@@ -104,14 +104,23 @@ class MainClass extends PluginBase implements Listener{
 							}
                         $sender->sendMessage("[AdvancedKits] Here is your kit!");
                     }
-					return true;
                 }else{
 						$sender->sendMessage("This kit does not exist");
 				}
+				return true;
 			}
-		if($args[0] == "addvip"){
-			
-		}
+			if($args[0] == "addvip"){
+				$playerName = $args[1];
+				$this->vips->set($playerName));
+				$this->vips->save();
+				return true;
+			}
+			if($args[0] == "unvip"){
+				$playerName = $args[1];
+				$this->vipPlayers->remove($playerName));
+				$this->vipPlayers->save();
+				return true;
+			}
 		}else{
 			$sender->sendMessage("Run this command in-game");
 			return true;
@@ -122,7 +131,4 @@ class MainClass extends PluginBase implements Listener{
 			return false;
 		}
 	}
-
-
-	
 }
