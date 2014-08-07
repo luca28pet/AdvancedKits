@@ -96,7 +96,7 @@ class Main extends PluginBase implements Listener{
 		switch($command->getName()){
 			case "advancedkits":
 			if($args[0] == "get"){
-			if ($issuer instanceof Player){
+			if ($sender instanceof Player){
 			$player = $sender->getName();
                 if(isset($this->configFile->get("kits")[strtolower($args[1])])){
                     $selectedkit = $this->configFile->get(strtolower($args[1]));
@@ -118,25 +118,43 @@ class Main extends PluginBase implements Listener{
 				}
 			}
 			if($args[0] == "addvip"){
-				if($sender->isOP){
-				$playerName = $args[1];
-				$this->vipPlayers->set($playerName);
-				$this->vipPlayers->save();
-				return true;
-				}else{
-				$sender->sendMessage("[AdvancedKits] You need to be an OP in order to run this command");
-				return true;
+				if($sender instanceof Player){
+					if($sender->isOP){
+					$playerName = $args[1];
+					$this->vipPlayers->set($playerName);
+					$this->vipPlayers->save();
+					$sender->sendMessage($playerName." has been added to vips.");
+					return true;
+					}else{
+					$sender->sendMessage("[AdvancedKits] You need to be an OP in order to run this command");
+					return true;
+					}
+				}elseif(!($sender instanceof Player)){
+					$playerName = $args[1];
+					$this->vipPlayers->set($playerName);
+					$this->vipPlayers->save();
+					$sender->sendMessage($playerName." has been added to vips.");
+					return true;
 				}
 			}
 			if($args[0] == "unvip"){
-				if($sender->isOP){
-				$playerName = $args[1];
-				$this->vipPlayers->remove($playerName);
-				$this->vipPlayers->save();
-				return true;
-				}else{
-				$sender->sendMessage("[AdvancedKits] You need to be an OP in order to run this command");
-				return true;
+				if($sender instanceof Player){
+					if($sender->isOP){
+					$playerName = $args[1];
+					$this->vipPlayers->remove($playerName);
+					$this->vipPlayers->save();
+					$sender->sendMessage($playerName." has been removed from vips.");
+					return true;
+					}else{
+					$sender->sendMessage("[AdvancedKits] You need to be an OP in order to run this command");
+					return true;
+					}
+				}elseif(!($sender instanceof Player)){
+					$playerName = $args[1];
+					$this->vipPlayers->remove($playerName);
+					$this->vipPlayers->save();
+					$sender->sendMessage($playerName." has been removed from vips.");
+					return true;
 				}
 			}
 		break;
