@@ -10,7 +10,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
 use pocketmine\utils\Config;
 
-class MainClass extends PluginBase implements Listener{
+class Main extends PluginBase implements Listener{
 
 	public function onLoad(){
 		$this->getLogger()->info("AdvancedKits loaded.");
@@ -32,6 +32,11 @@ class MainClass extends PluginBase implements Listener{
                         0,
                         5
                     ),
+					 array(
+                        260,
+                        0,
+                        5
+                    )
                 )
             ),
             "basicbuilder" => array(
@@ -95,7 +100,7 @@ class MainClass extends PluginBase implements Listener{
 			$player = $sender->getName();
                 if(isset($this->configFile->get("kits")[strtolower($args[1])])){
                     $selectedkit = $this->configFile->get(strtolower($args[1]));
-                    if($selectedkit["Vip"] == true and !$this->vipPlayers->exists($sender->getName()){
+                    if($selectedkit["Vip"] == true and !$this->vipPlayers->exists($sender->getName())){
                         $sender->sendMessage("You cannot get this kit, buy vip!!");
                     }else{
                         foreach ($selectedkit as $kit){
@@ -115,7 +120,7 @@ class MainClass extends PluginBase implements Listener{
 			if($args[0] == "addvip"){
 				if($sender->isOP){
 				$playerName = $args[1];
-				$this->vipPlayers->set($playerName));
+				$this->vipPlayers->set($playerName);
 				$this->vipPlayers->save();
 				return true;
 				}else{
@@ -126,7 +131,7 @@ class MainClass extends PluginBase implements Listener{
 			if($args[0] == "unvip"){
 				if($sender->isOP){
 				$playerName = $args[1];
-				$this->vipPlayers->remove($playerName));
+				$this->vipPlayers->remove($playerName);
 				$this->vipPlayers->save();
 				return true;
 				}else{
