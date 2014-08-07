@@ -5,7 +5,6 @@ namespace AdvancedKits;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
@@ -72,9 +71,9 @@ class MainClass extends PluginBase implements Listener{
                         366,
                         0,
                         20
-                    ),
+                    )
                 )
-            ),
+            )
         )
 	);
 		$this->configFile->save();
@@ -91,16 +90,16 @@ class MainClass extends PluginBase implements Listener{
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
 		switch($command->getName()){
 			case "advancedkits":
-			if ($issuer instanceof Player){
 			if($args[0] == "get"){
+			if ($issuer instanceof Player){
 			$player = $sender->getName();
                 if(isset($this->configFile->get("kits")[strtolower($args[1])])){
-                    $kitgot = $this->configFile->get(strtolower($args[1]));
-                    if($kitgot["Vip"] == true and !$this->vipPlayers->exists($sender->getName()){
+                    $selectedkit = $this->configFile->get(strtolower($args[1]));
+                    if($selectedkit["Vip"] == true and !$this->vipPlayers->exists($sender->getName()){
                         $sender->sendMessage("You cannot get this kit, buy vip!!");
                     }else{
-                        foreach ($kitgot as $content){
-							$sender->addItem($content[0], $content[1], $content[2]);
+                        foreach ($selectedkit as $kit){
+							$sender->addItem($kit[0], $kit[1], $kit[2]);
 							}
                         $sender->sendMessage("[AdvancedKits] Here is your kit!");
                     }
@@ -108,23 +107,33 @@ class MainClass extends PluginBase implements Listener{
 						$sender->sendMessage("This kit does not exist");
 				}
 				return true;
+				}else{
+				$sender->sendMessage("Run this command in game.");
+				return true;
+				}
 			}
 			if($args[0] == "addvip"){
+				if($sender->isOP){
 				$playerName = $args[1];
-				$this->vips->set($playerName));
-				$this->vips->save();
+				$this->vipPlayers->set($playerName));
+				$this->vipPlayers->save();
 				return true;
+				}else{
+				$sender->sendMessage("[AdvancedKits] You need to be an OP in order to run this command");
+				return true;
+				}
 			}
 			if($args[0] == "unvip"){
+				if($sender->isOP){
 				$playerName = $args[1];
 				$this->vipPlayers->remove($playerName));
 				$this->vipPlayers->save();
 				return true;
+				}else{
+				$sender->sendMessage("[AdvancedKits] You need to be an OP in order to run this command");
+				return true;
+				}
 			}
-		}else{
-			$sender->sendMessage("Run this command in-game");
-			return true;
-		}
 		break;
 			
 			default:
