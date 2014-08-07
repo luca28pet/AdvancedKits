@@ -11,6 +11,7 @@ commands:
  advancedkits:
   description: The main command
   usage: "/advancedkits"
+  aliases: [ak]
   permission: advancedkits.command
 permissions:
  advancedkits.command:
