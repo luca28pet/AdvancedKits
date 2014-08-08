@@ -95,10 +95,14 @@ class Main extends PluginBase implements Listener{
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
 		switch($command->getName()){
 			case "advancedkits":
+			if(!(isset($args[0]))){
+				return false;
+				break;
+				}
 			if($args[0] == "get"){
 			if ($sender instanceof Player){
 			$player = $sender->getName();
-                if(isset($this->configFile->get("kits")[strtolower($args[1])])){
+                if(isset($this->configFile->get(strtolower($args[1]))){
                     $selectedkit = $this->configFile->get(strtolower($args[1]));
                     if($selectedkit["Vip"] == true and !$this->vipPlayers->exists($sender->getName())){
                         $sender->sendMessage("You cannot get this kit, buy vip!!");
@@ -166,32 +170,33 @@ class Main extends PluginBase implements Listener{
 	}
 	public function AddKit($selectedkit, $player){
 		$selectedkit = $this->configFile->get(strtolower($args[1]));
-		if(!(isset($this->configFile->strtolower($args[1])[1]))){
+		$readconfig = $this->configFile->get(strtolower($args[1])['Content']);
+		if(!(isset($readconfig[1]))){
 			foreach ($selectedkit['Content'] as $kit){
 				$player->addItem($kit[0]);
 				}
 			}
-		if(!(isset($this->configFile->strtolower($args[1])[2]))){
+		if(!(isset($readconfig[2]))){
 			foreach ($selectedkit['Content'] as $kit){
 				$player->addItem($kit[0], $kit[1]);
 				}
 			}
-		if(!(isset($this->configFile->strtolower($args[1])[3]))){
+		if(!(isset($readconfig[3]))){
 			foreach ($selectedkit['Content'] as $kit){
 				$player->addItem($kit[0], $kit[1], $kit[2]);
 				}
 			}
-		if(!(isset($this->configFile->strtolower($args[1])[4]))){
+		if(!(isset($readconfig[4]))){
 			foreach ($selectedkit['Content'] as $kit){
 				$player->addItem($kit[0], $kit[1], $kit[2], $kit[3]);
 				}
 			}
-		if(!(isset($this->configFile->strtolower($args[1])[5]))){
+		if(!(isset($readconfig[5]))){
 			foreach ($selectedkit['Content'] as $kit){
 				$player->addItem($kit[0], $kit[1], $kit[2], $kit[3], $kit[4]);
 				}
 			}
-		if(!(isset($this->configFile->strtolower($args[1])[6]))){
+		if(!(isset($readconfig[6]))){
 			foreach ($selectedkit['Content'] as $kit){
 				$player->addItem($kit[0], $kit[1], $kit[2], $kit[3], $kit[4], $kit[5]);
 				}
