@@ -103,9 +103,10 @@ class Main extends PluginBase implements Listener{
                     if($selectedkit["Vip"] == true and !$this->vipPlayers->exists($sender->getName())){
                         $sender->sendMessage("You cannot get this kit, buy vip!!");
                     }else{
-                        foreach ($selectedkit as $kit){
+                        /*foreach ($selectedkit as $kit){
 							$sender->addItem($kit[0], $kit[1], $kit[2]);
-							}
+							}*/
+						$this->AddKit($selectedkit, $sender);
                         $sender->sendMessage("[AdvancedKits] Here is your kit!");
                     }
                 }else{
@@ -162,5 +163,38 @@ class Main extends PluginBase implements Listener{
 			default:
 			return false;
 		}
+	}
+	public function AddKit($selectedkit, $player){
+		$selectedkit = $this->configFile->get(strtolower($args[1]));
+		if(!(isset($this->configFile->strtolower($args[1])[1]))){
+			foreach ($selectedkit['Content'] as $kit){
+				$player->addItem($kit[0]);
+				}
+			}
+		if(!(isset($this->configFile->strtolower($args[1])[2]))){
+			foreach ($selectedkit['Content'] as $kit){
+				$player->addItem($kit[0], $kit[1]);
+				}
+			}
+		if(!(isset($this->configFile->strtolower($args[1])[3]))){
+			foreach ($selectedkit['Content'] as $kit){
+				$player->addItem($kit[0], $kit[1], $kit[2]);
+				}
+			}
+		if(!(isset($this->configFile->strtolower($args[1])[4]))){
+			foreach ($selectedkit['Content'] as $kit){
+				$player->addItem($kit[0], $kit[1], $kit[2], $kit[3]);
+				}
+			}
+		if(!(isset($this->configFile->strtolower($args[1])[5]))){
+			foreach ($selectedkit['Content'] as $kit){
+				$player->addItem($kit[0], $kit[1], $kit[2], $kit[3], $kit[4]);
+				}
+			}
+		if(!(isset($this->configFile->strtolower($args[1])[6]))){
+			foreach ($selectedkit['Content'] as $kit){
+				$player->addItem($kit[0], $kit[1], $kit[2], $kit[3], $kit[4], $kit[5]);
+				}
+			}
 	}
 }
