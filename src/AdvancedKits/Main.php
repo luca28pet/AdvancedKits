@@ -102,10 +102,12 @@ class Main extends PluginBase implements Listener{
 			if($args[0] == "get"){
 			if ($sender instanceof Player){
 			$player = $sender->getName();
-                if(isset($this->configFile->get(strtolower($args[1]))){
-                    $selectedkit = $this->configFile->get(strtolower($args[1]));
-                    if($selectedkit["Vip"] == true and !$this->vipPlayers->exists($sender->getName())){
+			$selectedkit = $this->configFile->get(strtolower($args[1]));
+                if(isset($selectedkit)){
+                    if($selectedkit["Vip"] == true){
+						if(!($this->vipPlayers->exists($sender->getName()))){			//and !$this->vipPlayers->exists($sender->getName())){
                         $sender->sendMessage("You cannot get this kit, buy vip!!");
+						}
                     }else{
                         /*foreach ($selectedkit as $kit){
 							$sender->addItem($kit[0], $kit[1], $kit[2]);
@@ -118,8 +120,8 @@ class Main extends PluginBase implements Listener{
 				}
 				return true;
 				}else{
-				$sender->sendMessage("Run this command in game.");
-				return true;
+					$sender->sendMessage("Run this command in game.");
+					return true;
 				}
 			}
 			if($args[0] == "addvip"){
