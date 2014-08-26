@@ -88,7 +88,6 @@ class Main extends PluginBase implements Listener{
     }
 
 	public function onDisable(){
-		$this->getLogger()->info("AdvancedKits disabled!");
 		$this->configFile->save();
 	}
 
@@ -97,29 +96,29 @@ class Main extends PluginBase implements Listener{
 			case "advancedkits":
 			if(!(isset($args[0]))){
 				return false;
-				}
+			}
 			if($args[0] == "get"){
-			if($sender instanceof Player){
-			$player = $sender->getName();
-			$selectedkit = $this->configFile->get(strtolower($args[1]));
-                if(isset($selectedkit)){
-                    if($selectedkit["Vip"] == true){
-						if(!($this->vipPlayers->exists($player))){			//and !$this->vipPlayers->exists($sender->getName())){
-                        $sender->sendMessage("You cannot get this kit, buy vip!!");
-						}else{
-						$this->AddKit($selectedkit, $sender);
-                        $sender->sendMessage("[AdvancedKits] Here is your kit!");
-						}
-                    }else{
+				if($sender instanceof Player){
+					$player = $sender->getName();
+					$selectedkit = $this->configFile->get(strtolower($args[1]));
+                			if(isset($selectedkit)){
+                				 if($selectedkit["Vip"] == true){
+							if(!($this->vipPlayers->exists($player))){			//and !$this->vipPlayers->exists($sender->getName())){
+                        					$sender->sendMessage("You cannot get this kit, buy vip!!");
+							}else{
+								$this->AddKit($selectedkit, $sender, $args);
+                        					$sender->sendMessage("[AdvancedKits] Here is your kit!");
+							}
+                    				}else{
                         /*foreach ($selectedkit as $kit){
 							$sender->addItem($kit[0], $kit[1], $kit[2]);
 							}*/
-						$this->AddKit($selectedkit, $sender);
-                        $sender->sendMessage("[AdvancedKits] Here is your kit!");
-                    }
-                }else{
+							$this->AddKit($selectedkit, $sender, $args);
+                        				$sender->sendMessage("[AdvancedKits] Here is your kit!");
+                    				}
+        				 }else{
 						$sender->sendMessage("This kit does not exist");
-				}
+					}
 				return true;
 				}else{
 					$sender->sendMessage("Run this command in game.");
@@ -172,9 +171,9 @@ class Main extends PluginBase implements Listener{
 			return false;
 		}
 	}
-	public function AddKit($selectedkit, $player){
-		$selectedkit = $this->configFile->get(strtolower($args[1]));
-		$readconfig = $this->configFile->get(strtolower($args[1])['Content']);
+	public function AddKit($selectedkit, $player, $params){
+		$selectedkit = $this->configFile->get(strtolower($params[1]));
+		$readconfig = $this->configFile->get(strtolower($params[1])['Content']);
 		if(!(isset($readconfig[1]))){
 			foreach ($selectedkit['Content'] as $kit){
 				$player->addItem($kit[0]);
