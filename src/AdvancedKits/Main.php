@@ -10,12 +10,13 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
 use pocketmine\inventory\BaseInventory;
 use pocketmine\utils\Config;
+use pocketmine\item\Item;
 
 class Main extends PluginBase implements Listener{
 
 	public function onEnable(){
-		@mkdir($this->getDataFolder());
-		$this->configFile = new Config($this->getDataFolder()."kits.yml", Config::YAML, array(
+  		@mkdir($this->getDataFolder());
+  		$this->configFile = new Config($this->getDataFolder()."kits.yml", Config::YAML, array(
             "basicpvp" => array(
                 "Vip" => false,
                 "Vip+" => false,
@@ -42,9 +43,9 @@ class Main extends PluginBase implements Listener{
                 "Vip+" => false,
                 "Content" => array(
                     array(
-                        11,
+                        4,
                         0,
-                        7
+                        25
                     ),
                     array(
                         275,
@@ -81,58 +82,58 @@ class Main extends PluginBase implements Listener{
             )
         )
 	);
-		$this->configFile->save();
-		$this->vipPlayers = new Config($this->getDataFolder()."vips.txt", Config::ENUM);
-		$this->vipPlayersPlus = new Config($this->getDataFolder()."vips+.txt", Config::ENUM);
-		$this->getServer()->getPluginManager()->registerEvents($this, $this);
-		$this->getLogger()->info("AdvancedKits enabled!");
-    }
+  		$this->configFile->save();
+  		$this->vipPlayers = new Config($this->getDataFolder()."vips.txt", Config::ENUM);
+  		$this->vipPlayersPlus = new Config($this->getDataFolder()."vips+.txt", Config::ENUM);
+  		$this->getServer()->getPluginManager()->registerEvents($this, $this);
+  		$this->getLogger()->info("AdvancedKits enabled!");
+ 	}
 
-	public function onDisable(){
-		$this->configFile->save();
-	}
+ 	public function onDisable(){
+ 	 	$this->configFile->save();
+ 	}
 
-	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
-		switch($command->getName()){
-			case "advancedkits":
-			if(!(isset($args[0]))){
-				return false;
-			}
-			if($args[0] == "get"){
-				if($sender instanceof Player){
-					$player = $sender->getName();
-					$selectedkit = $this->configFile->get(strtolower($args[1]));
-                			if(isset($selectedkit)){
-                				 if($selectedkit["Vip"] == true){
-							if(!($this->vipPlayers->exists($player)) and (!($this->vipPlayersPlus->exist($player)))){			//and !$this->vipPlayers->exists($sender->getName())){
-                        					$sender->sendMessage("[AdvancedKits] You cannot get this kit, buy vip!!");
-							}elseif($this->vipPlayers->exists($player) or $this->vipPlayersPlus->exist($player)){
-								$this->AddKit($selectedkit, $sender, $args);
-                        					$sender->sendMessage("[AdvancedKits] Here is your kit!");
-							}
-                    				}elseif($selectedkit["Vip+"] == true){
-                    					if($this->vipPlayersPlus->exist($player)){
-                    						$this->AddKit($selectedkit, $sender, $args);
-                        					$sender->sendMessage("[AdvancedKits] Here is your kit!");
-                    					}else{
-                    						$sender->sendMessage("[AdvancedKits] You cannot get this kit, buy vip!!");
-                    					}
-                    				}else{
-							$this->AddKit($selectedkit, $sender, $args);
-                        				$sender->sendMessage("[AdvancedKits] Here is your kit!");
-                    				}
-        				 }else{
-						$sender->sendMessage("[AdvancedKits] That kit does not exist");
+ 	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
+  		switch($command->getName()){
+  			case "advancedkits":
+  			if(!(isset($args[0]))){
+     				return false;
+    			}
+    			if($args[0] == "get"){
+     				if($sender instanceof Player){
+      					$player = $sender->getName();
+      					$kitname = $args[1];
+      					$readconfig = $this->configFile->get($args[1]);
+       					if(isset($readconfig)){
+						if($this->isVipPlus($kitname)){
+	 						if($this->vipPlayersPlus->exists($sender->getName())){
+	  							$this->addKit($sender, $kitname);
+	  							$sender->sendMessage("[AdvancedKits] Here is your kit");
+	 						}else{
+	  							$sender->sendMessage("[AdvancedKits] This is a Vip++ kit!");
+	 						}
+						}elseif($this->isVip($kitname)){
+	 						if($this->vipPlayersPlus->exists($sender->getName()) || $this->vipPlayers->exists($sender->getName())){
+	  							$this->addKit($sender, $kitname);
+	  							$sender->sendMessage("[AdvancedKits] Here is your kit");
+	 						}else{
+	  							$sender->sendMessage("[AdvancedKits] This is a vip kit!");
+	 						}
+						}else{
+	 						$this->addKit($sender, $kitname);
+	 						$sender->sendMessage("[AdvancedKits] Here is your kit");
+						}
+       					}else{
+						$sender->sendMessage("[AdvancedKits] This kit does not exists.");
 					}
-					return true;
-				}else{
-					$sender->sendMessage("Run this command in game.");
-					return true;
-				}
-			}
+      				}else{
+       					$sender->sendMessage("Run this command in game.");
+      				}
+				return true;
+     			}
 			if($args[0] == "addvip"){
 				if($sender instanceof Player){
-					if($sender->isOP){
+					if($sender->isOP()){
 						$playerName = $args[1];
 						if($args[1] == "plus"){
 							$this->vipPlayersPlus->set($playerName);
@@ -164,7 +165,7 @@ class Main extends PluginBase implements Listener{
 			}
 			if($args[0] == "unvip"){
 				if($sender instanceof Player){
-					if($sender->isOP){
+					if($sender->isOP()){
 						$playerName = $args[1];
 						if($args[1] == "plus"){
 							$this->vipPlayersPlus->remove($playerName);
@@ -200,38 +201,51 @@ class Main extends PluginBase implements Listener{
 			return false;
 		}
 	}
-	public function AddKit($selectedkit, $player, $params){
-		$selectedkit = $this->configFile->get(strtolower($params[1]));
-		$readconfig = $this->configFile->get(strtolower($params[1])['Content']);
-		if(!(isset($readconfig[1]))){
-			foreach ($selectedkit['Content'] as $kit){
-				$player->addItem($kit[0]);
-				}
+	public function AddKit(Player $player, $kitname){
+		$readconfig = $this->configFile->get($kitname[2]); //get the 'Content'
+		$selectedkit = $this->configFile->get($kitname);
+		foreach($selectedkit['Content'] as $k){
+			$kit = new Item($k[0], $k[1], $k[2]);
+			$itemn = count($readconfig);
+   			switch($itemn){
+			case 1:
+				$player->getInventory()->addItem($kit);
+			break;
+			case 2:
+				$player->getInventory()->addItem($kit);
+			break;
+			case 3:
+				$player->getInventory()->addItem($kit);
+			break;
+			case 4:
+				$player->getInventory()->addItem($kit);
+			break;
+			case 5;
+				$player->getInventory()->addItem($kit);
+			break;
+			case 6:
+				$player->getInventory()->addItem($kit);
+			break;
 			}
-		if(!(isset($readconfig[2]))){
-			foreach ($selectedkit['Content'] as $kit){
-				$player->addItem($kit[0], $kit[1]);
-				}
-			}
-		if(!(isset($readconfig[3]))){
-			foreach ($selectedkit['Content'] as $kit){
-				$player->addItem($kit[0], $kit[1], $kit[2]);
-				}
-			}
-		if(!(isset($readconfig[4]))){
-			foreach ($selectedkit['Content'] as $kit){
-				$player->addItem($kit[0], $kit[1], $kit[2], $kit[3]);
-				}
-			}
-		if(!(isset($readconfig[5]))){
-			foreach ($selectedkit['Content'] as $kit){
-				$player->addItem($kit[0], $kit[1], $kit[2], $kit[3], $kit[4]);
-				}
-			}
-		if(!(isset($readconfig[6]))){
-			foreach ($selectedkit['Content'] as $kit){
-				$player->addItem($kit[0], $kit[1], $kit[2], $kit[3], $kit[4], $kit[5]);
-				}
-			}
+		}
+		return true;
+	}
+
+	private function isVipPlus($kit){
+		$readconfig = $this->configFile->get($kit);
+		if($readconfig['Vip+'] == true){
+			return true;
+		}else{
+			return false;
+		}	
+	}
+	
+	private function isVip($kit){
+		$readconfig = $this->configFile->get($kit);
+		if($readconfig['Vip'] == true){
+			return true;
+		}else{
+			return false;
+		}	
 	}
 }
