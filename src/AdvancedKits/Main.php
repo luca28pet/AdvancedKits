@@ -100,6 +100,9 @@ class Main extends PluginBase implements Listener{
      				return false;
     			}
     			if($args[0] == "get"){
+				if(!(isset($args[1]))){
+					return false;
+				}
      				if($sender instanceof Player){
       					$player = $sender->getName();
       					$kitname = $args[1];
@@ -133,9 +136,12 @@ class Main extends PluginBase implements Listener{
      			}
 			if($args[0] == "addvip"){
 				if($sender instanceof Player){
+					if(!(isset($args[1]))){
+						return false;
+					}
 					if($sender->isOP()){
 						$playerName = $args[1];
-						if($args[1] == "plus"){
+						if($args[2] == "plus"){
 							$this->vipPlayersPlus->set($playerName);
 							$this->vipPlayersPlus->save();
 							$sender->sendMessage($playerName." has been added to vips +.");
@@ -150,7 +156,10 @@ class Main extends PluginBase implements Listener{
 						return true;
 					}
 				}elseif(!($sender instanceof Player)){
-					$playerName = $args[1];
+					if(!(isset($args[1]))){
+						return false;
+					}
+					$playerName = $args[2];
 					if($args[1] == "plus"){
 						$this->vipPlayersPlus->set($playerName);
 						$this->vipPlayersPlus->save();
@@ -165,9 +174,12 @@ class Main extends PluginBase implements Listener{
 			}
 			if($args[0] == "unvip"){
 				if($sender instanceof Player){
+					if(!(isset($args[1]))){
+						return false;
+					}
 					if($sender->isOP()){
 						$playerName = $args[1];
-						if($args[1] == "plus"){
+						if($args[2] == "plus"){
 							$this->vipPlayersPlus->remove($playerName);
 							$this->vipPlayersPlus->save();
 							$sender->sendMessage($playerName." has been removed from vips +.");
@@ -182,8 +194,11 @@ class Main extends PluginBase implements Listener{
 						return true;
 					}
 				}elseif(!($sender instanceof Player)){
+					if(!(isset($args[1]))){
+						return false;
+					}
 					$playerName = $args[1];
-					if($args[1] == "plus"){
+					if($args[2] == "plus"){
 						$this->vipPlayersPlus->remove($playerName);
 						$this->vipPlayersPlus->save();
 						$sender->sendMessage($playerName." has been removed from vips +.");
