@@ -111,23 +111,23 @@ class Main extends PluginBase implements Listener{
 						if($this->isVipPlus($kitname)){
 	 						if($this->vipPlayersPlus->exists($sender->getName())){
 	  							$this->addKit($sender, $kitname);
-	  							$sender->sendMessage("[AdvancedKits] Here is your kit");
+	  							$sender->sendMessage("[AdvancedKits] Kit added to inventory");
 	 						}else{
 	  							$sender->sendMessage("[AdvancedKits] This is a Vip++ kit!");
 	 						}
 						}elseif($this->isVip($kitname)){
 	 						if($this->vipPlayersPlus->exists($sender->getName()) || $this->vipPlayers->exists($sender->getName())){
 	  							$this->addKit($sender, $kitname);
-	  							$sender->sendMessage("[AdvancedKits] Here is your kit");
+	  							$sender->sendMessage("[AdvancedKits] Kit added to iventory");
 	 						}else{
 	  							$sender->sendMessage("[AdvancedKits] This is a vip kit!");
 	 						}
 						}else{
 	 						$this->addKit($sender, $kitname);
-	 						$sender->sendMessage("[AdvancedKits] Here is your kit");
+	 						$sender->sendMessage("[AdvancedKits] Kit added to inventory");
 						}
        					}else{
-						$sender->sendMessage("[AdvancedKits] This kit does not exists.");
+						$sender->sendMessage("[AdvancedKits] This kit does not exist.");
 					}
       				}else{
        					$sender->sendMessage("Run this command in game.");
@@ -221,26 +221,7 @@ class Main extends PluginBase implements Listener{
 		$selectedkit = $this->configFile->get($kitname);
 		foreach($selectedkit['Content'] as $k){
 			$kit = new Item($k[0], $k[1], $k[2]);
-			$itemn = count($readconfig);
-   			switch($itemn){
-			case 1:
-				$player->getInventory()->addItem($kit);
-			break;
-			case 2:
-				$player->getInventory()->addItem($kit);
-			break;
-			case 3:
-				$player->getInventory()->addItem($kit);
-			break;
-			case 4:
-				$player->getInventory()->addItem($kit);
-			break;
-			case 5;
-				$player->getInventory()->addItem($kit);
-			break;
-			case 6:
-				$player->getInventory()->addItem($kit);
-			break;
+			$player->getInventory()->addItem($kit);
 			}
 		}
 		return true;
