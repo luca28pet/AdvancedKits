@@ -197,6 +197,14 @@ private $hasKit = array();
 		}
 	}
 	
+	public function onQuit(PlayerQuitEvent $event){
+		if(in_array($player->getName(), $this->hasKit)){
+			if(($key = array_search($player->getName(), $this->hasKit)) !== false) {
+				unset($this->hasKit[$key]);
+			}
+		}
+	}
+	
 	private function AddKit(Player $player, $kitname){
 		$selectedkit = $this->configFile->get($kitname);
 		foreach($selectedkit['Content'] as $k){
