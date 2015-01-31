@@ -1,7 +1,7 @@
 name: AdvancedKits
 main: AdvancedKits\Main
 version: 1.2
-api: [1.8.0]
+api: [1.10.0]
 
 load: POSTWORLD
 author: luca28pet
@@ -9,8 +9,8 @@ description: Add kits to your server
 website: https://github.com/luca28pet/AdvancedKits
 commands:
  advancedkits:
-  description: The main command
-  usage: "/advancedkits"
+  description: Get a kit!
+  usage: "/advancedkits <get|vip> [plus]"
   aliases: [ak, kit]
   permission: advancedkits.command
   default: true
