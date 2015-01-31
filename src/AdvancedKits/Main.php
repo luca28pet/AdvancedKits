@@ -24,61 +24,25 @@ private $hasKit = array();
             		"basicpvp" => array(
                 		"Rank" => "Player",
         			"Content" => array(
-                    			array(
-                        			272,
-                        			0,
-                        			1
-                    			),
-                    			array(
-                				260,
-                        			0,
-                        			5
-                    			),
-					array(
-                        			260,
-                        			0,
-                        			5
-                    			)
+                    			array(272, 0, 1), //id, meta or damage, quantity
+                    			array(260, 0, 5),
+					array(260, 0, 5)
                 		)
             		),
             		"basicbuilder" => array(
                 		"Rank" => "Player",
                 		"Content" => array(
-                    			array(
-                        			4,
-                        			0,
-                        			25
-                    			),
-                    			array(
-                				275,
-                        			0,
-                        			1
-                    			),
-                    			array(
-                        			297,
-                        			0,
-                        			3
-                    			),
+                    			array(4, 0, 25),
+                    			array(275, 0, 1),
+                    			array(297, 0, 3),
                 		)
             		),
             		"darkgodpvp" => array(
                 		"Rank" => "Vip",
                 		"Content" => array(
-                			array(
-                        			276,
-                        			0,
-                        			2
-                    			),
-                    			array(
-                        			311,
-                        			0,
-                        			1
-                    			),
-                    			array(
-                        			366,
-                        			0,
-                        			20
-                    			)
+                			array(276, 0, 2),
+                    			array(311, 0, 1),
+                    			array(366, 0, 20)
                 		)
             		)
         	)
@@ -107,10 +71,12 @@ private $hasKit = array();
 				}
      				if($sender instanceof Player){
       					$kitname = $args[1];
-      					$readconfig  = $this->kits->get($kitname);
+      					$readconfig = $this->kits->get($kitname);
        					if(isset($readconfig)){
 						switch($readconfig['Rank']){
 	 						case "Vip+":
+	 						case "vip+":
+	 						case "vipplus":
 	 							if($this->vipPlayersPlus->exists($sender->getName())){
 	 								if(!in_array($sender->getName(), $this->hasKit)){
 	  									$this->addKit($sender, $kitname);
@@ -125,6 +91,7 @@ private $hasKit = array();
 	 							}
 	 						break;
 	 						case "Vip":
+	 						case "vip":
 	 							if($this->vipPlayersPlus->exists($sender->getName()) || $this->vipPlayers->exists($sender->getName())){
 	 								if(!in_array($sender->getName(), $this->hasKit)){
 	  									$this->addKit($sender, $kitname);
@@ -139,6 +106,7 @@ private $hasKit = array();
 	 							}
 	 						break;
 							case "Player":
+							case "player":
 								if(!in_array($sender->getName(), $this->hasKit)){
 	 								$this->addKit($sender, $kitname);
 	 								$sender->sendMessage("[AdvancedKits] Kit added to inventory.");
@@ -149,6 +117,7 @@ private $hasKit = array();
 	 						break;
 	 						default:
 	 							$sender->sendMessage("[AdvancedKits] Kit rank is invalid.");
+	 							$sender->sendMessage("[AdvancedKits] Valid ranks: Vip+, Vip, Player.");
 	 						return true;
 						}
        					}else{
@@ -167,12 +136,12 @@ private $hasKit = array();
 					if($args[2] == "plus"){
 						$this->vipPlayersPlus->set($playerName);
 						$this->vipPlayersPlus->save();
-						$sender->sendMessage($playerName." has been added to vips +.");
+						$sender->sendMessage("[AdvancedKits] ".$playerName." has been added to vips +.");
 						return true;
 					}else{
 						$this->vipPlayers->set($playerName);
 						$this->vipPlayers->save();
-						$sender->sendMessage($playerName." has been added to vips.");
+						$sender->sendMessage("[AdvancedKits] ".$playerName." has been added to vips.");
 						return true;
 					}
 				}else{
@@ -188,12 +157,12 @@ private $hasKit = array();
 					if($args[2] == "plus"){
 						$this->vipPlayersPlus->remove($playerName);
 						$this->vipPlayersPlus->save();
-						$sender->sendMessage($playerName." has been removed from vips +.");
+						$sender->sendMessage("[AdvancedKits] ".$playerName." has been removed from vips +.");
 						return true;
 					}else{
 						$this->vipPlayers->remove($playerName);
 						$this->vipPlayers->save();
-						$sender->sendMessage($playerName." has been removed from vips.");
+						$sender->sendMessage("[AdvancedKits] ".$playerName." has been removed from vips.");
 						return true;
 					}
 				}else{
