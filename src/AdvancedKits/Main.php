@@ -66,13 +66,13 @@ private $hasKit = array();
      				return false;
     			}
     			if($args[0] == "get"){
-					if(!(isset($args[1]))){
-						return false;
-					}
+				if(!(isset($args[1]))){
+					return false;
+				}
      				if($sender instanceof Player){
       					$kitname = $args[1];
 						if($this->kits->exists($kitname)){
-      					$readconfig = $this->kits->get($kitname);
+      							$readconfig = $this->kits->get($kitname);
 							switch($readconfig['Rank']){
 								case "Vip+":
 								case "vip+":
@@ -121,8 +121,8 @@ private $hasKit = array();
 								return true;
 							}
        					}else{
-							$sender->sendMessage("[AdvancedKits] This kit does not exist.");
-						}
+						$sender->sendMessage("[AdvancedKits] This kit does not exist.");
+					}
       				}else{
        					$sender->sendMessage("Run this command in game.");
       				}
