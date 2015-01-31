@@ -8,8 +8,8 @@ use pocketmine\event\Listener;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
-use pocketmine\event\player\PlayerQuitevent;
-use pocketmine\event\entity\EntityDeathEvent;
+use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\inventory\BaseInventory;
 use pocketmine\utils\Config;
 use pocketmine\item\Item;
@@ -66,63 +66,63 @@ private $hasKit = array();
      				return false;
     			}
     			if($args[0] == "get"){
-				if(!(isset($args[1]))){
-					return false;
-				}
+					if(!(isset($args[1]))){
+						return false;
+					}
      				if($sender instanceof Player){
       					$kitname = $args[1];
+						if($this->kits->exists($kitname)){
       					$readconfig = $this->kits->get($kitname);
-       					if(isset($readconfig)){
-						switch($readconfig['Rank']){
-	 						case "Vip+":
-	 						case "vip+":
-	 						case "vipplus":
-	 							if($this->vipPlayersPlus->exists($sender->getName())){
-	 								if(!in_array($sender->getName(), $this->hasKit)){
-	  									$this->addKit($sender, $kitname);
-	  									$sender->sendMessage("[AdvancedKits] Kit added to inventory.");
-	  									return true;
-	 								}else{
-	 									$sender->sendMessage("[AdvancedKits] You already got a kit.");
-	 								}
-	 							}else{
-	  								$sender->sendMessage("[AdvancedKits] This is a Vip++ kit!");
-	  								return true;
-	 							}
-	 						break;
-	 						case "Vip":
-	 						case "vip":
-	 							if($this->vipPlayersPlus->exists($sender->getName()) || $this->vipPlayers->exists($sender->getName())){
-	 								if(!in_array($sender->getName(), $this->hasKit)){
-	  									$this->addKit($sender, $kitname);
-	  									$sender->sendMessage("[AdvancedKits] Kit added to iventory.");
-	  									return true;
-	 								}else{
-	 									$sender->sendMessage("[AdvancedKits] You already got a kit.");
-	 								}
-	 							}else{
-	  								$sender->sendMessage("[AdvancedKits] This is a vip kit!");
-	  								return true;
-	 							}
-	 						break;
-							case "Player":
-							case "player":
-								if(!in_array($sender->getName(), $this->hasKit)){
-	 								$this->addKit($sender, $kitname);
-	 								$sender->sendMessage("[AdvancedKits] Kit added to inventory.");
-	 								return true;
-								}else{
-									$sender->sendMessage("[AdvancedKits] You already got a kit.");
-								}
-	 						break;
-	 						default:
-	 							$sender->sendMessage("[AdvancedKits] Kit rank is invalid.");
-	 							$sender->sendMessage("[AdvancedKits] Valid ranks: Vip+, Vip, Player.");
-	 						return true;
-						}
+							switch($readconfig['Rank']){
+								case "Vip+":
+								case "vip+":
+								case "vipplus":
+									if($this->vipPlayersPlus->exists($sender->getName())){
+										if(!in_array($sender->getName(), $this->hasKit)){
+											$this->addKit($sender, $kitname);
+											$sender->sendMessage("[AdvancedKits] Kit added to inventory.");
+											return true;
+										}else{
+											$sender->sendMessage("[AdvancedKits] You already got a kit.");
+										}
+									}else{
+										$sender->sendMessage("[AdvancedKits] This is a Vip++ kit!");
+										return true;
+									}
+								break;
+								case "Vip":
+								case "vip":
+									if($this->vipPlayersPlus->exists($sender->getName()) || $this->vipPlayers->exists($sender->getName())){
+										if(!in_array($sender->getName(), $this->hasKit)){
+											$this->addKit($sender, $kitname);
+											$sender->sendMessage("[AdvancedKits] Kit added to iventory.");
+											return true;
+										}else{
+											$sender->sendMessage("[AdvancedKits] You already got a kit.");
+										}
+									}else{
+										$sender->sendMessage("[AdvancedKits] This is a vip kit!");
+										return true;
+									}
+								break;
+								case "Player":
+								case "player":
+									if(!in_array($sender->getName(), $this->hasKit)){
+										$this->addKit($sender, $kitname);
+										$sender->sendMessage("[AdvancedKits] Kit added to inventory.");
+										return true;
+									}else{
+										$sender->sendMessage("[AdvancedKits] You already got a kit.");
+									}
+								break;
+								default:
+									$sender->sendMessage("[AdvancedKits] Kit rank is invalid.");
+									$sender->sendMessage("[AdvancedKits] Valid ranks: Vip+, Vip, Player.");
+								return true;
+							}
        					}else{
-						$sender->sendMessage("[AdvancedKits] This kit does not exist.");
-					}
+							$sender->sendMessage("[AdvancedKits] This kit does not exist.");
+						}
       				}else{
        					$sender->sendMessage("Run this command in game.");
       				}
@@ -133,7 +133,7 @@ private $hasKit = array();
 						return false;
 					}
 					$playerName = $args[1];
-					if($args[2] == "plus"){
+					if(isset($args[2]) and $args[2] == "plus"){
 						$this->vipPlayersPlus->set($playerName);
 						$this->vipPlayersPlus->save();
 						$sender->sendMessage("[AdvancedKits] ".$playerName." has been added to vips +.");
@@ -154,7 +154,7 @@ private $hasKit = array();
 						return false;
 					}
 					$playerName = $args[1];
-					if($args[2] == "plus"){
+					if(isset($args[2]) and $args[2] == "plus"){
 						$this->vipPlayersPlus->remove($playerName);
 						$this->vipPlayersPlus->save();
 						$sender->sendMessage("[AdvancedKits] ".$playerName." has been removed from vips +.");
@@ -179,12 +179,10 @@ private $hasKit = array();
 		}
 	}
 	
-	public function onDeath(EntityDeathEvent $event){
-		if($event->getEntity() instanceof Player){
-			if(in_array($event->getEntity()->getName(), $this->hasKit)){
-				if(($key = array_search($event->getEntity()->getName(), $this->hasKit)) !== false) {
-    					unset($this->hasKit[$key]);
-				}
+	public function onDeath(PlayerDeathEvent $event){
+		if(in_array($event->getEntity()->getName(), $this->hasKit)){
+			if(($key = array_search($event->getEntity()->getName(), $this->hasKit)) !== false) {
+				unset($this->hasKit[$key]);
 			}
 		}
 	}
