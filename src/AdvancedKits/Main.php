@@ -112,9 +112,13 @@ private $hasKit = array();
 						switch($readconfig['Rank']){
 	 						case "Vip+":
 	 							if($this->vipPlayersPlus->exists($sender->getName())){
-	  								$this->addKit($sender, $kitname);
-	  								$sender->sendMessage("[AdvancedKits] Kit added to inventory.");
-	  								return true;
+	 								if(!in_array($sender->getName(), $this->hasKit)){
+	  									$this->addKit($sender, $kitname);
+	  									$sender->sendMessage("[AdvancedKits] Kit added to inventory.");
+	  									return true;
+	 								}else{
+	 									$sender->sendMessage("[AdvancedKits] You already got a kit.");
+	 								}
 	 							}else{
 	  								$sender->sendMessage("[AdvancedKits] This is a Vip++ kit!");
 	  								return true;
@@ -122,18 +126,26 @@ private $hasKit = array();
 	 						break;
 	 						case "Vip":
 	 							if($this->vipPlayersPlus->exists($sender->getName()) || $this->vipPlayers->exists($sender->getName())){
-	  								$this->addKit($sender, $kitname);
-	  								$sender->sendMessage("[AdvancedKits] Kit added to iventory.");
-	  								return true;
+	 								if(!in_array($sender->getName(), $this->hasKit)){
+	  									$this->addKit($sender, $kitname);
+	  									$sender->sendMessage("[AdvancedKits] Kit added to iventory.");
+	  									return true;
+	 								}else{
+	 									$sender->sendMessage("[AdvancedKits] You already got a kit.");
+	 								}
 	 							}else{
 	  								$sender->sendMessage("[AdvancedKits] This is a vip kit!");
 	  								return true;
 	 							}
 	 						break;
 							case "Player":
-	 							$this->addKit($sender, $kitname);
-	 							$sender->sendMessage("[AdvancedKits] Kit added to inventory.");
-	 							return true;
+								if(!in_array($sender->getName(), $this->hasKit)){
+	 								$this->addKit($sender, $kitname);
+	 								$sender->sendMessage("[AdvancedKits] Kit added to inventory.");
+	 								return true;
+								}else{
+									$sender->sendMessage("[AdvancedKits] You already got a kit.");
+								}
 	 						break;
 	 						default:
 	 							$sender->sendMessage("[AdvancedKits] Kit rank is invalid.");
