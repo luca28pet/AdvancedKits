@@ -7,46 +7,49 @@ use pocketmine\command\CommandSender;
 use pocketmine\event\Listener;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
-use pocketmine\Server;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerDeathEvent;
-use pocketmine\inventory\BaseInventory;
 use pocketmine\utils\Config;
 use pocketmine\item\Item;
 
 class Main extends PluginBase implements Listener{
 
-private $hasKit = array();
+	private $hasKit = array();
+	/** @var Config::YAML*/
+	private $kits;
+	/** @var Config::ENUM*/
+	private $vipPlayers;
+	/** @var Config::ENUM*/
+	private $vipPlayersPlus;
 
 	public function onEnable(){
   		@mkdir($this->getDataFolder());
   		$this->kits = new Config($this->getDataFolder()."kits.yml", Config::YAML, array(
-            		"basicpvp" => array(
-                		"Rank" => "Player",
-        			"Content" => array(
-                    			array(272, 0, 1), //id, meta or damage, quantity
-                    			array(260, 0, 5),
+			"basicpvp" => array(
+				"Rank" => "Player",
+        		"Content" => array(
+					array(272, 0, 1), //id, meta or damage, quantity
+					array(260, 0, 5),
 					array(260, 0, 5)
-                		)
-            		),
-            		"basicbuilder" => array(
-                		"Rank" => "Player",
-                		"Content" => array(
-                    			array(4, 0, 25),
-                    			array(275, 0, 1),
-                    			array(297, 0, 3),
-                		)
-            		),
-            		"darkgodpvp" => array(
-                		"Rank" => "Vip",
-                		"Content" => array(
-                			array(276, 0, 2),
-                    			array(311, 0, 1),
-                    			array(366, 0, 20)
-                		)
-            		)
-        	)
-	);
+				)
+			),
+			"basicbuilder" => array(
+                "Rank" => "Player",
+                "Content" => array(
+                   	array(4, 0, 25),
+                   	array(275, 0, 1),
+                   	array(297, 0, 3),
+                )
+            ),
+			"darkgodpvp" => array(
+               	"Rank" => "Vip",
+                "Content" => array(
+					array(276, 0, 2),
+                  	array(311, 0, 1),
+                   	array(366, 0, 20)
+               	)
+           	)
+		));
   		$this->kits->save();
   		$this->vipPlayers = new Config($this->getDataFolder()."vips.txt", Config::ENUM);
   		$this->vipPlayersPlus = new Config($this->getDataFolder()."vips+.txt", Config::ENUM);
@@ -62,22 +65,22 @@ private $hasKit = array();
  	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
   		switch($command->getName()){
   			case "advancedkits":
-  			if(!(isset($args[0]))){
-     				return false;
-    			}
-    			if($args[0] == "get"){
-				if(!(isset($args[1]))){
+				if(!(isset($args[0]))){
 					return false;
 				}
-     				if($sender instanceof Player){
-      					$kitname = $args[1];
+				if($args[0] == "get"){
+					if(!(isset($args[1]))){
+						return false;
+					}
+					if($sender instanceof Player){
+						$kitname = $args[1];
 						if($this->kits->exists($kitname)){
-      							$readconfig = $this->kits->get($kitname);
+							$readconfig = $this->kits->get($kitname);
 							switch($readconfig['Rank']){
 								case "Vip+":
 								case "vip+":
 								case "vipplus":
-									if($this->vipPlayersPlus->exists($sender->getName())){
+									if($this->vipPlayersPlus->exists(strtolower($sender->getName()))){
 										if(!in_array($sender->getName(), $this->hasKit)){
 											$this->addKit($sender, $kitname);
 											$sender->sendMessage("[AdvancedKits] Kit added to inventory.");
@@ -92,18 +95,18 @@ private $hasKit = array();
 								break;
 								case "Vip":
 								case "vip":
-									if($this->vipPlayersPlus->exists($sender->getName()) || $this->vipPlayers->exists($sender->getName())){
-										if(!in_array($sender->getName(), $this->hasKit)){
-											$this->addKit($sender, $kitname);
-											$sender->sendMessage("[AdvancedKits] Kit added to iventory.");
-											return true;
-										}else{
-											$sender->sendMessage("[AdvancedKits] You already got a kit.");
-										}
-									}else{
-										$sender->sendMessage("[AdvancedKits] This is a vip kit!");
+								if($this->vipPlayersPlus->exists(strtolower($sender->getName())) || $this->vipPlayers->exists(strtolower($sender->getName()))){
+									if(!in_array($sender->getName(), $this->hasKit)){
+										$this->addKit($sender, $kitname);
+										$sender->sendMessage("[AdvancedKits] Kit added to iventory.");
 										return true;
+									}else{
+										$sender->sendMessage("[AdvancedKits] You already got a kit.");
 									}
+								}else{
+									$sender->sendMessage("[AdvancedKits] This is a vip kit!");
+									return true;
+								}
 								break;
 								case "Player":
 								case "player":
@@ -118,64 +121,64 @@ private $hasKit = array();
 								default:
 									$sender->sendMessage("[AdvancedKits] Kit rank is invalid.");
 									$sender->sendMessage("[AdvancedKits] Valid ranks: Vip+, Vip, Player.");
-								return true;
+									return true;
 							}
-       					}else{
-						$sender->sendMessage("[AdvancedKits] This kit does not exist.");
-					}
-      				}else{
-       					$sender->sendMessage("Run this command in game.");
-      				}
-				return true;
-     			}elseif($args[0] == "addvip"){
-				if($sender->isOp() or !$sender instanceof Player){
-					if(!(isset($args[1]))){
-						return false;
-					}
-					$playerName = $args[1];
-					if(isset($args[2]) and $args[2] == "plus"){
-						$this->vipPlayersPlus->set($playerName);
-						$this->vipPlayersPlus->save();
-						$sender->sendMessage("[AdvancedKits] ".$playerName." has been added to vips +.");
-						return true;
+						}else{
+							$sender->sendMessage("[AdvancedKits] This kit does not exist.");
+							return true;
+						}
 					}else{
-						$this->vipPlayers->set($playerName);
-						$this->vipPlayers->save();
-						$sender->sendMessage("[AdvancedKits] ".$playerName." has been added to vips.");
+						$sender->sendMessage("Run this command in game.");
+						return true;
+					}
+				}elseif($args[0] == "addvip"){
+					if($sender->isOp() or !$sender instanceof Player){
+						if(!(isset($args[1]))){
+							return false;
+						}
+						$playerName = $args[1];
+						if(isset($args[2]) and $args[2] == "plus"){
+							$this->vipPlayersPlus->set(strtolower($playerName));
+							$this->vipPlayersPlus->save();
+							$sender->sendMessage("[AdvancedKits] ".$playerName." has been added to vips +.");
+							return true;
+						}else{
+							$this->vipPlayers->set(strtolower($playerName));
+							$this->vipPlayers->save();
+							$sender->sendMessage("[AdvancedKits] ".$playerName." has been added to vips.");
+							return true;
+						}
+					}else{
+						$sender->sendMessage("[AdvancedKits] You need to be an OP in order to run this command.");
+						return true;
+					}
+				}elseif($args[0] == "unvip"){
+					if($sender->isOp() or !$sender instanceof Player){
+						if(!(isset($args[1]))){
+							return false;
+						}
+						$playerName = $args[1];
+						if(isset($args[2]) and $args[2] == "plus"){
+							$this->vipPlayersPlus->remove(strtolower($playerName));
+							$this->vipPlayersPlus->save();
+							$sender->sendMessage("[AdvancedKits] ".$playerName." has been removed from vips +.");
+							return true;
+						}else{
+							$this->vipPlayers->remove(strtolower($playerName));
+							$this->vipPlayers->save();
+							$sender->sendMessage("[AdvancedKits] ".$playerName." has been removed from vips.");
+							return true;
+						}
+					}else{
+						$sender->sendMessage("[AdvancedKits] You need to be an OP in order to run this command.");
 						return true;
 					}
 				}else{
-					$sender->sendMessage("[AdvancedKits] You need to be an OP in order to run this command.");
-					return true;
+					return false;
 				}
-			}elseif($args[0] == "unvip"){
-				if($sender->isOp() or !$sender instanceof Player){
-					if(!(isset($args[1]))){
-						return false;
-					}
-					$playerName = $args[1];
-					if(isset($args[2]) and $args[2] == "plus"){
-						$this->vipPlayersPlus->remove($playerName);
-						$this->vipPlayersPlus->save();
-						$sender->sendMessage("[AdvancedKits] ".$playerName." has been removed from vips +.");
-						return true;
-					}else{
-						$this->vipPlayers->remove($playerName);
-						$this->vipPlayers->save();
-						$sender->sendMessage("[AdvancedKits] ".$playerName." has been removed from vips.");
-						return true;
-					}
-				}else{
-					$sender->sendMessage("[AdvancedKits] You need to be an OP in order to run this command.");
-					return true;
-				}
-			}else{
-				return false;
-			}
 			break;
-			
 			default:
-			return false;
+				return false;
 		}
 	}
 	
