@@ -13,6 +13,7 @@ use pocketmine\utils\Config;
 
 class Main extends PluginBase implements Listener{
 
+	/** @var array*/
 	public $hasKit = array();
 	/** @var Config::YAML*/
 	private $kits;
