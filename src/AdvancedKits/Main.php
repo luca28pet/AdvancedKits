@@ -10,23 +10,23 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\utils\Config;
-use pocketmine\item\Item;
 
 class Main extends PluginBase implements Listener{
 
-	private $hasKit = array();
+	public $hasKit = array();
 	/** @var Config::YAML*/
-	private $kits;
+	public $kits;
 	/** @var Config::ENUM*/
-	private $vipPlayers;
+	public $vipPlayers;
 	/** @var Config::ENUM*/
-	private $vipPlayersPlus;
+	public $vipPlayersPlus;
 
 	public function onEnable(){
   		@mkdir($this->getDataFolder());
   		$this->kits = new Config($this->getDataFolder()."kits.yml", Config::YAML, array(
 			"basicpvp" => array(
 				"Rank" => "Player",
+				"Armor" => array(1, 2, 3, 4), //todo: add default armor contents
         		"Content" => array(
 					array(272, 0, 1), //id, meta or damage, quantity
 					array(260, 0, 5),
@@ -35,6 +35,7 @@ class Main extends PluginBase implements Listener{
 			),
 			"basicbuilder" => array(
                 "Rank" => "Player",
+				"Armor" => array(),
                 "Content" => array(
                    	array(4, 0, 25),
                    	array(275, 0, 1),
@@ -43,6 +44,7 @@ class Main extends PluginBase implements Listener{
             ),
 			"darkgodpvp" => array(
                	"Rank" => "Vip",
+				"Armor" => array(),
                 "Content" => array(
 					array(276, 0, 2),
                   	array(311, 0, 1),
@@ -73,56 +75,16 @@ class Main extends PluginBase implements Listener{
 						return false;
 					}
 					if($sender instanceof Player){
+						if(in_array($sender->getName(), $this->hasKit)){
+							$sender->sendMessage("[AdvancedKits] You already got a kit.");
+							return true;
+						}
 						$kitname = $args[1];
 						if($this->kits->exists($kitname)){
 							$readconfig = $this->kits->get($kitname);
-							switch($readconfig['Rank']){
-								case "Vip+":
-								case "vip+":
-								case "vipplus":
-									if($this->vipPlayersPlus->exists(strtolower($sender->getName()))){
-										if(!in_array($sender->getName(), $this->hasKit)){
-											$this->addKit($sender, $kitname);
-											$sender->sendMessage("[AdvancedKits] Kit added to inventory.");
-											return true;
-										}else{
-											$sender->sendMessage("[AdvancedKits] You already got a kit.");
-										}
-									}else{
-										$sender->sendMessage("[AdvancedKits] This is a Vip++ kit!");
-										return true;
-									}
-								break;
-								case "Vip":
-								case "vip":
-								if($this->vipPlayersPlus->exists(strtolower($sender->getName())) || $this->vipPlayers->exists(strtolower($sender->getName()))){
-									if(!in_array($sender->getName(), $this->hasKit)){
-										$this->addKit($sender, $kitname);
-										$sender->sendMessage("[AdvancedKits] Kit added to iventory.");
-										return true;
-									}else{
-										$sender->sendMessage("[AdvancedKits] You already got a kit.");
-									}
-								}else{
-									$sender->sendMessage("[AdvancedKits] This is a vip kit!");
-									return true;
-								}
-								break;
-								case "Player":
-								case "player":
-									if(!in_array($sender->getName(), $this->hasKit)){
-										$this->addKit($sender, $kitname);
-										$sender->sendMessage("[AdvancedKits] Kit added to inventory.");
-										return true;
-									}else{
-										$sender->sendMessage("[AdvancedKits] You already got a kit.");
-									}
-								break;
-								default:
-									$sender->sendMessage("[AdvancedKits] Kit rank is invalid.");
-									$sender->sendMessage("[AdvancedKits] Valid ranks: Vip+, Vip, Player.");
-									return true;
-							}
+							$kit = new Kit($readconfig["Armor"], $readconfig["Content"], $readconfig["Rank"], $kitname, $this);
+							$kit->give($sender);
+							return true;
 						}else{
 							$sender->sendMessage("[AdvancedKits] This kit does not exist.");
 							return true;
@@ -197,14 +159,5 @@ class Main extends PluginBase implements Listener{
 			}
 		}
 	}
-	
-	private function AddKit(Player $player, $kitname){
-		$selectedkit = $this->kits->get($kitname);
-		foreach($selectedkit['Content'] as $k){
-			$items = new Item($k[0], $k[1], $k[2]);
-			$player->getInventory()->addItem($items);
-		}
-		array_push($this->hasKit, $player->getName());
-		return true;
-	}
+
 }
