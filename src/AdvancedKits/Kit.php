@@ -32,7 +32,7 @@ class Kit{
         foreach($this->items as $item){
             $player->getInventory()->addItem(Item::get($item[0], $item[1], $item[2]));
         }
-        $player->sendMessage("[AdvancedKits] Kit".$this->name."given.");
+        $player->sendMessage("[AdvancedKits] Kit ".$this->name." given.");
         $this->plugin->hasKit[] = $player->getName();
     }
 
