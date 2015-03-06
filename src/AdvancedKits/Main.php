@@ -15,7 +15,7 @@ class Main extends PluginBase implements Listener{
 
 	public $hasKit = array();
 	/** @var Config::YAML*/
-	public $kits;
+	private $kits;
 	/** @var Config::ENUM*/
 	public $vipPlayers;
 	/** @var Config::ENUM*/
@@ -24,28 +24,19 @@ class Main extends PluginBase implements Listener{
 	public function onEnable(){
   		@mkdir($this->getDataFolder());
   		$this->kits = new Config($this->getDataFolder()."kits.yml", Config::YAML, array(
-			"basicpvp" => array(
-				"Rank" => "Player",
-				"Armor" => array(1, 2, 3, 4), //todo: add default armor contents
-        		"Content" => array(
-					array(272, 0, 1), //id, meta or damage, quantity
+			"basicpvp" => array("Rank" => "Player", "Armor" => array(1, 2, 3, 4), "Content" => array(
+					array(272, 0, 1),
 					array(260, 0, 5),
 					array(260, 0, 5)
 				)
 			),
-			"basicbuilder" => array(
-                "Rank" => "Player",
-				"Armor" => array(),
-                "Content" => array(
+			"basicbuilder" => array("Rank" => "Player", "Armor" => array(), "Content" => array(
                    	array(4, 0, 25),
                    	array(275, 0, 1),
                    	array(297, 0, 3),
                 )
             ),
-			"darkgodpvp" => array(
-               	"Rank" => "Vip",
-				"Armor" => array(),
-                "Content" => array(
+			"darkgodpvp" => array("Rank" => "Vip", "Armor" => array(), "Content" => array(
 					array(276, 0, 2),
                   	array(311, 0, 1),
                    	array(366, 0, 20)

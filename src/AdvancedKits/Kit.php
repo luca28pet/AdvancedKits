@@ -14,7 +14,7 @@ class Kit{
 
     public function __Construct($armor, $items, $rank, $name, Main $plugin){
         $this->armor = $armor;
-        $this->$items = $items;
+        $this->items = $items;
         $this->rank = $rank;
         $this->name = $name;
         $this->plugin = $plugin;
@@ -46,6 +46,7 @@ class Kit{
                 return($this->plugin->vipPlayers->exists(strtolower($player->getName())) or $this->plugin->vipPlayersPlus->exists(strtolower($player->getName())));
             break;
             case "player":
+            case "default":
                 return true;
             break;
             default:
