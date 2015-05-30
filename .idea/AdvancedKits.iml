@@ -7,22 +7,40 @@
     <orderEntry type="module-library">
       <library name="PHP">
         <CLASSES>
-          <root url="file://$USER_HOME$/Desktop/PocketMine-MP - Copia" />
+          <root url="file://$USER_HOME$/Desktop/lobby" />
         </CLASSES>
         <SOURCES>
-          <root url="file://$USER_HOME$/Desktop/PocketMine-MP - Copia" />
+          <root url="file://$USER_HOME$/Desktop/lobby" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$USER_HOME$/Desktop/PocketMine-MP - Copia/PocketMine-MP.phar" />
-          <root url="phar://$USER_HOME$/Desktop/PocketMine-MP - Copia/plugins/DevTools_v1.8.0-4c37f602.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/DevTools_v1.10.0.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/TimerBan_v2.1.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/Broadcaster_v1.15.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/AdvertisingKick_v1.0.0.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/DevTools/AllServers_v1.1.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/PocketMine-MP.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/PurePerms_v1.1.1.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/FastTransfer_v1.0.1.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/SimpleAuth_v1.7.0.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/AllServers_v1.1.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/PureChat_v1.2.6.phar" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$USER_HOME$/Desktop/PocketMine-MP - Copia/PocketMine-MP.phar" />
-          <root url="phar://$USER_HOME$/Desktop/PocketMine-MP - Copia/plugins/DevTools_v1.8.0-4c37f602.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/DevTools_v1.10.0.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/TimerBan_v2.1.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/Broadcaster_v1.15.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/AdvertisingKick_v1.0.0.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/DevTools/AllServers_v1.1.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/PocketMine-MP.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/PurePerms_v1.1.1.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/FastTransfer_v1.0.1.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/SimpleAuth_v1.7.0.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/AllServers_v1.1.phar" />
+          <root url="phar://$USER_HOME$/Desktop/lobby/plugins/PureChat_v1.2.6.phar" />
         </SOURCES>
       </library>
     </orderEntry>
