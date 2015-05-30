@@ -24,7 +24,7 @@ class Kit{
         if(!$this->testRank($player)){
             $player->sendMessage("[AdvancedKits] You don't have permission to use this kit.");
         }
-        $armorItems = array();
+        $armorItems = [];
         foreach($this->armor as $armor){
             $armorItems[] = Item::get($armor);
         }
@@ -40,10 +40,10 @@ class Kit{
         switch(strtolower($this->rank)){
             case "vip+":
             case "vipplus":
-                return($this->plugin->vipPlayersPlus->exists(strtolower($player->getName())));
+                return ($this->plugin->vipPlayersPlus->exists(strtolower($player->getName())));
             break;
             case "vip":
-                return($this->plugin->vipPlayers->exists(strtolower($player->getName())) or $this->plugin->vipPlayersPlus->exists(strtolower($player->getName())));
+                return ($this->plugin->vipPlayers->exists(strtolower($player->getName())) or $this->plugin->vipPlayersPlus->exists(strtolower($player->getName())));
             break;
             case "player":
             case "default":

@@ -13,37 +13,39 @@ use pocketmine\utils\Config;
 
 class Main extends PluginBase implements Listener{
 
-	/** @var array*/
-	public $hasKit = array();
-	/** @var Config::YAML*/
+	public $hasKit = [];
+
+	/** @var Config*/
 	private $kits;
-	/** @var Config::ENUM*/
+
+	/** @var Config*/
 	public $vipPlayers;
-	/** @var Config::ENUM*/
+
+	/** @var Config*/
 	public $vipPlayersPlus;
 
 	public function onEnable(){
   		@mkdir($this->getDataFolder());
-  		$this->kits = new Config($this->getDataFolder()."kits.yml", Config::YAML, array(
-			"basicpvp" => array("Rank" => "Player", "Armor" => array(1, 2, 3, 4), "Content" => array(
-					array(272, 0, 1),
-					array(260, 0, 5),
-					array(260, 0, 5)
-				)
-			),
-			"basicbuilder" => array("Rank" => "Player", "Armor" => array(), "Content" => array(
-                   	array(4, 0, 25),
-                   	array(275, 0, 1),
-                   	array(297, 0, 3),
-                )
-            ),
-			"darkgodpvp" => array("Rank" => "Vip", "Armor" => array(), "Content" => array(
-					array(276, 0, 2),
-                  	array(311, 0, 1),
-                   	array(366, 0, 20)
-               	)
-           	)
-		));
+  		$this->kits = new Config($this->getDataFolder()."kits.yml", Config::YAML, [
+			"basicpvp" => ["Rank" => "Player", "Armor" => [1, 2, 3, 4], "Content" => [
+					[272, 0, 1],
+					[260, 0, 5],
+					[260, 0, 5]
+				]
+			],
+			"basicbuilder" => ["Rank" => "Player", "Armor" => [], "Content" => [
+                   	[4, 0, 25],
+                   	[275, 0, 1],
+                   	[297, 0, 3]
+                ]
+            ],
+			"darkgodpvp" => ["Rank" => "Vip", "Armor" => [], "Content" => [
+					[276, 0, 2],
+                  	[311, 0, 1],
+                   	[366, 0, 20]
+               	]
+           	]
+		]);
   		$this->kits->save();
   		$this->vipPlayers = new Config($this->getDataFolder()."vips.txt", Config::ENUM);
   		$this->vipPlayersPlus = new Config($this->getDataFolder()."vips+.txt", Config::ENUM);
@@ -66,40 +68,37 @@ class Main extends PluginBase implements Listener{
 					if(!(isset($args[1]))){
 						return false;
 					}
-					if($sender instanceof Player){
-						if(in_array($sender->getName(), $this->hasKit)){
-							$sender->sendMessage("[AdvancedKits] You already got a kit.");
-							return true;
-						}
-						$kitname = $args[1];
-						if($this->kits->exists($kitname)){
-							$readconfig = $this->kits->get($kitname);
-							$kit = new Kit($readconfig["Armor"], $readconfig["Content"], $readconfig["Rank"], $kitname, $this);
-							$kit->give($sender);
-							return true;
-						}else{
-							$sender->sendMessage("[AdvancedKits] This kit does not exist.");
-							return true;
-						}
-					}else{
+					if(!($sender instanceof Player)){
 						$sender->sendMessage("Run this command in game.");
 						return true;
 					}
+					if(in_array($sender->getName(), $this->hasKit)){
+						$sender->sendMessage("[AdvancedKits] You already got a kit.");
+						return true;
+					}
+					if($this->kits->exists($args[1])){
+						$readconfig = $this->kits->get($args[1]);
+						$kit = new Kit($readconfig["Armor"], $readconfig["Content"], $readconfig["Rank"], $args[1], $this);
+						$kit->give($sender);
+						return true;
+					}else{
+						$sender->sendMessage("[AdvancedKits] Kit ".$args[1]." does not exist.");
+						return true;
+					}
 				}elseif($args[0] == "addvip"){
-					if($sender->isOp() or !$sender instanceof Player){
+					if($sender->isOp() or !($sender instanceof Player)){
 						if(!(isset($args[1]))){
 							return false;
 						}
-						$playerName = $args[1];
 						if(isset($args[2]) and $args[2] == "plus"){
-							$this->vipPlayersPlus->set(strtolower($playerName));
+							$this->vipPlayersPlus->set(strtolower($args[1]));
 							$this->vipPlayersPlus->save();
-							$sender->sendMessage("[AdvancedKits] ".$playerName." has been added to vips +.");
+							$sender->sendMessage("[AdvancedKits] ".$args[1]." has been added to vips +.");
 							return true;
 						}else{
-							$this->vipPlayers->set(strtolower($playerName));
+							$this->vipPlayers->set(strtolower($args[1]));
 							$this->vipPlayers->save();
-							$sender->sendMessage("[AdvancedKits] ".$playerName." has been added to vips.");
+							$sender->sendMessage("[AdvancedKits] ".$args[1]." has been added to vips.");
 							return true;
 						}
 					}else{
@@ -107,20 +106,19 @@ class Main extends PluginBase implements Listener{
 						return true;
 					}
 				}elseif($args[0] == "unvip"){
-					if($sender->isOp() or !$sender instanceof Player){
+					if($sender->isOp() or !($sender instanceof Player)){
 						if(!(isset($args[1]))){
 							return false;
 						}
-						$playerName = $args[1];
 						if(isset($args[2]) and $args[2] == "plus"){
-							$this->vipPlayersPlus->remove(strtolower($playerName));
+							$this->vipPlayersPlus->remove(strtolower($args[1]));
 							$this->vipPlayersPlus->save();
-							$sender->sendMessage("[AdvancedKits] ".$playerName." has been removed from vips +.");
+							$sender->sendMessage("[AdvancedKits] ".$args[1]." has been removed from vips +.");
 							return true;
 						}else{
-							$this->vipPlayers->remove(strtolower($playerName));
+							$this->vipPlayers->remove(strtolower($args[1]));
 							$this->vipPlayers->save();
-							$sender->sendMessage("[AdvancedKits] ".$playerName." has been removed from vips.");
+							$sender->sendMessage("[AdvancedKits] ".$args[1]." has been removed from vips.");
 							return true;
 						}
 					}else{
@@ -137,18 +135,14 @@ class Main extends PluginBase implements Listener{
 	}
 	
 	public function onDeath(PlayerDeathEvent $event){
-		if(in_array($event->getEntity()->getName(), $this->hasKit)){
-			if(($key = array_search($event->getEntity()->getName(), $this->hasKit)) !== false) {
-				unset($this->hasKit[$key]);
-			}
+		if(($key = array_search($event->getEntity()->getName(), $this->hasKit)) !== false) {
+			unset($this->hasKit[$key]);
 		}
 	}
 	
 	public function onQuit(PlayerQuitEvent $event){
-		if(in_array($event->getPlayer()->getName(), $this->hasKit)){
-			if(($key = array_search($event->getPlayer()->getName(), $this->hasKit)) !== false) {
-				unset($this->hasKit[$key]);
-			}
+		if(($key = array_search($event->getPlayer()->getName(), $this->hasKit)) !== false) {
+			unset($this->hasKit[$key]);
 		}
 	}
 
