@@ -26,29 +26,7 @@ class Main extends PluginBase implements Listener{
 
 	public function onEnable(){
   		@mkdir($this->getDataFolder());
-  		$this->kits = new Config($this->getDataFolder()."kits.yml", Config::YAML, [
-			"basicpvp" => ["Rank" => "Player", "Armor" => [1, 2, 3, 4], "Content" => [
-					[272, 0, 1],
-					[260, 0, 5],
-					[260, 0, 5]
-				]
-			],
-			"basicbuilder" => ["Rank" => "Player", "Armor" => [], "Content" => [
-                   	[4, 0, 25],
-                   	[275, 0, 1],
-                   	[297, 0, 3]
-                ]
-            ],
-			"darkgodpvp" => ["Rank" => "Vip", "Armor" => [], "Content" => [
-					[276, 0, 2],
-                  	[311, 0, 1],
-                   	[366, 0, 20]
-               	]
-           	]
-		]);
-  		$this->kits->save();
-  		$this->vipPlayers = new Config($this->getDataFolder()."vips.txt", Config::ENUM);
-  		$this->vipPlayersPlus = new Config($this->getDataFolder()."vips+.txt", Config::ENUM);
+  		$config = $this->getConfig();
   		$this->getServer()->getPluginManager()->registerEvents($this, $this);
  	}
 
