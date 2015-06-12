@@ -27,16 +27,16 @@ class Main extends PluginBase implements Listener{
 	public function onEnable(){
   		@mkdir($this->getDataFolder());
   		$this->kits = new Config($this->getDataFolder()."kits.yml", Config::YAML, [
-			"basicpvp" => ["Rank" => "Player", "Armor" => [1, 2, 3, 4], "Content" => [
-					[272, 0, 1],
-					[260, 0, 5],
-					[260, 0, 5]
+			"VIP" => ["Rank" => "Vip", "Armor" => [310, 307, 308, 313], "Content" => [
+					[349, 0, 64],
+					[276, 0, 1],
+					[278, 0, `]
 				]
 			],
-			"basicbuilder" => ["Rank" => "Player", "Armor" => [], "Content" => [
-                   	[4, 0, 25],
-                   	[275, 0, 1],
-                   	[297, 0, 3]
+			"VIP+" => ["Rank" => "Vip+", "Armor" => [310, 311, 312, 313], "Content" => [
+                   	[276, 0, 1],
+                   	[278, 0, 1],
+                   	[364, 0, 32]
                 ]
             ],
 			"darkgodpvp" => ["Rank" => "Vip", "Armor" => [], "Content" => [
@@ -60,7 +60,7 @@ class Main extends PluginBase implements Listener{
 
  	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
   		switch($command->getName()){
-  			case "advancedkits":
+  			case "k":
 				if(!(isset($args[0]))){
 					return false;
 				}
@@ -73,7 +73,7 @@ class Main extends PluginBase implements Listener{
 						return true;
 					}
 					if(in_array($sender->getName(), $this->hasKit)){
-						$sender->sendMessage("[AdvancedKits] You already got a kit.");
+						$sender->sendMessage("[CF] You already have a kit.");
 						return true;
 					}
 					if($this->kits->exists($args[1])){
@@ -82,7 +82,7 @@ class Main extends PluginBase implements Listener{
 						$kit->give($sender);
 						return true;
 					}else{
-						$sender->sendMessage("[AdvancedKits] Kit ".$args[1]." does not exist.");
+						$sender->sendMessage("[CF] Kit ".$args[1]." does not exist.");
 						return true;
 					}
 				}elseif($args[0] == "addvip"){
@@ -93,16 +93,16 @@ class Main extends PluginBase implements Listener{
 						if(isset($args[2]) and $args[2] == "plus"){
 							$this->vipPlayersPlus->set(strtolower($args[1]));
 							$this->vipPlayersPlus->save();
-							$sender->sendMessage("[AdvancedKits] ".$args[1]." has been added to vips +.");
+							$sender->sendMessage("[CF] ".$args[1]." has been added to vips +.");
 							return true;
 						}else{
 							$this->vipPlayers->set(strtolower($args[1]));
 							$this->vipPlayers->save();
-							$sender->sendMessage("[AdvancedKits] ".$args[1]." has been added to vips.");
+							$sender->sendMessage("[CF] ".$args[1]." has been added to vips.");
 							return true;
 						}
 					}else{
-						$sender->sendMessage("[AdvancedKits] You need to be an OP in order to run this command.");
+						$sender->sendMessage("[CF] You need to be an OP in order to run this command.");
 						return true;
 					}
 				}elseif($args[0] == "unvip"){
@@ -113,16 +113,16 @@ class Main extends PluginBase implements Listener{
 						if(isset($args[2]) and $args[2] == "plus"){
 							$this->vipPlayersPlus->remove(strtolower($args[1]));
 							$this->vipPlayersPlus->save();
-							$sender->sendMessage("[AdvancedKits] ".$args[1]." has been removed from vips +.");
+							$sender->sendMessage("[CF] ".$args[1]." has been removed from vips +.");
 							return true;
 						}else{
 							$this->vipPlayers->remove(strtolower($args[1]));
 							$this->vipPlayers->save();
-							$sender->sendMessage("[AdvancedKits] ".$args[1]." has been removed from vips.");
+							$sender->sendMessage("[CF] ".$args[1]." has been removed from vips.");
 							return true;
 						}
 					}else{
-						$sender->sendMessage("[AdvancedKits] You need to be an OP in order to run this command.");
+						$sender->sendMessage("[CF] You need to be an OP in order to run this command.");
 						return true;
 					}
 				}else{
