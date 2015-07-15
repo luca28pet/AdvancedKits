@@ -24,6 +24,7 @@ class Main extends PluginBase implements Listener{
     private $economy;
 
     public function onEnable(){
+        $this->getServer()->getPluginManager()->registerEvents($this, $this);
         @mkdir($this->getDataFolder());
         if(!file_exists($this->getDataFolder()."kits.yml")){
             $r = $this->getResource("kits.yml");
@@ -89,6 +90,10 @@ class Main extends PluginBase implements Listener{
                     }
                     if(!isset($this->kits[strtolower($text[1])])){
                         $event->getPlayer()->sendMessage("Kit ".$text[1]." does not exist");
+                        return;
+                    }
+                    if(isset($this->hasKit[$event->getPlayer()->getId()])){
+                        $event->getPlayer()->sendMessage("You already have a kit");
                         return;
                     }
                     if(!$event->getPlayer()->hasPermission("advancedkits.".strtolower($text[1]))){
