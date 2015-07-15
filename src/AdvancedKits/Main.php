@@ -99,11 +99,30 @@ class Main extends PluginBase implements Listener{
     }
 
     private function addKit($name, Player $player){
-        $items = $this->kits[$name]["items"];
+        $kit = $this->kits[$name];
         $inv = $player->getInventory();
-        foreach($items as $item){
+        foreach($kit["items"] as $item){
             $itemData = array_map("intval", explode(":", $item));
             $inv->setItem($inv->firstEmpty(), Item::get($itemData[0], $itemData[1], $itemData[2]));
+        }
+        foreach(["helmet", "chestplate", "leggings", "boots"] as $armor){
+            if(isset($kit[$armor])){
+                $armorItem = Item::get((int) $kit[$armor]);
+                switch($armor){
+                    case "helmet":
+                        $inv->setHelmet($armorItem);
+                        break;
+                    case "chestplate":
+                        $inv->setChestplate($armorItem);
+                        break;
+                    case "leggings":
+                        $inv->setLeggings($armorItem);
+                        break;
+                    case "boots":
+                        $inv->setBoots($armorItem);
+                        break;
+                }
+            }
         }
         $this->hasKit[$player->getId()] = true;
     }
