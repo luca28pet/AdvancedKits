@@ -17,3 +17,6 @@ permissions:
  advancedkits.command:
   description: "Allows the user to get a kit"
   default: true
+ advancedkits.createsign:
+  description: "Allows to create kit signs"
+  default: op

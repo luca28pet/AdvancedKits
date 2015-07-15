@@ -5,6 +5,7 @@ namespace AdvancedKits;
 use pocketmine\block\Block;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use pocketmine\event\block\SignChangeEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerInteractEvent;
@@ -13,6 +14,7 @@ use pocketmine\item\Item;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\tile\Sign;
+use pocketmine\utils\TextFormat;
 
 class Main extends PluginBase implements Listener{
 
@@ -79,7 +81,8 @@ class Main extends PluginBase implements Listener{
             $tile = $event->getPlayer()->getLevel()->getTile($event->getBlock());
             if($tile instanceof Sign){
                 $text = $tile->getText();
-                if(trim($text[0]) === "[AdvancedKits]"){
+                if(strtolower(TextFormat::clean($text[0])) === "[advancedkits]"){
+                    $event->setCancelled();
                     if(empty($text[1])){
                         $event->getPlayer()->sendMessage("On this sign, the kit is not specified");
                         return;
@@ -105,6 +108,13 @@ class Main extends PluginBase implements Listener{
                     }
                 }
             }
+        }
+    }
+
+    public function onSignChange(SignChangeEvent $event){
+        if(strtolower(TextFormat::clean($event->getLine(0))) === "[advancedkits]" and !$event->getPlayer()->hasPermission("advancedkits.createsign")){
+            $event->getPlayer()->sendMessage("You don't have permission to create a sign kit");
+            $event->setCancelled();
         }
     }
 
