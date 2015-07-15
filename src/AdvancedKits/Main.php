@@ -92,7 +92,17 @@ class Main extends PluginBase implements Listener{
                         $event->getPlayer()->sendMessage("You haven't the permission to use kit ".$text[1]);
                         return;
                     }
-                    $this->addKit(strtolower($text[1]), $event->getPlayer());
+                    if(isset($this->kits[strtolower($text[1])]["money"])){
+                        if($this->economy->grantKit($event->getPlayer(), (int) $this->kits[strtolower($text[1])]["money"])){
+                            $this->addKit(strtolower($text[1]), $event->getPlayer());
+                            $event->getPlayer()->sendMessage("Selected kit: ".$text[1].". Taken ".$this->kits[strtolower($text[1])]["money"]." money");
+                        }else{
+                            $event->getPlayer()->sendMessage("You can not afford this kit");
+                        }
+                    }else{
+                        $this->addKit(strtolower($text[1]), $event->getPlayer());
+                        $event->getPlayer()->sendMessage("Selected kit: ".$text[1]);
+                    }
                 }
             }
         }
