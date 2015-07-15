@@ -13,4 +13,5 @@ basicbuilder:
   - 275:0:1
   - 297:0:3
   chestplate: 299
+  money: 20
 ...
