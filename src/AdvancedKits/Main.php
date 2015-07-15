@@ -18,6 +18,8 @@ class Main extends PluginBase implements Listener{
 
     private $kits;
     private $hasKit = [];
+    /**@var EconomyManager*/
+    private $economy;
 
     public function onEnable(){
         @mkdir($this->getDataFolder());
@@ -28,6 +30,7 @@ class Main extends PluginBase implements Listener{
             file_put_contents($this->getDataFolder()."kits.yml", $o);
         }
         $this->kits = yaml_parse(file_get_contents($this->getDataFolder()."kits.yml"));
+        $this->economy = new EconomyManager($this);
     }
 
     public function onCommand(CommandSender $sender, Command $command, $label, array $args){
@@ -53,8 +56,17 @@ class Main extends PluginBase implements Listener{
                     $sender->sendMessage("You haven't the permission to use kit ".$args[0]);
                     return true;
                 }
-                $this->addKit(strtolower($args[0]), $sender);
-                $sender->sendMessage("Selected kit: ".$args[0]);
+                if(isset($this->kits[strtolower($args[0])]["money"])){
+                    if($this->economy->grantKit($sender, (int) $this->kits[strtolower($args[0])]["money"])){
+                        $this->addKit(strtolower($args[0]), $sender);
+                        $sender->sendMessage("Selected kit: ".$args[0].". Taken ".$this->kits[strtolower($args[0])]["money"]." money");
+                    }else{
+                        $sender->sendMessage("You can not afford this kit");
+                    }
+                }else{
+                    $this->addKit(strtolower($args[0]), $sender);
+                    $sender->sendMessage("Selected kit: ".$args[0]);
+                }
                 return true;
             break;
         }
