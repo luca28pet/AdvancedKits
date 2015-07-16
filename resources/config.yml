@@ -3,4 +3,6 @@
 one-kit-per-life: true
 #Users are able to get a kit if they log out event if they did not die
 reset-on-logout: true
+#Use built in permission system even if usign PurePerms
+force-builtin-permissions: false
 ...
