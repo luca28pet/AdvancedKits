@@ -22,6 +22,7 @@ class Main extends PluginBase implements Listener{
     private $hasKit = [];
     /**@var EconomyManager*/
     private $economy;
+    public $coolDown = [];
 
     public function onEnable(){
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
@@ -33,6 +34,7 @@ class Main extends PluginBase implements Listener{
             file_put_contents($this->getDataFolder()."kits.yml", $o);
         }
         $this->kits = yaml_parse(file_get_contents($this->getDataFolder()."kits.yml"));
+        $this->saveDefaultConfig();
         $this->economy = new EconomyManager($this);
     }
 
@@ -49,6 +51,10 @@ class Main extends PluginBase implements Listener{
                 }
                 if(isset($this->hasKit[$sender->getId()])){
                     $sender->sendMessage("You already have a kit");
+                    return true;
+                }
+                if(in_array(strtolower($args[0]), $this->coolDown[strtolower($sender->getName())])){
+                    $sender->sendMessage("Kit ".$args[0]." is in coolDown at the moment");
                     return true;
                 }
                 if(!isset($this->kits[strtolower($args[0])])){
@@ -96,6 +102,10 @@ class Main extends PluginBase implements Listener{
                         $event->getPlayer()->sendMessage("You already have a kit");
                         return;
                     }
+                    if(in_array(strtolower($text[1]), $this->coolDown[strtolower($event->getPlayer()->getName())])){
+                        $event->getPlayer()->sendMessage("Kit ".$text[1]." is in coolDown at the moment");
+                        return;
+                    }
                     if(!$event->getPlayer()->hasPermission("advancedkits.".strtolower($text[1]))){
                         $event->getPlayer()->sendMessage("You haven't the permission to use kit ".$text[1]);
                         return;
@@ -135,8 +145,8 @@ class Main extends PluginBase implements Listener{
         }
     }
 
-    private function addKit($name, Player $player){
-        $kit = $this->kits[$name];
+    private function addKit($kitName, Player $player){
+        $kit = $this->kits[$kitName];
         $inv = $player->getInventory();
         foreach($kit["items"] as $item){
             $itemData = array_map("intval", explode(":", $item));
@@ -161,7 +171,13 @@ class Main extends PluginBase implements Listener{
                 }
             }
         }
-        $this->hasKit[$player->getId()] = true;
+        if(isset($kit["cooldown"])){
+            $this->coolDown[strtolower($player->getName())][] = $kitName;
+            $this->getServer()->getScheduler()->scheduleDelayedTask(new CoolDownTask($kitName, strtolower($player->getName()), $this), $kit["cooldown"] * 60 * 20);
+        }
+        if($this->getConfig()->get("one-kit-per-life") == true){
+            $this->hasKit[$player->getId()] = true;
+        }
     }
 
 }
