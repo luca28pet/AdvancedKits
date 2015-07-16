@@ -1,3 +1,4 @@
 ---
 one-kit-per-life: true
+reset-on-logout: true
 ...
