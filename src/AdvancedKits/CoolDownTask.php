@@ -11,6 +11,7 @@ class CoolDownTask extends PluginTask{
     private $plugin;
 
     public function __construct($kitName, $playerName, Main $plugin){
+        parent::__construct($plugin);
         $this->kitName = $kitName;
         $this->playerName = $playerName;
         $this->plugin = $plugin;
