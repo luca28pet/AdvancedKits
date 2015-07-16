@@ -7,6 +7,7 @@ basicpvp:
   chestplate: 299
   leggings: 300
   boots: 301
+  cooldown: 20
 basicbuilder:
   items:
   - "4:0:25"
