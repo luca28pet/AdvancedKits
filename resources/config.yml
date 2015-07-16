@@ -1,4 +1,6 @@
 ---
+#Users are able to get only one kit per life
 one-kit-per-life: true
+#Users are able to get a kit if they log out event if they did not die
 reset-on-logout: true
 ...
