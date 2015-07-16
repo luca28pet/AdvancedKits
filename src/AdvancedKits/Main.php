@@ -140,7 +140,7 @@ class Main extends PluginBase implements Listener{
     }
 
     public function onLogOut(PlayerQuitEvent $event){
-        if(isset($this->hasKit[$event->getPlayer()->getId()])){
+        if($this->getConfig()->get("reset-on-logout") == true and isset($this->hasKit[$event->getPlayer()->getId()])){
             unset($this->hasKit[$event->getPlayer()->getId()]);
         }
     }
