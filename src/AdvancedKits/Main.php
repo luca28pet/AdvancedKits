@@ -53,7 +53,7 @@ class Main extends PluginBase implements Listener{
                     $sender->sendMessage("You already have a kit");
                     return true;
                 }
-                if(in_array(strtolower($args[0]), $this->coolDown[strtolower($sender->getName())])){
+                if(isset($this->coolDown[strtolower($sender->getName())]) and in_array(strtolower($args[0]), $this->coolDown[strtolower($sender->getName())])){
                     $sender->sendMessage("Kit ".$args[0]." is in coolDown at the moment");
                     return true;
                 }
