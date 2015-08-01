@@ -15,8 +15,8 @@ class Main extends PluginBase implements Listener{
     public $hasKit = [];
     /**@var EconomyManager*/
     public $economy;
-    private $permManager = false;
     public $coolDown = [];
+    private $permManager = false;
 
     public function onEnable(){
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
@@ -127,7 +127,7 @@ class Main extends PluginBase implements Listener{
                 }
                 $sender->sendMessage("Taken ".$args[1]." permission to use kit ".$args[0]);
                 return true;
-                break;
+            break;
             case "rmkitworld":
                 if(!isset($args[0])){
                     $sender->sendMessage("Please specify a kit");
@@ -146,22 +146,22 @@ class Main extends PluginBase implements Listener{
                 }
                 $sender->sendMessage("Kit ".$args[0]." is no longer available in world ".$args[1]);
                 return true;
-                break;
+            break;
         }
         return true;
     }
 
     public function checkPermission(Player $player, $kitName){
         if($this->permManager){
-            if(!$player->hasPermission("advancedkits.".$kitName)){
-                return false;
+            if($player->hasPermission("advancedkits.".$kitName)){
+                return true;
             }
-            return true;
+            return false;
         }
         return (
-            (isset($this->kits[$kitName]["users"]) and in_array(strtolower($player->getName()), $this->kits[$kitName]["users"]))
+            (isset($this->kits[$kitName]["users"]) ? in_array(strtolower($player->getName()), $this->kits[$kitName]["users"]) : true)
             and
-            (isset($this->kits[$kitName]["worlds"]) and in_array(strtolower($player->getName()), $this->kits[$kitName]["worlds"]))
+            (isset($this->kits[$kitName]["worlds"]) ? in_array(strtolower($player->getName()), $this->kits[$kitName]["worlds"]) : true)
         );
     }
 
@@ -193,7 +193,7 @@ class Main extends PluginBase implements Listener{
         }
         if(isset($kit["cooldown"])){
             $this->coolDown[strtolower($player->getName())][] = $kitName;
-            $this->getServer()->getScheduler()->scheduleDelayedTask(new CoolDownTask($kitName, strtolower($player->getName()), $this), $kit["cooldown"] * 60 * 20);
+            $this->getServer()->getScheduler()->scheduleDelayedTask($task = new CoolDownTask($kitName, strtolower($player->getName()), $this), $kit["cooldown"] * 60 * 20);
         }
         if($this->getConfig()->get("one-kit-per-life") == true){
             $this->hasKit[$player->getId()] = true;
