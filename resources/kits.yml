@@ -7,7 +7,9 @@ basicpvp:
   chestplate: 299
   leggings: 300
   boots: 301
-  cooldown: 20
+  cooldown:
+    hours: 24
+    minutes: 30
   worlds:
   - "kitpvp"
 basicbuilder:
@@ -17,6 +19,8 @@ basicbuilder:
   - "297:0:3"
   chestplate: 299
   money: 20
+  cooldown:
+    minutes: 2
   users:
   - "luca28pet"
   - "dioconsole"

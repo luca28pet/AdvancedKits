@@ -33,6 +33,7 @@ class Main extends PluginBase implements Listener{
         if($this->getServer()->getPluginManager()->getPlugin("PurePerms") !== null and $this->getConfig()->get("force-builtin-permissions") == false){
             $this->permManager = true;
         }
+        $this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new CoolDownTask($this), 1200, 1200);
     }
 
     public function onCommand(CommandSender $sender, Command $command, $label, array $args){
@@ -50,8 +51,9 @@ class Main extends PluginBase implements Listener{
                     $sender->sendMessage("You already have a kit");
                     return true;
                 }
-                if(isset($this->coolDown[strtolower($sender->getName())]) and in_array(strtolower($args[0]), $this->coolDown[strtolower($sender->getName())])){
+                if(isset($this->coolDown[strtolower($sender->getName())][strtolower($args[0])])){
                     $sender->sendMessage("Kit ".$args[0]." is in coolDown at the moment");
+                    $sender->sendMessage("You will be able to get it in ".$this->getTimeLeft($this->coolDown[strtolower($sender->getName())][strtolower($args[0])]));
                     return true;
                 }
                 if(!isset($this->kits[strtolower($args[0])])){
@@ -188,13 +190,25 @@ class Main extends PluginBase implements Listener{
                 }
             }
         }
-        if(isset($kit["cooldown"])){
-            $this->coolDown[strtolower($player->getName())][] = $kitName;
-            $this->getServer()->getScheduler()->scheduleDelayedTask(new CoolDownTask($kitName, strtolower($player->getName()), $this), $kit["cooldown"] * 60 * 20);
+        if(isset($kit["cooldown"]["minutes"])){
+            $this->coolDown[strtolower($player->getName())][$kitName] = $kit["cooldown"]["minutes"];
+        }
+        if(isset($kit["cooldown"]["hours"])){
+            $this->coolDown[strtolower($player->getName())][$kitName] += $kit["cooldown"]["hours"] * 60;
         }
         if($this->getConfig()->get("one-kit-per-life") == true){
             $this->hasKit[$player->getId()] = true;
         }
+    }
+
+    public function getTimeLeft($minutes){
+        if($minutes < 60){
+            return $minutes." minutes";
+        }
+        if(($modulo = $minutes % 60) === 0){
+            return ($minutes / 60)." hours";
+        }
+        return floor($minutes / 60)." hours and ".$modulo." minutes";
     }
 
 }
