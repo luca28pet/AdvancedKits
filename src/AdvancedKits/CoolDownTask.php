@@ -18,10 +18,8 @@ class CoolDownTask extends PluginTask{
     }
 
     public function onRun($tick){
-        if(isset($this->plugin->coolDown[$this->playerName])){
-            if(($key = array_search($this->kitName, $this->plugin->coolDown[$this->playerName])) !== false){
-                unset($this->plugin->coolDown[$this->playerName][$key]);
-            }
+        if(isset($this->plugin->coolDown[$this->playerName]) and ($key = array_search($this->kitName, $this->plugin->coolDown[$this->playerName])) !== false){
+            unset($this->plugin->coolDown[$this->playerName][$key]);
         }
     }
 
