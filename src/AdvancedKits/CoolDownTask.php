@@ -6,20 +6,21 @@ use pocketmine\scheduler\PluginTask;
 
 class CoolDownTask extends PluginTask{
 
-    private $kitName;
-    private $playerName;
     private $plugin;
 
-    public function __construct($kitName, $playerName, Main $plugin){
+    public function __construct(Main $plugin){
         parent::__construct($plugin);
-        $this->kitName = $kitName;
-        $this->playerName = $playerName;
         $this->plugin = $plugin;
     }
 
     public function onRun($tick){
-        if(isset($this->plugin->coolDown[$this->playerName]) and ($key = array_search($this->kitName, $this->plugin->coolDown[$this->playerName])) !== false){
-            unset($this->plugin->coolDown[$this->playerName][$key]);
+        foreach($this->plugin->coolDown as $player => $coolDownKits){
+            foreach($coolDownKits as $kit => $minutes){
+                $this->plugin->coolDown[$player][$kit] -= 1;
+                if($this->plugin->coolDown[$player][$kit] === 0){
+                    unset($this->plugin->coolDown[$player][$kit]);
+                }
+            }
         }
     }
 
