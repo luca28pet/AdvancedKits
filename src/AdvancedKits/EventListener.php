@@ -40,8 +40,9 @@ class EventListener implements Listener{
                         $event->getPlayer()->sendMessage("You already have a kit");
                         return;
                     }
-                    if(isset($this->ak->coolDown[strtolower($event->getPlayer()->getName())]) and in_array(strtolower($text[1]), $this->ak->coolDown[strtolower($event->getPlayer()->getName())])){
+                    if(isset($this->ak->coolDown[strtolower($event->getPlayer()->getName())][strtolower($text[1])])){
                         $event->getPlayer()->sendMessage("Kit ".$text[1]." is in coolDown at the moment");
+                        $event->getPlayer()->sendMessage("You will be able to get it in ".$this->ak->getTimeLeft($this->ak->coolDown[strtolower($event->getPlayer()->getName())][strtolower($text[1])]));
                         return;
                     }
                     if(!$this->ak->checkPermission($event->getPlayer(), strtolower($text[1]))){
