@@ -33,7 +33,14 @@ class Main extends PluginBase implements Listener{
         if($this->getServer()->getPluginManager()->getPlugin("PurePerms") !== null and $this->getConfig()->get("force-builtin-permissions") == false){
             $this->permManager = true;
         }
+        if(file_exists($this->getDataFolder()."cooldowns.sl")){
+            $this->coolDown = unserialize(file_get_contents($this->getDataFolder()."cooldowns.sl"));
+        }
         $this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new CoolDownTask($this), 1200, 1200);
+    }
+
+    public function onDisable(){
+        file_put_contents($this->getDataFolder()."cooldowns.sl", serialize($this->coolDown));
     }
 
     public function onCommand(CommandSender $sender, Command $command, $label, array $args){
@@ -154,10 +161,7 @@ class Main extends PluginBase implements Listener{
     }
 
     public function checkPermission(Player $player, $kitName){
-        if($this->permManager){
-            return $player->hasPermission("advancedkits.".$kitName);
-        }
-        return (
+        return $this->permManager ? $player->hasPermission("advancedkits.".$kitName) : (
             (isset($this->kits[$kitName]["users"]) ? in_array(strtolower($player->getName()), $this->kits[$kitName]["users"]) : true)
             and
             (isset($this->kits[$kitName]["worlds"]) ? in_array(strtolower($player->getName()), $this->kits[$kitName]["worlds"]) : true)
