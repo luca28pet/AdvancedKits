@@ -153,10 +153,7 @@ class Main extends PluginBase implements Listener{
 
     public function checkPermission(Player $player, $kitName){
         if($this->permManager){
-            if($player->hasPermission("advancedkits.".$kitName)){
-                return true;
-            }
-            return false;
+            return $player->hasPermission("advancedkits.".$kitName);
         }
         return (
             (isset($this->kits[$kitName]["users"]) ? in_array(strtolower($player->getName()), $this->kits[$kitName]["users"]) : true)
