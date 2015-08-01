@@ -193,7 +193,7 @@ class Main extends PluginBase implements Listener{
         }
         if(isset($kit["cooldown"])){
             $this->coolDown[strtolower($player->getName())][] = $kitName;
-            $this->getServer()->getScheduler()->scheduleDelayedTask($task = new CoolDownTask($kitName, strtolower($player->getName()), $this), $kit["cooldown"] * 60 * 20);
+            $this->getServer()->getScheduler()->scheduleDelayedTask(new CoolDownTask($kitName, strtolower($player->getName()), $this), $kit["cooldown"] * 60 * 20);
         }
         if($this->getConfig()->get("one-kit-per-life") == true){
             $this->hasKit[$player->getId()] = true;
