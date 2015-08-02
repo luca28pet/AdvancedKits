@@ -60,7 +60,7 @@ class Main extends PluginBase implements Listener{
                 }
                 if(isset($this->coolDown[strtolower($sender->getName())][strtolower($args[0])])){
                     $sender->sendMessage("Kit ".$args[0]." is in coolDown at the moment");
-                    $sender->sendMessage("You will be able to get it in ".$this->getTimeLeft($this->coolDown[strtolower($sender->getName())][strtolower($args[0])]));
+                    $sender->sendMessage("You will be able to get it in ".$this->getTimeLeftString($this->coolDown[strtolower($sender->getName())][strtolower($args[0])]));
                     return true;
                 }
                 if(!isset($this->kits[strtolower($args[0])])){
@@ -131,10 +131,14 @@ class Main extends PluginBase implements Listener{
                     $sender->sendMessage("Kit ".$args[0]." does not exist");
                     return true;
                 }
-                if(($key = array_search(strtolower($args[1]), $this->kits[strtolower($args[0])]["users"])) !== false){
-                    unset($this->kits[strtolower($args[0])]["users"][$key]);
+                if(isset($this->kits[strtolower($args[0])]["users"])){
+                    if(($key = array_search(strtolower($args[1]), $this->kits[strtolower($args[0])]["users"])) !== false){
+                        unset($this->kits[strtolower($args[0])]["users"][$key]);
+                        $sender->sendMessage("Taken ".$args[1]." permission to use kit ".$args[0]);
+                        return true;
+                    }
                 }
-                $sender->sendMessage("Taken ".$args[1]." permission to use kit ".$args[0]);
+                $sender->sendMessage("Player not found in users list");
                 return true;
             break;
             case "rmkitworld":
@@ -150,10 +154,14 @@ class Main extends PluginBase implements Listener{
                     $sender->sendMessage("Kit ".$args[0]." does not exist");
                     return true;
                 }
-                if(($key = array_search(strtolower($args[1]), $this->kits[strtolower($args[0])]["worlds"])) !== false){
-                    unset($this->kits[strtolower($args[0])]["worlds"][$key]);
+                if(isset($this->kits[strtolower($args[0])]["worlds"])){
+                    if(($key = array_search(strtolower($args[1]), $this->kits[strtolower($args[0])]["worlds"])) !== false){
+                        unset($this->kits[strtolower($args[0])]["worlds"][$key]);
+                        $sender->sendMessage("Kit ".$args[0]." is no longer available in world ".$args[1]);
+                        return true;
+                    }
                 }
-                $sender->sendMessage("Kit ".$args[0]." is no longer available in world ".$args[1]);
+                $sender->sendMessage("World not found in levels list");
                 return true;
             break;
         }
@@ -205,14 +213,14 @@ class Main extends PluginBase implements Listener{
         }
     }
 
-    public function getTimeLeft($minutes){
+    public function getTimeLeftString($minutes){
         if($minutes < 60){
             return $minutes." minutes";
         }
-        if(($modulo = $minutes % 60) === 0){
-            return ($minutes / 60)." hours";
+        if(($modulo = $minutes % 60) !== 0){
+            return floor($minutes / 60)." hours and ".$modulo." minutes";
         }
-        return floor($minutes / 60)." hours and ".$modulo." minutes";
+        return ($minutes / 60)." hours";
     }
 
 }
