@@ -4,12 +4,11 @@ namespace AdvancedKits;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\event\Listener;
 use pocketmine\item\Item;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 
-class Main extends PluginBase implements Listener{
+class Main extends PluginBase{
 
     public $kits;
     public $hasKit = [];
@@ -19,7 +18,7 @@ class Main extends PluginBase implements Listener{
     private $permManager = false;
 
     public function onEnable(){
-        $this->getServer()->getPluginManager()->registerEvents($this, $this);
+        $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
         @mkdir($this->getDataFolder());
         if(!file_exists($this->getDataFolder()."kits.yml")){
             $r = $this->getResource("kits.yml");
