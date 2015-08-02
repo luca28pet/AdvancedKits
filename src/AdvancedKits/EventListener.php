@@ -42,7 +42,7 @@ class EventListener implements Listener{
                     }
                     if(isset($this->ak->coolDown[strtolower($event->getPlayer()->getName())][strtolower($text[1])])){
                         $event->getPlayer()->sendMessage("Kit ".$text[1]." is in coolDown at the moment");
-                        $event->getPlayer()->sendMessage("You will be able to get it in ".$this->ak->getTimeLeft($this->ak->coolDown[strtolower($event->getPlayer()->getName())][strtolower($text[1])]));
+                        $event->getPlayer()->sendMessage("You will be able to get it in ".$this->ak->getTimeLeftString($this->ak->coolDown[strtolower($event->getPlayer()->getName())][strtolower($text[1])]));
                         return;
                     }
                     if(!$this->ak->checkPermission($event->getPlayer(), strtolower($text[1]))){
@@ -66,7 +66,7 @@ class EventListener implements Listener{
     }
 
     public function onSignChange(SignChangeEvent $event){
-        if(strtolower(TextFormat::clean($event->getLine(0))) === "[advancedkits]" and !$event->getPlayer()->hasPermission("advancedkits.createsign")){
+        if(strtolower(TextFormat::clean($event->getLine(0))) === "[advancedkits]" and !$event->getPlayer()->hasPermission("advancedkits.admin")){
             $event->getPlayer()->sendMessage("You don't have permission to create a sign kit");
             $event->setCancelled();
         }
