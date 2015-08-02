@@ -13,22 +13,6 @@ commands:
   usage: "/kit <kitName>"
   aliases: [ak, advancedkits]
   permission: advancedkits.command
- addkituser:
-  description: Let a user get a certain kit
-  usage: "/addkituser <kit> <player>"
-  permission: advancedkits.admin
- addkitworld:
-  description: Let a user get a certain kit in a world
-  usage: "/addkitworld <kit> <player>"
-  permission: advancedkits.admin
- rmkituser:
-  description: Prevent a user to get a certain kit
-  usage: "/rmkituser <kit> <player>"
-  permission: advancedkits.admin
- rmkitworld:
-  description: Prevent a user to get a certain kit in a world
-  usage: "/rmkitworld <kit> <player>"
-  permission: advancedkits.admin
 permissions:
  advancedkits.command:
   description: "Allows the user to get a kit"
