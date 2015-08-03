@@ -13,6 +13,10 @@ commands:
   usage: "/kit <kitName>"
   aliases: [ak, advancedkits]
   permission: advancedkits.command
+ akreload:
+  descrpition: Reload Kits settings
+  usage: "/akreload"
+  permission: advancedkits.admin
 permissions:
  advancedkits.command:
   description: "Allows the user to get a kit"

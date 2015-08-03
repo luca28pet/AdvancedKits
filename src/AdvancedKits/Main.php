@@ -83,6 +83,11 @@ class Main extends PluginBase{
                 }
                 return true;
             break;
+            case "akreload":
+                $this->kits = yaml_parse(file_get_contents($this->getDataFolder()."kits.yml"));
+                $sender->sendMessage("Reloaded kits settings");
+                return true;
+            break;
         }
         return true;
     }
