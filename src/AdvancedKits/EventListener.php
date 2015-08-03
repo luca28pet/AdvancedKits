@@ -36,8 +36,8 @@ class EventListener implements Listener{
                         $event->getPlayer()->sendMessage("Kit ".$text[1]." does not exist");
                         return;
                     }
-                    if(isset($this->ak->hasKit[$event->getPlayer()->getId()])){
-                        $event->getPlayer()->sendMessage("You already have a kit");
+                    if(!$this->ak->checkPermission($event->getPlayer(), strtolower($text[1]))){
+                        $event->getPlayer()->sendMessage("You haven't the permission to use kit ".$text[1]);
                         return;
                     }
                     if(isset($this->ak->coolDown[strtolower($event->getPlayer()->getName())][strtolower($text[1])])){
@@ -45,8 +45,8 @@ class EventListener implements Listener{
                         $event->getPlayer()->sendMessage("You will be able to get it in ".$this->ak->getTimeLeftString($this->ak->coolDown[strtolower($event->getPlayer()->getName())][strtolower($text[1])]));
                         return;
                     }
-                    if(!$this->ak->checkPermission($event->getPlayer(), strtolower($text[1]))){
-                        $event->getPlayer()->sendMessage("You haven't the permission to use kit ".$text[1]);
+                    if(isset($this->ak->hasKit[$event->getPlayer()->getId()])){
+                        $event->getPlayer()->sendMessage("You already have a kit");
                         return;
                     }
                     if(isset($this->ak->kits[strtolower($text[1])]["money"])){
