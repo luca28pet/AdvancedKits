@@ -13,7 +13,7 @@ class EconomyManager{
     public function __construct(Main $plugin){
         $this->plugin = $plugin;
         foreach(["EconomyAPI", "PocketMoney", "MassiveEconomy"] as $plugin){
-            if($p = $this->plugin->getServer()->getPluginManager()->getPlugin($plugin) !== null){
+            if(($p = $this->plugin->getServer()->getPluginManager()->getPlugin($plugin)) !== null){
                 $this->economy = $plugin;
                 $this->api = $p;
                 break;
