@@ -53,8 +53,12 @@ class Main extends PluginBase{
                     $sender->sendMessage("Available kits: ".implode(", ", array_keys($this->kits)));
                     return true;
                 }
-                if(isset($this->hasKit[$sender->getId()])){
-                    $sender->sendMessage("You already have a kit");
+                if(!isset($this->kits[strtolower($args[0])])){
+                    $sender->sendMessage("Kit ".$args[0]." does not exist");
+                    return true;
+                }
+                if(!$this->checkPermission($sender, strtolower($args[0]))){
+                    $sender->sendMessage("You haven't the permission to use kit ".$args[0]);
                     return true;
                 }
                 if(isset($this->coolDown[strtolower($sender->getName())][strtolower($args[0])])){
@@ -62,12 +66,8 @@ class Main extends PluginBase{
                     $sender->sendMessage("You will be able to get it in ".$this->getTimeLeftString($this->coolDown[strtolower($sender->getName())][strtolower($args[0])]));
                     return true;
                 }
-                if(!isset($this->kits[strtolower($args[0])])){
-                    $sender->sendMessage("Kit ".$args[0]." does not exist");
-                    return true;
-                }
-                if(!$this->checkPermission($sender, strtolower($args[0]))){
-                    $sender->sendMessage("You haven't the permission to use kit ".$args[0]);
+                if(isset($this->hasKit[$sender->getId()])){
+                    $sender->sendMessage("You already have a kit");
                     return true;
                 }
                 if(isset($this->kits[strtolower($args[0])]["money"])){
