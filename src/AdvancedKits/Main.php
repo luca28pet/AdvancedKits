@@ -91,7 +91,7 @@ class Main extends PluginBase{
         return $this->permManager ? $player->hasPermission("advancedkits.".$kitName) : (
             (isset($this->kits[$kitName]["users"]) ? in_array(strtolower($player->getName()), $this->kits[$kitName]["users"]) : true)
             and
-            (isset($this->kits[$kitName]["worlds"]) ? in_array(strtolower($player->getName()), $this->kits[$kitName]["worlds"]) : true)
+            (isset($this->kits[$kitName]["worlds"]) ? in_array(strtolower($player->getLevel()->getName()), $this->kits[$kitName]["worlds"]) : true)
         );
     }
 
