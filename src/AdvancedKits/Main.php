@@ -86,6 +86,7 @@ class Main extends PluginBase{
             break;
             case "akreload":
                 $this->kits = yaml_parse(file_get_contents($this->getDataFolder()."kits.yml"));
+                $this->fixConfig();
                 $sender->sendMessage("Reloaded kits settings");
                 return true;
             break;
