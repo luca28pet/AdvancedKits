@@ -36,6 +36,7 @@ class Main extends PluginBase{
             $this->coolDown = unserialize(file_get_contents($this->getDataFolder()."cooldowns.sl"));
         }
         $this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new CoolDownTask($this), 1200, 1200);
+        $this->fixConfig();
     }
 
     public function onDisable(){
@@ -145,6 +146,19 @@ class Main extends PluginBase{
             return floor($minutes / 60)." hours and ".$modulo." minutes";
         }
         return ($minutes / 60)." hours";
+    }
+
+    private function fixConfig(){
+        foreach($this->kits as $name => $kit){
+            if(isset($kit["users"])){
+                $users = array_map("strtolower", $kit["users"]);
+                $this->kits[$name]["users"] = $users;
+            }
+            if(isset($kit["worlds"])){
+                $worlds = array_map("strtolower", $kit["worlds"]);
+                $this->kits[$name]["worlds"] = $worlds;
+            }
+        }
     }
 
 }
