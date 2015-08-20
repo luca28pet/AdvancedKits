@@ -1,7 +1,8 @@
 <?php
 
-namespace AdvancedKits;
+namespace AdvancedKits\tasks;
 
+use AdvancedKits\Main;
 use pocketmine\scheduler\PluginTask;
 
 class CoolDownTask extends PluginTask{

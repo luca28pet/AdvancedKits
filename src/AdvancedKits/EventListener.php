@@ -29,13 +29,13 @@ class EventListener implements Listener{
                 if(strtolower(TextFormat::clean($text[0])) === "[advancedkits]"){
                     $event->setCancelled();
                     if(empty($text[1])){
-                        $event->getPlayer()->sendMessage("On this sign, the kit is not specified");
+                        $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation("no-sign-on-kit"));
                         return;
                     }
                     /**@var Kit[] $lowerKeys*/
                     $lowerKeys = array_change_key_case($this->ak->kits, CASE_LOWER);
                     if(!isset($lowerKeys[strtolower($text[1])])){
-                        $event->getPlayer()->sendMessage("Kit ".$text[1]." does not exist");
+                        $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation("no-kit", $text[1]));
                         return;
                     }
                     $lowerKeys[strtolower($text[1])]->handleRequest($event->getPlayer());
@@ -46,7 +46,7 @@ class EventListener implements Listener{
 
     public function onSignChange(SignChangeEvent $event){
         if(strtolower(TextFormat::clean($event->getLine(0))) === "[advancedkits]" and !$event->getPlayer()->hasPermission("advancedkits.admin")){
-            $event->getPlayer()->sendMessage("You don't have permission to create a sign kit");
+            $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation("no-perm-sign"));
             $event->setCancelled();
         }
     }
