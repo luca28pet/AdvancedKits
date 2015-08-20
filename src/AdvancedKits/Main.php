@@ -2,6 +2,9 @@
 
 namespace AdvancedKits;
 
+use AdvancedKits\economy\EconomyManager;
+use AdvancedKits\lang\LangManager;
+use AdvancedKits\tasks\CoolDownTask;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
@@ -15,12 +18,15 @@ class Main extends PluginBase{
     /**@var EconomyManager*/
     public $economy;
     public $permManager = false;
+    /**@var LangManager*/
+    public $langManager;
 
     public function onEnable(){
         $this->saveDefaultConfig();
         @mkdir($this->getDataFolder()."cooldowns/");
         $this->loadKits();
         $this->economy = new EconomyManager($this);
+        $this->langManager = new LangManager($this);
         if($this->getServer()->getPluginManager()->getPlugin("PurePerms") !== null and $this->getConfig()->get("force-builtin-permissions") == false){
             $this->permManager = true;
         }
@@ -65,17 +71,17 @@ class Main extends PluginBase{
         switch(strtolower($command->getName())){
             case "kit":
                 if(!($sender instanceof Player)){
-                    $sender->sendMessage("Please run this command in game");
+                    $sender->sendMessage($this->langManager->getTranslation("in-game"));
                     return true;
                 }
                 if(!isset($args[0])){
-                    $sender->sendMessage("Available kits: ".implode(", ", array_keys($this->kits)));
+                    $sender->sendMessage($this->langManager->getTranslation("av-kits", implode(", ", array_keys($this->kits))));
                     return true;
                 }
                 /**@var Kit[] $lowerKeys*/
                 $lowerKeys = array_change_key_case($this->kits, CASE_LOWER);
                 if(!isset($lowerKeys[strtolower($args[0])])){
-                    $sender->sendMessage("Kit ".$args[0]." does not exist");
+                    $sender->sendMessage($this->langManager->getTranslation("no-kit", $args[0]));
                     return true;
                 }
                 $lowerKeys[strtolower($args[0])]->handleRequest($sender);
@@ -83,7 +89,7 @@ class Main extends PluginBase{
             break;
             case "akreload":
                 $this->loadKits();
-                $sender->sendMessage("Reloaded kits settings");
+                $sender->sendMessage($this->langManager->getTranslation("reload"));
                 return true;
             break;
         }

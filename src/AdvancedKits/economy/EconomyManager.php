@@ -1,7 +1,8 @@
 <?php
 
-namespace AdvancedKits;
+namespace AdvancedKits\economy;
 
+use AdvancedKits\Main;
 use pocketmine\Player;
 
 class EconomyManager{
