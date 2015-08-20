@@ -24,7 +24,7 @@ class Kit{
     public function handleRequest(Player $player){
         if($this->testPermission($player)){
             if(!isset($this->coolDowns[strtolower($player->getName())])){
-                if($this->ak->getConfig()->get("one-kit-per-life") ? isset($this->ak->hasKit[strtolower($player->getName())]) : true){
+                if(!($this->ak->getConfig()->get("one-kit-per-life") and isset($this->ak->hasKit[strtolower($player->getName())]))){
                     if($this->isPaid()){
                         if($this->ak->economy->grantKit($player, $this->getCost())){
                             $this->addTo($player);
@@ -59,6 +59,7 @@ class Kit{
             elseif($type === "boots") $inv->setBoots($item);
         }
         $this->coolDowns[strtolower($player)] = $this->getCoolDownMinutes();
+        $this->ak->hasKit[strtolower($player->getName())] = true;
     }
 
     /**
