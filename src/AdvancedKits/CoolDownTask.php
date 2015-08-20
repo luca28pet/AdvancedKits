@@ -14,13 +14,8 @@ class CoolDownTask extends PluginTask{
     }
 
     public function onRun($tick){
-        foreach($this->plugin->coolDown as $player => $coolDownKits){
-            foreach($coolDownKits as $kit => $minutes){
-                $this->plugin->coolDown[$player][$kit] -= 1;
-                if($this->plugin->coolDown[$player][$kit] <= 0){
-                    unset($this->plugin->coolDown[$player][$kit]);
-                }
-            }
+        foreach($this->plugin->kits as $kit){
+            $kit->processCoolDown();
         }
     }
 

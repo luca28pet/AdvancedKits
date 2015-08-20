@@ -32,34 +32,13 @@ class EventListener implements Listener{
                         $event->getPlayer()->sendMessage("On this sign, the kit is not specified");
                         return;
                     }
-                    if(!isset($this->ak->kits[strtolower($text[1])])){
+                    /**@var Kit[] $lowerKeys*/
+                    $lowerKeys = array_change_key_case($this->ak->kits, CASE_LOWER);
+                    if(!isset($lowerKeys[strtolower($text[1])])){
                         $event->getPlayer()->sendMessage("Kit ".$text[1]." does not exist");
                         return;
                     }
-                    if(!$this->ak->checkPermission($event->getPlayer(), strtolower($text[1]))){
-                        $event->getPlayer()->sendMessage("You haven't the permission to use kit ".$text[1]);
-                        return;
-                    }
-                    if(isset($this->ak->coolDown[strtolower($event->getPlayer()->getName())][strtolower($text[1])])){
-                        $event->getPlayer()->sendMessage("Kit ".$text[1]." is in coolDown at the moment");
-                        $event->getPlayer()->sendMessage("You will be able to get it in ".$this->ak->getTimeLeftString($this->ak->coolDown[strtolower($event->getPlayer()->getName())][strtolower($text[1])]));
-                        return;
-                    }
-                    if(isset($this->ak->hasKit[$event->getPlayer()->getId()])){
-                        $event->getPlayer()->sendMessage("You already have a kit");
-                        return;
-                    }
-                    if(isset($this->ak->kits[strtolower($text[1])]["money"])){
-                        if($this->ak->economy->grantKit($event->getPlayer(), (int) $this->ak->kits[strtolower($text[1])]["money"])){
-                            $this->ak->addKit(strtolower($text[1]), $event->getPlayer());
-                            $event->getPlayer()->sendMessage("Selected kit: ".$text[1].". Taken ".$this->ak->kits[strtolower($text[1])]["money"]." money");
-                        }else{
-                            $event->getPlayer()->sendMessage("You can not afford this kit");
-                        }
-                    }else{
-                        $this->ak->addKit(strtolower($text[1]), $event->getPlayer());
-                        $event->getPlayer()->sendMessage("Selected kit: ".$text[1]);
-                    }
+                    $lowerKeys[strtolower($text[1])]->handleRequest($event->getPlayer());
                 }
             }
         }
@@ -73,14 +52,14 @@ class EventListener implements Listener{
     }
 
     public function onDeath(PlayerDeathEvent $event){
-        if(isset($this->ak->hasKit[$event->getEntity()->getId()])){
-            unset($this->ak->hasKit[$event->getEntity()->getId()]);
+        if(isset($this->ak->hasKit[strtolower($event->getEntity()->getName())])){
+            unset($this->ak->hasKit[strtolower($event->getEntity()->getName())]);
         }
     }
 
     public function onLogOut(PlayerQuitEvent $event){
-        if($this->ak->getConfig()->get("reset-on-logout") == true and isset($this->ak->hasKit[$event->getPlayer()->getId()])){
-            unset($this->ak->hasKit[$event->getPlayer()->getId()]);
+        if($this->ak->getConfig()->get("reset-on-logout") and isset($this->ak->hasKit[strtolower($event->getPlayer()->getName())])){
+            unset($this->ak->hasKit[strtolower($event->getPlayer()->getName())]);
         }
     }
 
