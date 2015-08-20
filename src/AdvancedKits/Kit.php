@@ -28,23 +28,23 @@ class Kit{
                     if($this->isPaid()){
                         if($this->ak->economy->grantKit($player, $this->getCost())){
                             $this->addTo($player);
-                            $player->sendMessage("Selected kit: ".$this->name);
+                            $player->sendMessage($this->ak->langManager->getTranslation("sel-kit", $this->name));
                         }else{
-                            $player->sendMessage("You cannot afford kit: ".$this->name);
+                            $player->sendMessage($this->ak->langManager->getTranslation("cant-afford", $this->name));
                         }
                     }else{
                         $this->addTo($player);
-                        $player->sendMessage("Selected kit: ".$this->name);
+                        $player->sendMessage($this->ak->langManager->getTranslation("sel-kit", $this->name));
                     }
                 }else{
-                    $player->sendMessage("You can only get one kit per life");
+                    $player->sendMessage($this->ak->langManager->getTranslation("one-per-life"));
                 }
             }else{
-                $player->sendMessage("Kit ".$this->name." is in coolDown at the moment");
-                $player->sendMessage("You will be able to get it in ".$this->getCoolDownLeft($player));
+                $player->sendMessage($this->ak->langManager->getTranslation("cooldown1", $this->name));
+                $player->sendMessage($this->ak->langManager->getTranslation("cooldown2", $this->getCoolDownLeft($player)));
             }
         }else{
-            $player->sendMessage("You haven't the permission to use kit ".$this->name);
+            $player->sendMessage($this->ak->langManager->getTranslation("no-perm", $this->name));
         }
     }
 
@@ -102,12 +102,12 @@ class Kit{
 
     private function getCoolDownLeft(Player $player){
         if(($minutes = $this->coolDowns[strtolower($player->getName())]) < 60){
-            return $minutes." minutes";
+            return $this->ak->langManager->getTranslation("cooldown-format1", $minutes);
         }
         if(($modulo = $minutes % 60) !== 0){
-            return floor($minutes / 60)." hours and ".$modulo." minutes";
+            return $this->ak->langManager->getTranslation("cooldown-format2", floor($minutes / 60), $modulo);
         }
-        return ($minutes / 60)." hours";
+        return $this->ak->langManager->getTranslation("cooldown-format3", $minutes / 60);
     }
 
     public function processCoolDown(){
