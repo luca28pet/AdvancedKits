@@ -27,7 +27,7 @@ class Main extends PluginBase{
         $this->loadKits();
         $this->economy = new EconomyManager($this);
         $this->langManager = new LangManager($this);
-        if($this->getServer()->getPluginManager()->getPlugin("PurePerms") !== null and $this->getConfig()->get("force-builtin-permissions") == false){
+        if($this->getServer()->getPluginManager()->getPlugin("PurePerms") !== null and !$this->getConfig()->get("force-builtin-permissions")){
             $this->permManager = true;
         }
         $this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new CoolDownTask($this), 1200, 1200);
