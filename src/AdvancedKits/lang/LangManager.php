@@ -34,7 +34,7 @@ class LangManager{
             "no-perm-sign" => "You don't have permission to create a sign kit"
         ];
         $this->data = new Config($this->ak->getDataFolder()."lang.properties", Config::PROPERTIES, $this->defaults);
-        if($this->data["lang-version"] != self::LANG_VERSION){
+        if($this->data->get("lang-version") != self::LANG_VERSION){
             $this->ak->getLogger()->alert("Translation file is outdated. Please delete your lang.properties and restart your server to create an updated file");
         }
     }
