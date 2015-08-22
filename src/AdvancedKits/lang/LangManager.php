@@ -15,7 +15,7 @@ class LangManager{
 
     public function __construct(Main $ak){
         $this->ak = $ak;
-        $this->defaults = [
+        $this->defaults = array(
             "lang-version" => 0,
             "in-game" => "Please run this command in game",
             "av-kits" => "Available kits: %0",
@@ -32,9 +32,9 @@ class LangManager{
             "cooldown-format3" => "%0 hours",
             "no-sign-on-kit" => "On this sign, the kit is not specified",
             "no-perm-sign" => "You don't have permission to create a sign kit"
-        ];
+        );
         $this->data = new Config($this->ak->getDataFolder()."lang.properties", Config::PROPERTIES, $this->defaults);
-        if($this->data["lang-version"] != self::LANG_VERSION){
+        if($this->data->get["lang-version"] != self::LANG_VERSION){
             $this->ak->getLogger()->alert("Translation file is outdated. Please delete your lang.properties and restart your server to create an updated file");
         }
     }
