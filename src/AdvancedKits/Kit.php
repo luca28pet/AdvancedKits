@@ -2,6 +2,7 @@
 
 namespace AdvancedKits;
 
+use pocketmine\command\ConsoleCommandSender;
 use pocketmine\item\Item;
 use pocketmine\Player;
 
@@ -58,7 +59,12 @@ class Kit{
             elseif($type === "leggings") $inv->setLeggings($item);
             elseif($type === "boots") $inv->setBoots($item);
         }
-        $this->coolDowns[strtolower($player)] = $this->getCoolDownMinutes();
+        if(isset($this->data["commands"]) and is_array($this->data["commands"])){
+            foreach($this->data["commands"] as $cmd){
+                $this->ak->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace("{player}", $player->getName(), $cmd));
+            }
+        }
+        $this->coolDowns[strtolower($player->getName())] = $this->getCoolDownMinutes();
         $this->ak->hasKit[strtolower($player->getName())] = true;
     }
 
