@@ -18,18 +18,18 @@ class LangManager{
         $this->defaults = [
             "lang-version" => 0,
             "in-game" => "Please run this command in game",
-            "av-kits" => "Available kits: %0",
-            "no-kit" => "Kit %0 does not exist",
+            "av-kits" => "Available kits: {%0}",
+            "no-kit" => "Kit {%0} does not exist",
             "reload" => "Reloaded kits settings",
-            "sel-kit" => "Selected kit: %0",
-            "cant-afford" => "You cannot afford kit: %0",
+            "sel-kit" => "Selected kit: {%0}",
+            "cant-afford" => "You cannot afford kit: {%0}",
             "one-per-life" => "You can only get one kit per life",
-            "cooldown1" => "Kit %0 is in coolDown at the moment",
-            "cooldown2" => "You will be able to get it in %0",
-            "no-perm" => "You haven't the permission to use kit %0",
-            "cooldown-format1" => "%0 minutes",
-            "cooldown-format2" => "%0 hours and %1 minutes",
-            "cooldown-format3" => "%0 hours",
+            "cooldown1" => "Kit {%0} is in coolDown at the moment",
+            "cooldown2" => "You will be able to get it in {%0}",
+            "no-perm" => "You haven't the permission to use kit {%0}",
+            "cooldown-format1" => "{%0} minutes",
+            "cooldown-format2" => "{%0} hours and {%1} minutes",
+            "cooldown-format3" => "{%0} hours",
             "no-sign-on-kit" => "On this sign, the kit is not specified",
             "no-perm-sign" => "You don't have permission to create a sign kit"
         ];
@@ -42,7 +42,7 @@ class LangManager{
     public function getTranslation($dataKey, ...$args){
         $str = $this->data->get($dataKey, $this->defaults[$dataKey]);
         foreach($args as $key => $arg){
-            $str = str_replace("%".$key, $arg, $str);
+            $str = str_replace("{%".$key."}", $arg, $str);
         }
         return $str;
     }

@@ -10,6 +10,8 @@ basicpvp:
   cooldown:
     hours: 24
     minutes: 30
+  commands:
+  - "tell {player} you got an awesome kit thanks to AdvancedKits plugin!"
   worlds:
   - "kitpvp"
 basicbuilder:

@@ -60,6 +60,9 @@ class Main extends PluginBase{
                 return true;
             break;
             case "akreload":
+                foreach($this->kits as $kit){
+                    $kit->save();
+                }
                 $this->loadKits();
                 $sender->sendMessage($this->langManager->getTranslation("reload"));
                 return true;
