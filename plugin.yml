@@ -19,7 +19,7 @@ commands:
   permission: advancedkits.admin
 permissions:
  advancedkits.command:
-  description: "Allows the user to get a kit"
+  description: "Allows the user to run /kit command"
   default: true
  advancedkits.admin:
   description: "Allows to manage admin features"
