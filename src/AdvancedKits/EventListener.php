@@ -32,13 +32,12 @@ class EventListener implements Listener{
                         $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation("no-sign-on-kit"));
                         return;
                     }
-                    /**@var Kit[] $lowerKeys*/
-                    $lowerKeys = array_change_key_case($this->ak->kits, CASE_LOWER);
-                    if(!isset($lowerKeys[strtolower($text[1])])){
+                    $kit = $this->ak->getKit($text[1]);
+                    if($kit === null){
                         $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation("no-kit", $text[1]));
                         return;
                     }
-                    $lowerKeys[strtolower($text[1])]->handleRequest($event->getPlayer());
+                    $kit->handleRequest($event->getPlayer());
                 }
             }
         }

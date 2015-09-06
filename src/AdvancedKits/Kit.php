@@ -52,7 +52,7 @@ class Kit{
         $items = $this->getItems();
         $inv = $player->getInventory();
         foreach($items as $type => $item){
-            if(is_int($type)) $inv->addItem($item);
+            if((int) $type === $type) $inv->addItem($item);
             elseif($type === "helmet")  $inv->setHelmet($item);
             elseif($type === "chestplate") $inv->setChestplate($item);
             elseif($type === "leggings") $inv->setLeggings($item);
@@ -127,7 +127,7 @@ class Kit{
         );
     }
 
-    public function close(){
+    public function save(){
         if(count($this->coolDowns) > 0){
             file_put_contents($this->ak->getDataFolder()."cooldowns/".strtolower($this->name).".sl", serialize($this->coolDowns));
         }

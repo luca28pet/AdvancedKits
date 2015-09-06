@@ -22,8 +22,8 @@ class Main extends PluginBase{
     public $langManager;
 
     public function onEnable(){
-        $this->saveDefaultConfig();
         @mkdir($this->getDataFolder()."cooldowns/");
+        $this->saveDefaultConfig();
         $this->loadKits();
         $this->economy = new EconomyManager($this);
         $this->langManager = new LangManager($this);
@@ -36,18 +36,41 @@ class Main extends PluginBase{
 
     public function onDisable(){
         foreach($this->kits as $kit){
-            $kit->close();
+            $kit->save();
         }
     }
 
-    private function loadKits(){
-        if(!file_exists($this->getDataFolder()."kits.yml")){
-            $r = $this->getResource("kits.yml");
-            $o = stream_get_contents($r);
-            fclose($r);
-            file_put_contents($this->getDataFolder()."kits.yml", $o);
+    public function onCommand(CommandSender $sender, Command $command, $label, array $args){
+        switch(strtolower($command->getName())){
+            case "kit":
+                if(!($sender instanceof Player)){
+                    $sender->sendMessage($this->langManager->getTranslation("in-game"));
+                    return true;
+                }
+                if(!isset($args[0])){
+                    $sender->sendMessage($this->langManager->getTranslation("av-kits", implode(", ", array_keys($this->kits))));
+                    return true;
+                }
+                $kit = $this->getKit($args[0]);
+                if($kit === null){
+                    $sender->sendMessage($this->langManager->getTranslation("no-kit", $args[0]));
+                    return true;
+                }
+                $kit->handleRequest($sender);
+                return true;
+            break;
+            case "akreload":
+                $this->loadKits();
+                $sender->sendMessage($this->langManager->getTranslation("reload"));
+                return true;
+            break;
         }
-        $kitsData = yaml_parse(file_get_contents($this->getDataFolder()."kits.yml"));
+        return true;
+    }
+
+    private function loadKits(){
+        $this->saveResource("kits.yml");
+        $kitsData = yaml_parse_file($this->getDataFolder()."kits.yml");
         $this->fixConfig($kitsData);
         foreach($kitsData as $kitName => $kitData){
             $this->kits[$kitName] = new Kit($this, $kitData, $kitName);
@@ -67,33 +90,17 @@ class Main extends PluginBase{
         }
     }
 
-    public function onCommand(CommandSender $sender, Command $command, $label, array $args){
-        switch(strtolower($command->getName())){
-            case "kit":
-                if(!($sender instanceof Player)){
-                    $sender->sendMessage($this->langManager->getTranslation("in-game"));
-                    return true;
-                }
-                if(!isset($args[0])){
-                    $sender->sendMessage($this->langManager->getTranslation("av-kits", implode(", ", array_keys($this->kits))));
-                    return true;
-                }
-                /**@var Kit[] $lowerKeys*/
-                $lowerKeys = array_change_key_case($this->kits, CASE_LOWER);
-                if(!isset($lowerKeys[strtolower($args[0])])){
-                    $sender->sendMessage($this->langManager->getTranslation("no-kit", $args[0]));
-                    return true;
-                }
-                $lowerKeys[strtolower($args[0])]->handleRequest($sender);
-                return true;
-            break;
-            case "akreload":
-                $this->loadKits();
-                $sender->sendMessage($this->langManager->getTranslation("reload"));
-                return true;
-            break;
+    /**
+     * @param $kit
+     * @return Kit|null
+     */
+    public function getKit($kit){
+        /**@var Kit[] $lowerKeys*/
+        $lowerKeys = array_change_key_case($this->kits, CASE_LOWER);
+        if(isset($lowerKeys[strtolower($kit)])){
+            return $lowerKeys[strtolower($kit)];
         }
-        return true;
+        return null;
     }
 
 }

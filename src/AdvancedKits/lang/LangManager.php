@@ -41,10 +41,8 @@ class LangManager{
 
     public function getTranslation($dataKey, ...$args){
         $str = $this->data->get($dataKey, $this->defaults[$dataKey]);
-        if(count($args) > 0){
-            foreach($args as $key => $arg){
-                $str = str_replace("%".$key, $arg, $str);
-            }
+        foreach($args as $key => $arg){
+            $str = str_replace("%".$key, $arg, $str);
         }
         return $str;
     }
