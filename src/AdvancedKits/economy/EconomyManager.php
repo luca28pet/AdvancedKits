@@ -23,7 +23,7 @@ class EconomyManager{
     }
 
     public function grantKit(Player $player, $money){
-        if(is_null($this->economy)){
+        if($this->economy === null){
             return false;
         }
         switch($this->economy){
