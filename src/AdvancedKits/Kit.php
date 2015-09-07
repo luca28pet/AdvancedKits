@@ -64,7 +64,9 @@ class Kit{
                 $this->ak->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace("{player}", $player->getName(), $cmd));
             }
         }
-        $this->coolDowns[strtolower($player->getName())] = $this->getCoolDownMinutes();
+        if(($cd = $this->getCoolDownMinutes()) > 0){
+            $this->coolDowns[strtolower($player->getName())] = $cd;
+        }
         $this->ak->hasKit[strtolower($player->getName())] = true;
     }
 
@@ -119,7 +121,7 @@ class Kit{
     public function processCoolDown(){
         foreach($this->coolDowns as $player => $min){
             $this->coolDowns[$player] -= 1;
-            if($this->coolDowns[$player] === 0){
+            if($this->coolDowns[$player] <= 0){
                 unset($this->coolDowns[$player]);
             }
         }
