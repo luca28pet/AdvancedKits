@@ -1,8 +1,8 @@
 ---
 basicpvp:
   items:
-  - "272:0:1"
-  - "260:0:5"
+  - 272:0:1{"enchantment":{"sharpness":1,"unbreaking":3},"name":"Test"}
+  - 260:0:5
   helmet: 298
   chestplate: 299
   leggings: 300
@@ -11,19 +11,19 @@ basicpvp:
     hours: 24
     minutes: 30
   commands:
-  - "tell {player} you got an awesome kit thanks to AdvancedKits plugin!"
+  - tell {player} you got an awesome kit thanks to AdvancedKits plugin!
   worlds:
-  - "kitpvp"
+  - kitpvp
 basicbuilder:
   items:
-  - "4:0:25"
-  - "275:0:1"
-  - "297:0:3"
+  - 4:0:25
+  - 275:0:1
+  - 297:0:3
   chestplate: 299
   money: 20
   cooldown:
     minutes: 2
   users:
-  - "luca28pet"
-  - "dioconsole"
+  - luca28pet
+  - dioconsole
 ...

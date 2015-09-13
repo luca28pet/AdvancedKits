@@ -3,6 +3,7 @@
 namespace AdvancedKits;
 
 use pocketmine\command\ConsoleCommandSender;
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
 use pocketmine\Player;
 
@@ -11,12 +12,15 @@ class Kit{
     private $ak;
     private $data;
     private $name;
+    /** @var  Item[] */
+    private $items = [];
     private $coolDowns = [];
 
     public function __construct(Main $ak, array $data, $name){
         $this->ak = $ak;
         $this->data = $data;
         $this->name = $name;
+        $this->loadItems();
         if(file_exists($this->ak->getDataFolder()."cooldowns/".strtolower($this->name).".sl")){
             $this->coolDowns = unserialize(file_get_contents($this->ak->getDataFolder()."cooldowns/".strtolower($this->name).".sl"));
         }
@@ -50,9 +54,8 @@ class Kit{
     }
 
     private function addTo(Player $player){
-        $items = $this->getItems();
         $inv = $player->getInventory();
-        foreach($items as $type => $item){
+        foreach($this->items as $type => $item){
             if((int) $type === $type) $inv->addItem($item);
             elseif($type === "helmet")  $inv->setHelmet($item);
             elseif($type === "chestplate") $inv->setChestplate($item);
@@ -70,22 +73,37 @@ class Kit{
         $this->ak->hasKit[strtolower($player->getName())] = true;
     }
 
-    /**
-     * @return Item[]
-     */
-    private function getItems(){
-        $items = [];
+    private function loadItems(){
         foreach($this->data["items"] as $itemString){
-            $itemData = array_map("intval", explode(":", $itemString));
-            $items[] = Item::get($itemData[0], $itemData[1], $itemData[2]);
+            $itemData = array_map("intval", array_slice(explode(":", $itemString), 0, 3));
+            $item = Item::get($itemData[0], $itemData[1], $itemData[2]);
+            $len = strlen($itemString);
+            for($offset = 0; $offset < $len; $offset++){
+                if($itemString{$offset} === "{"){
+                    $json = json_decode(substr($itemString, $offset, $len));
+                    if($json !== null){
+                        isset($json["name"]) and is_string($json["name"]) and $item->setCustomName($json["name"]);
+                        if(isset($json["enchantments"]) and is_array($json["enchantments"])){
+                            foreach($json["enchantments"] as $name => $level){
+                                $enchantment = Enchantment::getEffectByName($name);
+                                if($enchantment !== null){
+                                    $enchantment->setLevel($level);
+                                    $item->addEnchantment($enchantment);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+            $this->items[] = $item;
         }
         foreach(["helmet", "chestplate", "leggings", "boots"] as $armor){
             if(isset($this->data[$armor])){
                 $armorItem = Item::get((int) $this->data[$armor]);
-                $items[$armor] = $armorItem;
+                $this->items[$armor] = $armorItem;
             }
         }
-        return $items;
     }
 
     private function isPaid(){
