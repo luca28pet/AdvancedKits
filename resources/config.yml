@@ -7,4 +7,7 @@ reset-on-logout: true
 
 # Use built in permission system even if using PurePerms
 force-builtin-permissions: false
+
+# Sign text (capitals don't matter)
+sign-text: "[AdvancedKits]"
 ...
