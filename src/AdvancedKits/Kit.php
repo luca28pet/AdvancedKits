@@ -74,34 +74,43 @@ class Kit{
     }
 
     private function loadItems(){
-        foreach($this->data["items"] as $itemString){
-            $itemData = array_map("intval", array_slice(explode(":", $itemString), 0, 3));
+        foreach($this->data["items"] as $key => $value){
+            if((int) $key === $key){
+                $itemString = $value;
+            }else{
+                $itemString = $key;
+                $addons = $value;
+            }
+            $itemData = array_map("intval", explode(":", $itemString));
             $item = Item::get($itemData[0], $itemData[1], $itemData[2]);
-            $len = strlen($itemString);
-            for($offset = 0; $offset < $len; $offset++){
-                if($itemString{$offset} === "{"){
-                    $json = json_decode(substr($itemString, $offset, $len));
-                    if($json !== null){
-                        isset($json["name"]) and is_string($json["name"]) and $item->setCustomName($json["name"]);
-                        if(isset($json["enchantments"]) and is_array($json["enchantments"])){
-                            foreach($json["enchantments"] as $name => $level){
-                                $enchantment = Enchantment::getEffectByName($name);
-                                if($enchantment !== null){
-                                    $enchantment->setLevel($level);
-                                    $item->addEnchantment($enchantment);
-                                }
-                            }
+            if(isset($addons) and is_array($addons)){
+                isset($addons["name"]) and $item->setCustomName($addons["name"]);
+                if(isset($addons["enchantment"]) and is_array($addons["enchantment"])){
+                    foreach($addons["enchantment"] as $name => $level){
+                        $enchantment = Enchantment::getEffectByName($name);
+                        if($enchantment !== null){
+                            $enchantment->setLevel($level);
+                            $item->addEnchantment($enchantment);
                         }
                     }
-                    break;
                 }
             }
             $this->items[] = $item;
         }
         foreach(["helmet", "chestplate", "leggings", "boots"] as $armor){
-            if(isset($this->data[$armor])){
-                $armorItem = Item::get((int) $this->data[$armor]);
-                $this->items[$armor] = $armorItem;
+            if(isset($this->data[$armor]) and isset($this->data[$armor]["id"])){
+                $item = Item::get($this->data[$armor]["id"]);
+                isset($this->data[$armor]["name"]) and $item->setCustomName($this->data[$armor]["name"]);
+                if(isset($this->data[$armor]["enchantment"]) and is_array($this->data[$armor]["enchantment"])){
+                    foreach($this->data[$armor]["enchantment"] as $name => $level){
+                        $enchantment = Enchantment::getEffectByName($name);
+                        if($enchantment !== null){
+                            $enchantment->setLevel($level);
+                            $item->addEnchantment($enchantment);
+                        }
+                    }
+                }
+                $this->items[$armor] = $item;
             }
         }
     }

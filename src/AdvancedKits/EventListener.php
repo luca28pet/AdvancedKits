@@ -26,7 +26,7 @@ class EventListener implements Listener{
             $tile = $event->getPlayer()->getLevel()->getTile($event->getBlock());
             if($tile instanceof Sign){
                 $text = $tile->getText();
-                if(strtolower(TextFormat::clean($text[0])) === "[advancedkits]"){
+                if(strtolower(TextFormat::clean($text[0])) === strtolower($this->ak->getConfig()->get("sign-text"))){
                     $event->setCancelled();
                     if(empty($text[1])){
                         $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation("no-sign-on-kit"));
@@ -44,7 +44,7 @@ class EventListener implements Listener{
     }
 
     public function onSignChange(SignChangeEvent $event){
-        if(strtolower(TextFormat::clean($event->getLine(0))) === "[advancedkits]" and !$event->getPlayer()->hasPermission("advancedkits.admin")){
+        if(strtolower(TextFormat::clean($event->getLine(0))) === strtolower($this->ak->getConfig()->get("sign-text")) and !$event->getPlayer()->hasPermission("advancedkits.admin")){
             $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation("no-perm-sign"));
             $event->setCancelled();
         }
