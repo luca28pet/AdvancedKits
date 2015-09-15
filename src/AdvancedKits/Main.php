@@ -14,6 +14,7 @@ class Main extends PluginBase{
 
     /**@var kit[]*/
     public $kits;
+    /**@var kit[]*/
     public $hasKit = [];
     /**@var EconomyManager*/
     public $economy;
@@ -104,6 +105,16 @@ class Main extends PluginBase{
             return $lowerKeys[strtolower($kit)];
         }
         return null;
+    }
+
+    /**
+     * @param $player
+     * @param bool $object whether to return the kit object or the kit name
+     * @return kit|null
+     */
+    public function getPlayerKit($player, $object = false){
+        if($player instanceof Player) $player = $player->getName();
+        return isset($this->hasKit[strtolower($player)]) ? ($object ? $this->hasKit[strtolower($player)] : $this->hasKit[strtolower($player)]->getName()) : null;
     }
 
 }
