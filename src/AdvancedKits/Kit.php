@@ -26,6 +26,10 @@ class Kit{
         }
     }
 
+    public function getName(){
+        return $this->name;
+    }
+
     public function handleRequest(Player $player){
         if($this->testPermission($player)){
             if(!isset($this->coolDowns[strtolower($player->getName())])){
@@ -53,7 +57,7 @@ class Kit{
         }
     }
 
-    private function addTo(Player $player){
+    public function addTo(Player $player){
         $inv = $player->getInventory();
         foreach($this->items as $type => $item){
             if((int) $type === $type) $inv->addItem($item);
@@ -70,7 +74,7 @@ class Kit{
         if(($cd = $this->getCoolDownMinutes()) > 0){
             $this->coolDowns[strtolower($player->getName())] = $cd;
         }
-        $this->ak->hasKit[strtolower($player->getName())] = true;
+        $this->ak->hasKit[strtolower($player->getName())] = $this;
     }
 
     private function loadItems(){
