@@ -20,11 +20,13 @@
           <root url="phar://$USER_HOME$/Desktop/MinecraftPE/TEST TEST/plugins/DevTools_v1.10.0.phar" />
           <root url="phar://$USER_HOME$/Desktop/MinecraftPE/TEST TEST/plugins/PurePerms_v1.1.10.phar" />
           <root url="phar://$USER_HOME$/Desktop/MinecraftPE/TEST TEST/plugins/UniqueIdUtils_v1.0.0.phar" />
+          <root url="phar://$USER_HOME$/Desktop/MinecraftPE/TEST TEST/PocketMine-MP.phar" />
         </CLASSES>
         <SOURCES>
           <root url="phar://$USER_HOME$/Desktop/MinecraftPE/TEST TEST/plugins/DevTools_v1.10.0.phar" />
           <root url="phar://$USER_HOME$/Desktop/MinecraftPE/TEST TEST/plugins/PurePerms_v1.1.10.phar" />
           <root url="phar://$USER_HOME$/Desktop/MinecraftPE/TEST TEST/plugins/UniqueIdUtils_v1.0.0.phar" />
+          <root url="phar://$USER_HOME$/Desktop/MinecraftPE/TEST TEST/PocketMine-MP.phar" />
         </SOURCES>
       </library>
     </orderEntry>
