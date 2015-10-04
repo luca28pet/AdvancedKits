@@ -13,7 +13,7 @@ use pocketmine\plugin\PluginBase;
 class Main extends PluginBase{
 
     /**@var kit[]*/
-    public $kits;
+    public $kits = [];
     /**@var kit[]*/
     public $hasKit = [];
     /**@var EconomyManager*/

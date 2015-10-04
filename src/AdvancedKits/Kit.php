@@ -79,7 +79,7 @@ class Kit{
 
     private function loadItems(){
         foreach($this->data["items"] as $key => $value){
-            if((int) $key === $key){
+            if(is_int($key)){
                 $itemString = $value;
             }else{
                 $itemString = $key;
