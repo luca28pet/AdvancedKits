@@ -78,6 +78,7 @@ class Kit{
     }
 
     private function loadItems(){
+		//var_dump($this->data["items"]);
         foreach($this->data["items"] as $key => $value){
             if(is_int($key)){
                 $itemString = $value;
@@ -85,7 +86,8 @@ class Kit{
                 $itemString = $key;
                 $addons = $value;
             }
-            $itemData = array_map("intval", explode(":", $itemString));
+			//var_dump(implode("", array_keys($itemString)));
+            $itemData = array_map("intval", explode(":", implode("", array_keys($itemString))));
             $item = Item::get($itemData[0], $itemData[1], $itemData[2]);
             if(isset($addons) and is_array($addons)){
                 isset($addons["name"]) and $item->setCustomName($addons["name"]);
