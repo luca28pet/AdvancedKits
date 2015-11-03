@@ -78,12 +78,11 @@ class Kit{
     }
 
     private function loadItems(){
-        $this->ak->getLogger()->warning(var_export($this->data["items"], true));
         foreach($this->data["items"] as $key => $values){
             $itemData = array_map("intval", explode(":", $key));
             $item = Item::get($itemData[0], $itemData[1], $itemData[2]);
             if(is_array($values) and count($values) > 0){
-                isset($values["name"]) and $item->setCustomName($values["name"]) and var_export("Name set");
+                isset($values["name"]) and $item->setCustomName($values["name"]);
                 if(isset($values["enchantment"]) and is_array($values["enchantment"])){
                     foreach($values["enchantment"] as $name => $level){
                         $enchantment = Enchantment::getEffectByName($name);
