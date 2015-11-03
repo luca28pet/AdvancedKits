@@ -2,12 +2,12 @@
 basicpvp:
   items:
     "272:0:1":
-      name: "ItemName"
+      name: "SwordName"
       enchantment:
         weapon_sharpness: 5
         weapon_knockback: 2
     "260:0:5":
-      name: "Item2"
+      name: "ApplesName"
     "261:0:1": []
   helmet:
     id: 298
