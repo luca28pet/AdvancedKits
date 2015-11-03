@@ -78,19 +78,14 @@ class Kit{
     }
 
     private function loadItems(){
-        foreach($this->data["items"] as $key => $value){
-            if(is_int($key)){
-                $itemString = $value;
-            }else{
-                $itemString = $key;
-                $addons = $value;
-            }
-            $itemData = array_map("intval", explode(":", $itemString));
+        $this->ak->getLogger()->warning(var_export($this->data["items"], true));
+        foreach($this->data["items"] as $key => $values){
+            $itemData = array_map("intval", explode(":", $key));
             $item = Item::get($itemData[0], $itemData[1], $itemData[2]);
-            if(isset($addons) and is_array($addons)){
-                isset($addons["name"]) and $item->setCustomName($addons["name"]);
-                if(isset($addons["enchantment"]) and is_array($addons["enchantment"])){
-                    foreach($addons["enchantment"] as $name => $level){
+            if(is_array($values) and count($values) > 0){
+                isset($values["name"]) and $item->setCustomName($values["name"]) and var_export("Name set");
+                if(isset($values["enchantment"]) and is_array($values["enchantment"])){
+                    foreach($values["enchantment"] as $name => $level){
                         $enchantment = Enchantment::getEffectByName($name);
                         if($enchantment !== null){
                             $enchantment->setLevel($level);
