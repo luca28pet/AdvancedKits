@@ -1,25 +1,25 @@
 ---
 basicpvp:
   items:
-  - "272:0:1":
-    - name: "ItemName"
-    - enchantment:
-      - weapon_sharpness: 5
-      - weapon_knockback: 2
-  - "260:0:5":
-    - name: "Item 2"
-  - "261:0:1"
+    "272:0:1":
+      name: "ItemName"
+      enchantment:
+        weapon_sharpness: 5
+        weapon_knockback: 2
+    "260:0:5":
+      name: "Item2"
+    "261:0:1": []
   helmet:
-  - id: 298
-  - name: "HelmetName"
-  - enchantment:
-    - armor_protection: 1
+    id: 298
+    name: "HelmetName"
+    enchantment:
+      armor_protection: 1
   chestplate:
-  - id: 299
+    id: 299
   leggings:
-  - id: 300
+    id: 300
   boots:
-  - id: 301
+    id: 301
   cooldown:
     hours: 24
     minutes: 30
@@ -29,11 +29,11 @@ basicpvp:
   - "kitpvp"
 basicbuilder:
   items:
-  - "4:0:25"
-  - "275:0:1"
-  - "297:0:3"
+    "4:0:25": []
+    "275:0:1": []
+    "297:0:3": []
   chestplate:
-  - id: 299
+    id: 299
   money: 20
   cooldown:
     minutes: 2
