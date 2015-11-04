@@ -12,14 +12,20 @@ class Kit{
     private $ak;
     private $data;
     private $name;
+    private $cost = 0;
+    private $coolDown;
+    private $coolDowns = [];
     /** @var  Item[] */
     private $items = [];
-    private $coolDowns = [];
 
     public function __construct(Main $ak, array $data, $name){
         $this->ak = $ak;
         $this->data = $data;
         $this->name = $name;
+        $this->coolDown = $this->getCoolDownMinutes();
+        if(isset($this->data["money"]) and $this->data["money"] != 0){
+            $this->cost = (int) $this->data["money"];
+        }
         $this->loadItems();
         if(file_exists($this->ak->getDataFolder()."cooldowns/".strtolower($this->name).".sl")){
             $this->coolDowns = unserialize(file_get_contents($this->ak->getDataFolder()."cooldowns/".strtolower($this->name).".sl"));
@@ -34,8 +40,8 @@ class Kit{
         if($this->testPermission($player)){
             if(!isset($this->coolDowns[strtolower($player->getName())])){
                 if(!($this->ak->getConfig()->get("one-kit-per-life") and isset($this->ak->hasKit[strtolower($player->getName())]))){
-                    if($this->isPaid()){
-                        if($this->ak->economy->grantKit($player, $this->getCost())){
+                    if($this->cost){
+                        if($this->ak->economy->grantKit($player, $this->cost)){
                             $this->addTo($player);
                             $player->sendMessage($this->ak->langManager->getTranslation("sel-kit", $this->name));
                         }else{
@@ -71,8 +77,8 @@ class Kit{
                 $this->ak->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace("{player}", $player->getName(), $cmd));
             }
         }
-        if(($cd = $this->getCoolDownMinutes()) > 0){
-            $this->coolDowns[strtolower($player->getName())] = $cd;
+        if($this->coolDown){
+            $this->coolDowns[strtolower($player->getName())] = $this->coolDown;
         }
         $this->ak->hasKit[strtolower($player->getName())] = $this;
     }
@@ -111,15 +117,6 @@ class Kit{
                 $this->items[$armor] = $item;
             }
         }
-    }
-
-    private function isPaid(){
-        return isset($this->data["money"]) and $this->data["money"] !== 0;
-    }
-
-    //Call isPaid() before !!!
-    private function getCost(){
-        return (int) $this->data["money"];
     }
 
     private function getCoolDownMinutes(){
