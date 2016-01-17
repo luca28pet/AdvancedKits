@@ -112,7 +112,12 @@ class Kit{
                 isset($this->data[$armor]["name"]) and $item->setCustomName($this->data[$armor]["name"]);
                 if(isset($this->data[$armor]["enchantment"]) and is_array($this->data[$armor]["enchantment"])){
                     foreach($this->data[$armor]["enchantment"] as $name => $level){
-                        $enchantment = Enchantment::getEffectByName($name);
+                        $r = new \ReflectionClass("Enchantment");
+                        if($r->hasMethod("getEnchantmentByName")){
+                            $enchantment = Enchantment::getEnchantmentByName($name);
+                        }else{
+                            $enchantment = Enchantment::getEffectByName($name);
+                        }
                         if($enchantment !== null){
                             $enchantment->setLevel($level);
                             $item->addEnchantment($enchantment);
