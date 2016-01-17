@@ -91,7 +91,12 @@ class Kit{
                 isset($values["name"]) and $item->setCustomName($values["name"]);
                 if(isset($values["enchantment"]) and is_array($values["enchantment"])){
                     foreach($values["enchantment"] as $name => $level){
-                        $enchantment = Enchantment::getEffectByName($name);
+                        $r = new \ReflectionClass("Enchantment");
+                        if($r->hasMethod("getEnchantmentByName")){
+                            $enchantment = Enchantment::getEnchantmentByName($name);
+                        }else{
+                            $enchantment = Enchantment::getEffectByName($name);
+                        }
                         if($enchantment !== null){
                             $enchantment->setLevel($level);
                             $item->addEnchantment($enchantment);
