@@ -35,11 +35,17 @@ class LangManager{
         ];
         $this->data = new Config($this->ak->getDataFolder()."lang.properties", Config::PROPERTIES, $this->defaults);
         if($this->data->get("lang-version") != self::LANG_VERSION){
-            $this->ak->getLogger()->alert("Translation file is outdated. Please delete your lang.properties and restart your server to create an updated file");
+            $this->ak->getLogger()->alert("Translation file is outdated. The old file has been renamed and a new one has been created");
+            @rename($this->ak->getDataFolder()."lang.properties", $this->ak->getDataFolder()."lang.properties.old");
+            $this->data = new Config($this->ak->getDataFolder()."lang.properties", Config::PROPERTIES, $this->defaults);
         }
     }
 
     public function getTranslation($dataKey, ...$args){
+        if(!isset($this->defaults[$dataKey])){
+            $this->ak->getLogger()->error("Invalid datakey $dataKey passed to method LangManager::getTranslation()");
+            return "";
+        }
         $str = $this->data->get($dataKey, $this->defaults[$dataKey]);
         foreach($args as $key => $arg){
             $str = str_replace("{%".$key."}", $arg, $str);
