@@ -90,13 +90,10 @@ class Kit{
             if(is_array($values) and count($values) > 0){
                 isset($values["name"]) and $item->setCustomName($values["name"]);
                 if(isset($values["enchantment"]) and is_array($values["enchantment"])){
+                    $class = Enchantment::getEnchantment(Enchantment::TYPE_INVALID);
+                    $method = (new \ReflectionClass($class))->hasMethod("getEnchantmentByName");
                     foreach($values["enchantment"] as $name => $level){
-                        $r = new \ReflectionClass("Enchantment");
-                        if($r->hasMethod("getEnchantmentByName")){
-                            $enchantment = Enchantment::getEnchantmentByName($name);
-                        }else{
-                            $enchantment = Enchantment::getEffectByName($name);
-                        }
+                        $enchantment = ($method ? Enchantment::getEnchantmentByName($name) : Enchantment::getEffectByName($name));
                         if($enchantment !== null){
                             $enchantment->setLevel($level);
                             $item->addEnchantment($enchantment);
@@ -111,13 +108,10 @@ class Kit{
                 $item = Item::get($this->data[$armor]["id"]);
                 isset($this->data[$armor]["name"]) and $item->setCustomName($this->data[$armor]["name"]);
                 if(isset($this->data[$armor]["enchantment"]) and is_array($this->data[$armor]["enchantment"])){
+                    $class = Enchantment::getEnchantment(Enchantment::TYPE_INVALID);
+                    $method = (new \ReflectionClass($class))->hasMethod("getEnchantmentByName");
                     foreach($this->data[$armor]["enchantment"] as $name => $level){
-                        $r = new \ReflectionClass("Enchantment");
-                        if($r->hasMethod("getEnchantmentByName")){
-                            $enchantment = Enchantment::getEnchantmentByName($name);
-                        }else{
-                            $enchantment = Enchantment::getEffectByName($name);
-                        }
+                        $enchantment = ($method ? Enchantment::getEnchantmentByName($name) : Enchantment::getEffectByName($name));
                         if($enchantment !== null){
                             $enchantment->setLevel($level);
                             $item->addEnchantment($enchantment);
