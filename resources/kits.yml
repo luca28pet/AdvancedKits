@@ -1,43 +1,19 @@
----
-basicpvp:
+soldier:
   items:
-    "272:0:1":
+    "267:0:1":
       name: "SwordName"
-      enchantment:
-        weapon_sharpness: 5
-        weapon_knockback: 2
-    "260:0:5":
-      name: "ApplesName"
-    "261:0:1": []
+    "400:0:64":
+      name: "Pumpkin_PieName": []
   helmet:
-    id: 298
+    id: 306
     name: "HelmetName"
-    enchantment:
-      armor_protection: 1
   chestplate:
-    id: 299
+    id: 307
   leggings:
-    id: 300
+    id: 308
   boots:
-    id: 301
-  cooldown:
-    hours: 24
-    minutes: 30
+    id: 309
   commands:
-  - "tell {player} you got an awesome kit thanks to AdvancedKits plugin!"
-  worlds:
+  - "tell {player} You selected the soldier kit:
   - "kitpvp"
-basicbuilder:
-  items:
-    "4:0:25": []
-    "275:0:1": []
-    "297:0:3": []
-  chestplate:
-    id: 299
-  money: 20
-  cooldown:
-    minutes: 2
-  users:
-  - "luca28pet"
-  - "dioconsole"
 ...
