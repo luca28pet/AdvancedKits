@@ -1,7 +1,7 @@
 name: AdvancedKits
 main: AdvancedKits\Main
-version: 4.1
-api: [1.13.0]
+version: 5.0b1
+api: [2.0.0]
 
 load: POSTWORLD
 author: luca28pet

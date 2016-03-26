@@ -1,42 +1,61 @@
 ---
-basicpvp:
+testkit:
+  #items. name and enchantments are optional.
+  #if damage is not specified, 0 will be used
+  #if count is not specified, 1 will be used
   items:
-    "272:0:1":
-      name: "SwordName"
-      enchantment:
-        weapon_sharpness: 5
-        weapon_knockback: 2
-    "260:0:5":
-      name: "ApplesName"
-    "261:0:1": []
+  - id: 272
+    damage: 0
+    count: 1
+    name: "SwordName"
+    enchantment:
+      #name: level
+      weapon_sharpness: 5
+      weapon_knockback: 2
+  - id: 160
+    damage: 0
+    count: 5
+    name: "AppleName"
+  #helmet
+  #optional. you can remove this if you don't want a helmet
   helmet:
     id: 298
     name: "HelmetName"
     enchantment:
       armor_protection: 1
+  #chestplate
+  #optional. you can remove this if you don't want a chestplate
   chestplate:
     id: 299
+  #leggings
+  #optional. you can remove this if you don't want leggings
   leggings:
     id: 300
+  #boots
+  #optional. you can remove this if you don't want boots
   boots:
     id: 301
+  #cool down time.
+  #when a player gets this kit, he will not be able to get this again until the cool down ends
+  #this is optional. you can remove this if you don't want a cooldown
   cooldown:
     hours: 24
     minutes: 30
+  #commands to execute when a player gets a kit
+  #use {player} to specify the player name
+  #optional. you can remove this if you don't want any command to be executed
   commands:
   - "tell {player} you got an awesome kit thanks to AdvancedKits plugin!"
+  #effects to give to the player
+  #optional. you can remove this if you don't want effects to come with this kit
+  effects:
+  - name: "speed"
+    seconds: 120
+    amplifier: 2
+  #if you do not use pureperms, use 'worlds' to specify in which worlds you want this kit to be used
   worlds:
   - "kitpvp"
-basicbuilder:
-  items:
-    "4:0:25": []
-    "275:0:1": []
-    "297:0:3": []
-  chestplate:
-    id: 299
-  money: 20
-  cooldown:
-    minutes: 2
+  #if you do not use pureperms, use 'users' to specify which players will be able to get this kit
   users:
   - "luca28pet"
   - "dioconsole"

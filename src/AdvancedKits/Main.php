@@ -64,6 +64,7 @@ class Main extends PluginBase{
                 foreach($this->kits as $kit){
                     $kit->save();
                 }
+                $this->kits = [];
                 $this->loadKits();
                 $sender->sendMessage($this->langManager->getTranslation("reload"));
                 return true;
@@ -95,10 +96,10 @@ class Main extends PluginBase{
     }
 
     /**
-     * @param $kit
+     * @param string $kit
      * @return Kit|null
      */
-    public function getKit($kit){
+    public function getKit(string $kit){
         /**@var Kit[] $lowerKeys*/
         $lowerKeys = array_change_key_case($this->kits, CASE_LOWER);
         if(isset($lowerKeys[strtolower($kit)])){
