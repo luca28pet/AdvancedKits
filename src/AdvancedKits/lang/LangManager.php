@@ -41,7 +41,7 @@ class LangManager{
         }
     }
 
-    public function getTranslation($dataKey, ...$args){
+    public function getTranslation(string $dataKey, ...$args) : string{
         if(!isset($this->defaults[$dataKey])){
             $this->ak->getLogger()->error("Invalid datakey $dataKey passed to method LangManager::getTranslation()");
             return "";
