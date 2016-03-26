@@ -7,24 +7,20 @@
     <orderEntry type="module-library">
       <library name="PHP">
         <CLASSES>
-          <root url="file://$USER_HOME$/Desktop/MinecraftPE/lib-pm" />
+          <root url="file://$USER_HOME$/Scrivania/pm" />
         </CLASSES>
         <SOURCES>
-          <root url="file://$USER_HOME$/Desktop/MinecraftPE/lib-pm" />
+          <root url="file://$USER_HOME$/Scrivania/pm" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$USER_HOME$/Desktop/MinecraftPE/lib-pm/PocketMine-MP.phar/" />
-          <root url="phar://$USER_HOME$/Desktop/MinecraftPE/lib-pm/plugins/DevTools_v1.10.0.phar/" />
-          <root url="phar://$USER_HOME$/Desktop/MinecraftPE/lib-pm/plugins/DevTools/AdvancedKits_v4.1.phar/" />
+          <root url="phar://$USER_HOME$/Scrivania/pm/plugins/PurePerms_v1.3.0_01.phar/" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$USER_HOME$/Desktop/MinecraftPE/lib-pm/PocketMine-MP.phar/" />
-          <root url="phar://$USER_HOME$/Desktop/MinecraftPE/lib-pm/plugins/DevTools_v1.10.0.phar/" />
-          <root url="phar://$USER_HOME$/Desktop/MinecraftPE/lib-pm/plugins/DevTools/AdvancedKits_v4.1.phar/" />
+          <root url="phar://$USER_HOME$/Scrivania/pm/plugins/PurePerms_v1.3.0_01.phar/" />
         </SOURCES>
       </library>
     </orderEntry>

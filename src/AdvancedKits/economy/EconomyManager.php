@@ -22,7 +22,7 @@ class EconomyManager{
         }
     }
 
-    public function grantKit(Player $player, $money){
+    public function grantKit(Player $player, int $money) : bool{
         if($this->economy === null){
             return false;
         }
