@@ -16,10 +16,6 @@ class Kit{
     private $cost = 0;
     private $coolDown;
     private $coolDowns = [];
-    /** @var  Item[] */
-    private $items = [];
-    /** @var Effect[] */
-    private $effects = [];
 
     public function __construct(Main $ak, array $data, string $name){
         $this->ak = $ak;
@@ -29,8 +25,6 @@ class Kit{
         if(isset($this->data["money"]) and $this->data["money"] != 0){
             $this->cost = (int) $this->data["money"];
         }
-        $this->loadItems();
-        $this->loadEffects();
         if(file_exists($this->ak->getDataFolder()."cooldowns/".strtolower($this->name).".sl")){
             $this->coolDowns = unserialize(file_get_contents($this->ak->getDataFolder()."cooldowns/".strtolower($this->name).".sl"));
         }
@@ -72,20 +66,28 @@ class Kit{
 
     public function addTo(Player $player){
         $inv = $player->getInventory();
-        foreach($this->items as $type => $item){
-            if((int) $type === $type) $inv->addItem($item);
-            elseif($type === "helmet")  $inv->setHelmet($item);
-            elseif($type === "chestplate") $inv->setChestplate($item);
-            elseif($type === "leggings") $inv->setLeggings($item);
-            elseif($type === "boots") $inv->setBoots($item);
+        foreach($this->data["items"] as $itemString){
+            $inv->setItem($inv->firstEmpty(), $i = $this->loadItem(...explode(":", $itemString)));
         }
+
+        isset($this->data["helmet"]) and $inv->setHelmet($this->loadItem(...explode(":", $this->data["helmet"])));
+        isset($this->data["chestplate"]) and $inv->setChestplate($this->loadItem(...explode(":", $this->data["chestplate"])));
+        isset($this->data["leggings"]) and $inv->setLeggings($this->loadItem(...explode(":", $this->data["leggings"])));
+        isset($this->data["boots"]) and $inv->setBoots($this->loadItem(...explode(":", $this->data["boots"])));
+
+        if(isset($this->data["effects"])){
+            foreach($this->data["effects"] as $effectString){
+                $e = $this->loadEffect(...explode(":", $effectString));
+                if($e !== null){
+                    $player->addEffect($e);
+                }
+            }
+        }
+
         if(isset($this->data["commands"]) and is_array($this->data["commands"])){
             foreach($this->data["commands"] as $cmd){
                 $this->ak->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace("{player}", $player->getName(), $cmd));
             }
-        }
-        foreach($this->effects as $effect){
-            $player->addEffect($effect);
         }
         if($this->coolDown){
             $this->coolDowns[strtolower($player->getName())] = $this->coolDown;
@@ -93,62 +95,29 @@ class Kit{
         $this->ak->hasKit[strtolower($player->getName())] = $this;
     }
 
-    private function loadItems(){
-        foreach($this->data["items"] as $values){
-            if(!isset($values["id"])){
-                continue;
-            }
-            $item = Item::get($values["id"], $values["damage"] ?? 0, $values["count"] ?? 1);
-            isset($values["name"]) and $item->setCustomName($values["name"]);
-            if(isset($values["enchantment"]) and is_array($values["enchantment"])){
-                $class = Enchantment::getEnchantment(Enchantment::TYPE_INVALID);
-                $method = (new \ReflectionClass($class))->hasMethod("getEnchantmentByName");
-                foreach($values["enchantment"] as $name => $level){
-                    $enchantment = ($method ? Enchantment::getEnchantmentByName($name) : Enchantment::getEffectByName($name));
-                    if($enchantment !== null){
-                        $enchantment->setLevel($level);
-                        $item->addEnchantment($enchantment);
-                    }
+    private function loadItem(int $id = 0, int $damage = 0, int $count = 1, string $name = "default", ...$enchantments) : Item{
+        $item = Item::get($id, $damage, $count);
+        if(strtolower($name) !== "default"){
+            $item->setCustomName($name);
+        }
+        foreach($enchantments as $key => $name_level){
+            if($key % 2 === 0){ //Name expected
+                $ench = Enchantment::getEffectByName($name_level);
+            }else{ //Level expected
+                if(isset($ench) and $ench !== null){
+                    $item->addEnchantment($ench->setLevel($name_level));
                 }
             }
-            $this->items[] = $item;
         }
-        foreach(["helmet", "chestplate", "leggings", "boots"] as $armor){
-            if(isset($this->data[$armor]) and isset($this->data[$armor]["id"])){
-                $item = Item::get($this->data[$armor]["id"]);
-                isset($this->data[$armor]["name"]) and $item->setCustomName($this->data[$armor]["name"]);
-                if(isset($this->data[$armor]["enchantment"]) and is_array($this->data[$armor]["enchantment"])){
-                    $class = Enchantment::getEnchantment(Enchantment::TYPE_INVALID);
-                    $method = (new \ReflectionClass($class))->hasMethod("getEnchantmentByName");
-                    foreach($this->data[$armor]["enchantment"] as $name => $level){
-                        $enchantment = ($method ? Enchantment::getEnchantmentByName($name) : Enchantment::getEffectByName($name));
-                        if($enchantment !== null){
-                            $enchantment->setLevel($level);
-                            $item->addEnchantment($enchantment);
-                        }
-                    }
-                }
-                $this->items[$armor] = $item;
-            }
-        }
+        return $item;
     }
 
-    private function loadEffects(){
-        if(!isset($this->data["effects"]) or !is_array($this->data["effects"])){
-            return;
+    private function loadEffect(string $name = "INVALID", int $seconds = 60, int $amplifier = 1){
+        $e = Effect::getEffectByName($name);
+        if($e !== null){
+            return $e->setDuration($seconds * 20)->setAmbient($amplifier);
         }
-        foreach($this->data["effects"] as $eff){
-            if(!isset($eff["name"])){
-                continue;
-            }
-            $effect = Effect::getEffectByName($eff["name"]);
-            if($effect !== null){
-                $effect->setAmplifier($eff["amplifier"] ?? 1);
-                $effect->setDuration(isset($eff["seconds"]) ? $eff["seconds"] * 20 : 20 * 60);
-                $effect->setVisible($eff["visible"] ?? false);
-                $this->effects[] = $effect;
-            }
-        }
+        return null;
     }
 
     private function getCoolDownMinutes() : int{
