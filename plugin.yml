@@ -1,6 +1,6 @@
 name: AdvancedKits
 main: AdvancedKits\Main
-version: 5.1RC1
+version: 5.1
 api: [2.0.0]
 author: luca28pet
 description: Add kits to your server
