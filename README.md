@@ -10,7 +10,7 @@ This is a simple yet useful PocketMine-MP kit plugin. For who doesn't know what 
 - Highly configurable
 - Custom permission support: give a player permission advancedkits.kitname to let him use the kit named "kitname"
 - Built in perms system for non-PurePerms users (read the documentation)
-- Economy support: pay to get a kit (to set up read the documentation tab). Support for EconomyS, PocketMoney and MassiveEconomy
+- Economy support: pay to get a kit. Support for EconomyS, PocketMoney and MassiveEconomy
 - Sign support: write a sign to let users get a kit
 - Unlimited kits with unlimited items, and armor support
 - Time limit (cooldown) for kits
@@ -38,10 +38,7 @@ Line 3 & 4: Whatever you like
 
 
 The default kit is: testkit.
-You can add kits editing kits.yml (read carefully the documentation).
-If plugin has bugs, please report them to the GitHub issue tracker.
-You can find development versions in the GitHub repository
-Documentation
+You can add kits editing kits.yml (see "Kit settings").
 
 **Kit Settings:**
 
@@ -52,81 +49,42 @@ You can add lots of kits, but remember to keep this file format:
 ```
 ---
 testkit:
-  #items. name and enchantments are optional.
-  #if damage is not specified, 0 will be used
-  #if count is not specified, 1 will be used
+  # Fromat: "id:damage:count:name:ench_name:ench_level"
+
+  # If you want ONLY custom name (no enchantments): "id:damage:count:name"
+
+  # If you don't want enchantments or custom name: "id:damage:count"
+
+  # If you want ONLY enchantments (no custom name): "id:damage:count:DEFAULT:ench_name:ench_level" -- you have to put DEFAULT in the name field
+
+  # If you want more than one enchantment just do: "id:damage:count:name:ench1_name:ench1_level:ench2_name:ench2_level"
+  # or "id:damage:count:DEFAULT:ench1_name:ench1_level:ench2_name:ench2_level" if you don't want a custom item name
+
+  # Please note: You have to write numeric IDs
   items:
-  - id: 272
-    damage: 0
-    count: 1
-    name: "SwordName"
-    enchantment:
-      #name: level
-      weapon_sharpness: 5
-      weapon_knockback: 2
-  - id: 160
-    damage: 0
-    count: 5
-    name: "AppleName"
-  #helmet
-  #optional. you can remove this if you don't want a helmet
-  helmet:
-    id: 298
-    name: "HelmetName"
-    enchantment:
-      armor_protection: 1
-  #chestplate
-  #optional. you can remove this if you don't want a chestplate
-  chestplate:
-    id: 299
-  #leggings
-  #optional. you can remove this if you don't want leggings
-  leggings:
-    id: 300
-  #boots
-  #optional. you can remove this if you don't want boots
-  boots:
-    id: 301
-  #cool down time.
-  #when a player gets this kit, he will not be able to get this again until the cool down ends
-  #this is optional. you can remove this if you don't want a cooldown
+  - "260:0:10"
+  - "267:0:1:Sword Name:weapon_sharpness:3:weapon_knockback:1"
+  helmet: "302:0:1"
+  chestplate: "303:0:1:DEFAULT:armor_protection:1"
+  leggings: "304:0:1:Leggings Name"
+  boots: "305:0:1"
+
+  commands:
+  - "tell {player} you got an awesome kit thanks to AdvancedKits plugin!"
+
   cooldown:
     hours: 24
     minutes: 30
-  #commands to execute when a player gets a kit
-  #use {player} to specify the player name
-  #optional. you can remove this if you don't want any command to be executed
-  commands:
-  - "tell {player} you got an awesome kit thanks to AdvancedKits plugin!"
-  #effects to give to the player
-  #optional. you can remove this if you don't want effects to come with this kit
+
+  # Format: "name:time:amplifier"
+  # Time is in seconds
   effects:
-  - name: "speed"
-    seconds: 120
-    amplifier: 2
-  #if you do not use pureperms, use 'worlds' to specify in which worlds you want this kit to be used
+  - "speed:120:2"
+
+  # If you do not use pureperms, use 'worlds' to specify in which worlds you want this kit to be used
   worlds:
   - "kitpvp"
-  #if you do not use pureperms, use 'users' to specify which players will be able to get this kit
-  users:
-  - "luca28pet"
-  - "dioconsole"
-...
-```
-
-**Permissions:**
-
-With PurePerms or a permissions manager: you must give players the permission to get a kit: advancedkits.kitname
-
-Without PurePerms or a permissions manager: this plugin has a permission system that lets the server owner choose what players in what worlds can get a certain kit.
-To use it, add the parameters "users" and "worlds" like this in the kits.yml file:
-
-```
----
-testkit:
-  #stuff...
-  worlds:
-  - "kitpvp"
+  # If you do not use pureperms, use 'users' to specify which players will be able to get this kit
   users:
   - "luca28pet"
   - "dioconsole"
