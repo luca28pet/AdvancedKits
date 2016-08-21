@@ -103,10 +103,8 @@ class Kit{
         foreach($enchantments as $key => $name_level){
             if($key % 2 === 0){ //Name expected
                 $ench = Enchantment::getEffectByName($name_level);
-            }else{ //Level expected
-                if(isset($ench) and $ench !== null){
-                    $item->addEnchantment($ench->setLevel($name_level));
-                }
+            }elseif(isset($ench) and $ench !== null){
+                $item->addEnchantment($ench->setLevel($name_level));
             }
         }
         return $item;
@@ -115,7 +113,7 @@ class Kit{
     private function loadEffect(string $name = "INVALID", int $seconds = 60, int $amplifier = 1){
         $e = Effect::getEffectByName($name);
         if($e !== null){
-            return $e->setDuration($seconds * 20)->setAmbient($amplifier);
+            return $e->setDuration($seconds * 20)->setAmplifier($amplifier);
         }
         return null;
     }
