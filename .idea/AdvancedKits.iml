@@ -17,15 +17,9 @@
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$USER_HOME$/Desktop/Genisys/plugins/WorldFixer_v1.phar/" />
-          <root url="phar://$USER_HOME$/Desktop/Genisys/plugins/MagicWE_v0.1.13.phar/" />
-          <root url="phar://$USER_HOME$/Desktop/Genisys/plugins/ManyWorlds_v2.1.0.phar/" />
           <root url="phar://$USER_HOME$/Desktop/Genisys/PocketMine-MP.phar/" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$USER_HOME$/Desktop/Genisys/plugins/WorldFixer_v1.phar/" />
-          <root url="phar://$USER_HOME$/Desktop/Genisys/plugins/MagicWE_v0.1.13.phar/" />
-          <root url="phar://$USER_HOME$/Desktop/Genisys/plugins/ManyWorlds_v2.1.0.phar/" />
           <root url="phar://$USER_HOME$/Desktop/Genisys/PocketMine-MP.phar/" />
         </SOURCES>
       </library>
