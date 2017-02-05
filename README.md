@@ -49,7 +49,7 @@ You can add lots of kits, but remember to keep this file format:
 ```
 ---
 testkit:
-  # Fromat: "id:damage:count:name:ench_name:ench_level"
+  # Format: "id:damage:count:name:ench_name:ench_level"
 
   # If you want ONLY custom name (no enchantments): "id:damage:count:name"
 
