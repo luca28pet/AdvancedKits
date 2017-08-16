@@ -1,0 +1,7 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/luca28pet/AdvancedKits
+branches:
+- master
+projects:
+  AdvancedKits:
+    path: ""
+...
