@@ -41,7 +41,7 @@ class Main extends PluginBase{
         }
     }
 
-    public function onCommand(CommandSender $sender, Command $command, $label, array $args){
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
         switch(strtolower($command->getName())){
             case "kit":
                 if(!($sender instanceof Player)){
@@ -59,7 +59,6 @@ class Main extends PluginBase{
                 }
                 $kit->handleRequest($sender);
                 return true;
-            break;
             case "akreload":
                 foreach($this->kits as $kit){
                     $kit->save();
@@ -68,7 +67,6 @@ class Main extends PluginBase{
                 $this->loadKits();
                 $sender->sendMessage($this->langManager->getTranslation("reload"));
                 return true;
-            break;
         }
         return true;
     }

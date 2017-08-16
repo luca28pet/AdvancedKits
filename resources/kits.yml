@@ -32,6 +32,10 @@ testkit:
   effects:
   - "speed:120:2"
 
+  # Add a cost for the kit. Compatible with EconomyAPI, PocketMoney and MassiveEconomy
+  # Put 0 if you want the kit to be free
+  money: 50
+
   # If you do not use pureperms, use 'worlds' to specify in which worlds you want this kit to be used
   worlds:
   - "kitpvp"

@@ -80,6 +80,10 @@ testkit:
   # Time is in seconds
   effects:
   - "speed:120:2"
+  
+  # Add a cost for the kit. Compatible with EconomyAPI, PocketMoney and MassiveEconomy
+  # Put 0 if you want the kit to be free
+  money: 50
 
   # If you do not use pureperms, use 'worlds' to specify in which worlds you want this kit to be used
   worlds:
@@ -91,6 +95,7 @@ testkit:
 ...
 ```
 
+You can find a list of available enchantments in the file Enchantment.php in the pmmp source code: https://github.com/pmmp/PocketMine-MP/blob/master/src/pocketmine/item/enchantment/Enchantment.php
 
 If you don't specify users or world, then the kit will be available to all users or in all worlds.
 If you have PurePerms, these parameters will be ignored unless you edit the config.yml
