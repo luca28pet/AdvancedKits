@@ -5,6 +5,10 @@ PocketMine-MP plugin that adds kits to your PocketMine server. Report bugs and e
 
 This is a simple yet useful PocketMine-MP kit plugin. For who doesn't know what kits are, they are groups of items that you can get simply by typing a command or touching a sign.
 
+*Find the latest PHAR at: https://poggit.pmmp.io/ci/luca28pet/AdvancedKits*
+
+This plugin only supports PocketMine-MP. It might work on other forks as well, but please Do NOT open issues if you have problems with AdvancedKits and you are using a fork.
+
 **Features:**
 
 - Highly configurable
