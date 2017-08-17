@@ -67,9 +67,9 @@ testkit:
   # Please note: You have to write numeric IDs
   items:
   - "260:0:10"
-  - "267:0:1:Sword Name:weapon_sharpness:3:weapon_knockback:1"
+  - "267:0:1:Sword Name:sharpness:3:knockback:1"
   helmet: "302:0:1"
-  chestplate: "303:0:1:DEFAULT:armor_protection:1"
+  chestplate: "303:0:1:DEFAULT:protection:1"
   leggings: "304:0:1:Leggings Name"
   boots: "305:0:1"
 
