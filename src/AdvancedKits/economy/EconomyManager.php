@@ -7,16 +7,14 @@ use pocketmine\Player;
 
 class EconomyManager{
 
-    private $plugin;
-    private $economy = null;
+    private $economy;
     private $api;
 
-    public function __construct(Main $plugin){
-        $this->plugin = $plugin;
-        foreach(["EconomyAPI", "PocketMoney", "MassiveEconomy"] as $plugin){
-            if(($p = $this->plugin->getServer()->getPluginManager()->getPlugin($plugin)) !== null){
-                $this->economy = $plugin;
-                $this->api = $p;
+    public function __construct(Main $ak){
+        foreach(['EconomyAPI', 'PocketMoney', 'MassiveEconomy'] as $ecoPluginName){
+            if(($ecoPlugin = $ak->getServer()->getPluginManager()->getPlugin($ecoPluginName)) !== null){
+                $this->economy = $ecoPluginName;
+                $this->api = $ecoPlugin;
                 break;
             }
         }
@@ -27,12 +25,12 @@ class EconomyManager{
             return false;
         }
         switch($this->economy){
-            case "EconomyAPI":
+            case 'EconomyAPI':
                 if($this->api->reduceMoney($player, $money) === 1){
                     return true;
                 }
             break;
-            case "PocketMoney":
+            case 'PocketMoney':
                 if($this->api->getMoney($player->getName()) < $money){
                     return false;
                 }
@@ -40,7 +38,7 @@ class EconomyManager{
                     return true;
                 }
             break;
-            case "MassiveEconomy":
+            case 'MassiveEconomy':
                 if($this->api->takeMoney($player->getName(), $money) === 2){
                     return true;
                 }

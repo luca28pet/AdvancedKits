@@ -12,108 +12,117 @@ use pocketmine\plugin\PluginBase;
 
 class Main extends PluginBase{
 
-    /**@var kit[]*/
+    /** @var Kit[] */
     public $kits = [];
-    /**@var kit[]*/
+    /** @var string[] */
     public $hasKit = [];
-    /**@var EconomyManager*/
+    /** @var EconomyManager */
     public $economy;
+    /** @var bool  */
     public $permManager = false;
-    /**@var LangManager*/
+    /** @var LangManager */
     public $langManager;
 
-    public function onEnable(){
-        @mkdir($this->getDataFolder()."cooldowns/");
+    public function onEnable() : void{
+        if(!is_dir($this->getDataFolder().'cooldowns')){
+            if(!mkdir($this->getDataFolder().'cooldowns/') && !is_dir($this->getDataFolder().'cooldowns')){
+                $this->getLogger()->error('Unable to create cooldown directory');
+            }
+        }
         $this->saveDefaultConfig();
         $this->loadKits();
         $this->economy = new EconomyManager($this);
         $this->langManager = new LangManager($this);
-        if($this->getServer()->getPluginManager()->getPlugin("PurePerms") !== null and !$this->getConfig()->get("force-builtin-permissions")){
+        if(!$this->getConfig()->get('force-builtin-permissions') && $this->getServer()->getPluginManager()->getPlugin('PurePerms') !== null){
             $this->permManager = true;
         }
         $this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new CoolDownTask($this), 1200, 1200);
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
     }
 
-    public function onDisable(){
+    public function onDisable() : void{
         foreach($this->kits as $kit){
             $kit->save();
         }
+        $this->kits = [];
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
         switch(strtolower($command->getName())){
-            case "kit":
+            case 'kit':
                 if(!($sender instanceof Player)){
-                    $sender->sendMessage($this->langManager->getTranslation("in-game"));
+                    $sender->sendMessage($this->langManager->getTranslation('in-game'));
                     return true;
                 }
                 if(!isset($args[0])){
-                    $sender->sendMessage($this->langManager->getTranslation("av-kits", implode(", ", array_keys($this->kits))));
+                    $sender->sendMessage($this->langManager->getTranslation('av-kits', implode(', ', array_keys($this->kits))));
                     return true;
                 }
                 $kit = $this->getKit($args[0]);
                 if($kit === null){
-                    $sender->sendMessage($this->langManager->getTranslation("no-kit", $args[0]));
+                    $sender->sendMessage($this->langManager->getTranslation('no-kit', $args[0]));
                     return true;
                 }
                 $kit->handleRequest($sender);
                 return true;
-            case "akreload":
+            case 'akreload':
                 foreach($this->kits as $kit){
                     $kit->save();
                 }
                 $this->kits = [];
                 $this->loadKits();
-                $sender->sendMessage($this->langManager->getTranslation("reload"));
+                $sender->sendMessage($this->langManager->getTranslation('reload'));
                 return true;
         }
         return true;
     }
 
-    private function loadKits(){
-        $this->saveResource("kits.yml");
-        $kitsData = yaml_parse_file($this->getDataFolder()."kits.yml");
+    private function loadKits() : void{
+        $this->saveResource('kits.yml');
+        $kitsData = yaml_parse_file($this->getDataFolder().'kits.yml');
         $this->fixConfig($kitsData);
         foreach($kitsData as $kitName => $kitData){
             $this->kits[$kitName] = new Kit($this, $kitData, $kitName);
         }
     }
 
-    private function fixConfig(&$config){
+    private function fixConfig(&$config) : void{
         foreach($config as $name => $kit){
-            if(isset($kit["users"])){
-                $users = array_map("strtolower", $kit["users"]);
-                $config[$name]["users"] = $users;
+            if(isset($kit['users'])){
+                $users = array_map('strtolower', $kit['users']);
+                $config[$name]['users'] = $users;
             }
-            if(isset($kit["worlds"])){
-                $worlds = array_map("strtolower", $kit["worlds"]);
-                $config[$name]["worlds"] = $worlds;
+            if(isset($kit['worlds'])){
+                $worlds = array_map('strtolower', $kit['worlds']);
+                $config[$name]['worlds'] = $worlds;
             }
         }
     }
 
     /**
-     * @param string $kit
+     * @param string $kitName
      * @return Kit|null
      */
-    public function getKit(string $kit){
+    public function getKit(string $kitName) : ?Kit{
         /**@var Kit[] $lowerKeys*/
         $lowerKeys = array_change_key_case($this->kits, CASE_LOWER);
-        if(isset($lowerKeys[strtolower($kit)])){
-            return $lowerKeys[strtolower($kit)];
+        if(isset($lowerKeys[strtolower($kitName)])){
+            return $lowerKeys[strtolower($kitName)];
         }
         return null;
     }
 
     /**
      * @param $player
-     * @param bool $object whether to return the kit object or the kit name
-     * @return kit|null
+     * @return string|null
      */
-    public function getPlayerKit($player, $object = false){
-        if($player instanceof Player) $player = $player->getName();
-        return isset($this->hasKit[strtolower($player)]) ? ($object ? $this->hasKit[strtolower($player)] : $this->hasKit[strtolower($player)]->getName()) : null;
+    public function getPlayerKit($player) : ?string{
+        if($player instanceof Player){
+            $player = $player->getLowerCaseName();
+        }else{
+            $player = strtolower($player);
+        }
+        return $this->hasKit[$player] ?? null;
     }
 
 }
