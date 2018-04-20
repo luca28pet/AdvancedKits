@@ -22,19 +22,19 @@ class EventListener implements Listener{
 
     public function onSign(PlayerInteractEvent $event){
         $id = $event->getBlock()->getId();
-        if($id === Block::SIGN_POST or $id === Block::WALL_SIGN){
+        if($id === Block::SIGN_POST || $id === Block::WALL_SIGN){
             $tile = $event->getPlayer()->getLevel()->getTile($event->getBlock());
             if($tile instanceof Sign){
                 $text = $tile->getText();
-                if(strtolower(TextFormat::clean($text[0])) === strtolower($this->ak->getConfig()->get("sign-text"))){
+                if(strtolower(TextFormat::clean($text[0])) === strtolower($this->ak->getConfig()->get('sign-text'))){
                     $event->setCancelled();
                     if(empty($text[1])){
-                        $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation("no-sign-on-kit"));
+                        $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation('no-sign-on-kit'));
                         return;
                     }
                     $kit = $this->ak->getKit($text[1]);
                     if($kit === null){
-                        $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation("no-kit", $text[1]));
+                        $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation('no-kit', $text[1]));
                         return;
                     }
                     $kit->handleRequest($event->getPlayer());
@@ -44,21 +44,21 @@ class EventListener implements Listener{
     }
 
     public function onSignChange(SignChangeEvent $event){
-        if(strtolower(TextFormat::clean($event->getLine(0))) === strtolower($this->ak->getConfig()->get("sign-text")) and !$event->getPlayer()->hasPermission("advancedkits.admin")){
-            $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation("no-perm-sign"));
+        if(strtolower(TextFormat::clean($event->getLine(0))) === strtolower($this->ak->getConfig()->get('sign-text')) && !$event->getPlayer()->hasPermission('advancedkits.admin')){
+            $event->getPlayer()->sendMessage($this->ak->langManager->getTranslation('no-perm-sign'));
             $event->setCancelled();
         }
     }
 
     public function onDeath(PlayerDeathEvent $event){
-        if(isset($this->ak->hasKit[strtolower($event->getEntity()->getName())])){
-            unset($this->ak->hasKit[strtolower($event->getEntity()->getName())]);
+        if(isset($this->ak->hasKit[$event->getPlayer()->getLowerCaseName()])){
+            unset($this->ak->hasKit[$event->getPlayer()->getLowerCaseName()]);
         }
     }
 
     public function onLogOut(PlayerQuitEvent $event){
-        if($this->ak->getConfig()->get("reset-on-logout") and isset($this->ak->hasKit[strtolower($event->getPlayer()->getName())])){
-            unset($this->ak->hasKit[strtolower($event->getPlayer()->getName())]);
+        if($this->ak->getConfig()->get('reset-on-logout') && isset($this->ak->hasKit[strtolower($event->getPlayer()->getName())])){
+            unset($this->ak->hasKit[$event->getPlayer()->getLowerCaseName()]);
         }
     }
 
