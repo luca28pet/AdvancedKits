@@ -237,11 +237,15 @@ class Kit{
     }
 
     private function testPermission(Player $player) : bool{
-        return $this->ak->permManager ? $player->hasPermission('advancedkits.'.strtolower($this->name)) : (
+        if($this->ak->permManager){
+            return $player->hasPermission('advancedkits.'.strtolower($this->name)) || $player->hasPermission('advancedkits.'.$this->name);
+        }
+
+        return
             (isset($this->data['users']) ? in_array($player->getLowerCaseName(), $this->data['users'], true) : true)
             &&
             (isset($this->data['worlds']) ? in_array(strtolower($player->getLevel()->getName()), $this->data['worlds'], true) : true)
-        );
+        ;
     }
 
     public function save() : void{

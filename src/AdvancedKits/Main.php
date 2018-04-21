@@ -35,6 +35,7 @@ class Main extends PluginBase{
         $this->langManager = new LangManager($this);
         if(!$this->getConfig()->get('force-builtin-permissions') && $this->getServer()->getPluginManager()->getPlugin('PurePerms') !== null){
             $this->permManager = true;
+            $this->getLogger()->notice('PurePerms mode enabled');
         }
         $this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new CoolDownTask($this), 1200, 1200);
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
