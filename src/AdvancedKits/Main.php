@@ -86,7 +86,7 @@ class Main extends PluginBase{
         }
     }
 
-    private function fixConfig(&$config) : void{
+    private function fixConfig(array &$config) : void{
         foreach($config as $name => $kit){
             if(isset($kit['users'])){
                 $users = array_map('strtolower', $kit['users']);

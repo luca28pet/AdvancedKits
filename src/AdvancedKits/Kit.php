@@ -22,7 +22,7 @@ class Kit{
     /** @var Item[] */
     private $items = [];
     /** @var Item[] */
-    private $armor = [];
+    private $armor = ['helmet' => null, 'chestplate' => null, 'leggings' => null, 'boots' => null];
     /** @var EffectInstance[] */
     private $effects = [];
 
@@ -98,10 +98,10 @@ class Kit{
             $player->getInventory()->addItem($item);
         }
 
-        isset($this->armor['helmet']) && $player->getArmorInventory()->setHelmet($this->armor['helmet']);
-        isset($this->armor['chestplate']) && $player->getArmorInventory()->setChestplate($this->armor['chestplate']);
-        isset($this->armor['leggings']) && $player->getArmorInventory()->setLeggings($this->armor['leggings']);
-        isset($this->armor['boots']) && $player->getArmorInventory()->setBoots($this->armor['boots']);
+        $this->armor['helmet'] !== null && $player->getArmorInventory()->setHelmet($this->armor['helmet']);
+        $this->armor['chestplate'] !== null && $player->getArmorInventory()->setChestplate($this->armor['chestplate']);
+        $this->armor['leggings'] !== null && $player->getArmorInventory()->setLeggings($this->armor['leggings']);
+        $this->armor['boots'] !== null && $player->getArmorInventory()->setBoots($this->armor['boots']);
 
         foreach($this->effects as $effect){
             $player->addEffect(clone $effect);
@@ -132,12 +132,18 @@ class Kit{
             $item = Item::fromString($name.':'.$damage);
         }catch(\InvalidArgumentException $exception){
             $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Item '.$itemString.' could not be loaded');
-            $this->ak->getLogger()->logException($exception);
+            $this->ak->getLogger()->warning($exception->getMessage());
             return null;
         }
 
         if(!empty($array)){
-            $item->setCount((int) array_shift($array));
+            $count = array_shift($array);
+            if(is_numeric($count)){
+                $item->setCount((int) $count);
+            }else{
+                $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Item '.$itemString.' could not be loaded because the count is not a number');
+                return null;
+            }
         }
 
         if(!empty($array)){
@@ -151,7 +157,7 @@ class Kit{
             $enchantmentsArrays = array_chunk($array, 2);
             foreach ($enchantmentsArrays as $enchantmentsData){
                 if(count($enchantmentsData) !== 2){
-                    $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Enchantments must be specified in the format name:level. Item: '.$itemString.' could not be loaded');
+                    $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Enchantments must be specified in the format name:level. Enchantment: '.$enchantmentsData[0].' will not be included in the item '.$itemString);
                     continue;
                 }
                 $enchantment = Enchantment::getEnchantmentByName($enchantmentsData[0]);
@@ -163,8 +169,7 @@ class Kit{
                     $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Enchantment '.$enchantmentsData[0].' in item '.$itemString.' could not be loaded because the level is not a number');
                     continue;
                 }
-                $enchantmentInstance = new EnchantmentInstance($enchantment, (int) $enchantmentsData[1]);
-                $item->addEnchantment($enchantmentInstance);
+                $item->addEnchantment(new EnchantmentInstance($enchantment, (int) $enchantmentsData[1]));
             }
         }
         return $item;
