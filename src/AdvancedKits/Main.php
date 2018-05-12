@@ -24,9 +24,14 @@ class Main extends PluginBase{
     public $langManager;
 
     public function onEnable() : void{
-        if(!is_dir($this->getDataFolder().'cooldowns')){
-            if(!mkdir($this->getDataFolder().'cooldowns/') && !is_dir($this->getDataFolder().'cooldowns')){
-                $this->getLogger()->error('Unable to create cooldown directory');
+        if(!is_dir($this->getDataFolder())){
+            if(!mkdir($this->getDataFolder()) && !is_dir($this->getDataFolder())){
+                $this->getLogger()->error('Unable to create data folder');
+            }
+        }
+        if(!is_dir($this->getDataFolder().'cooldowns/')){
+            if(!mkdir($this->getDataFolder().'cooldowns/') && !is_dir($this->getDataFolder().'cooldowns/')){
+                $this->getLogger()->error('Unable to create cooldowns folder');
             }
         }
         $this->saveDefaultConfig();
