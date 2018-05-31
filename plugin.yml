@@ -1,7 +1,7 @@
 name: AdvancedKits
 main: AdvancedKits\Main
 version: 5.2.2
-api: [3.0.0-ALPHA12]
+api: [3.0.0-ALPHA11]
 author: luca28pet
 description: Add kits to your server
 website: https://github.com/luca28pet/AdvancedKits
