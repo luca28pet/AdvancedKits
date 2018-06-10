@@ -26,13 +26,8 @@ class Main extends PluginBase{
     public $piggyCustomEnchantsInstance;
 
     public function onEnable() : void{
-        if(!is_dir($this->getDataFolder())){
-            if(!mkdir($this->getDataFolder()) && !is_dir($this->getDataFolder())){
-                $this->getLogger()->error('Unable to create data folder');
-            }
-        }
         if(!is_dir($this->getDataFolder().'cooldowns/')){
-            if(!mkdir($this->getDataFolder().'cooldowns/') && !is_dir($this->getDataFolder().'cooldowns/')){
+            if(!mkdir($this->getDataFolder().'cooldowns/', 0777, true) && !is_dir($this->getDataFolder().'cooldowns/')){
                 $this->getLogger()->error('Unable to create cooldowns folder');
             }
         }
