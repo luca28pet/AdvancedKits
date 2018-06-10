@@ -2,6 +2,7 @@
 
 namespace AdvancedKits;
 
+use PiggyCustomEnchants\CustomEnchants\CustomEnchants;
 use pocketmine\command\ConsoleCommandSender;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
@@ -160,16 +161,31 @@ class Kit{
                     $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Enchantments must be specified in the format name:level. Enchantment: '.$enchantmentsData[0].' will not be included in the item '.$itemString);
                     continue;
                 }
+
                 $enchantment = Enchantment::getEnchantmentByName($enchantmentsData[0]);
-                if($enchantment === null){
-                    $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Enchantment '.$enchantmentsData[0].' in item '.$itemString.' could not be loaded because the enchantment does not exist');
-                    continue;
+                if($enchantment === null){ //If the specified enchantment is not a vanilla enchantment
+                    if($this->ak->piggyCustomEnchantsInstance !== null){ //Check if PiggyCustomEnchants is loaded and try to load the enchantment from there
+                        $enchantment = CustomEnchants::getEnchantmentByName($enchantmentsData[0]);
+                        if($enchantment === null){ //If the specified enchantment is not a custom enchantment
+                            $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Enchantment '.$enchantmentsData[0].' in item '.$itemString.' could not be loaded because the enchantment does not exist');
+                            continue;
+                        }
+                    }else{
+                        $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Enchantment '.$enchantmentsData[0].' in item '.$itemString.' could not be loaded because the enchantment does not exist');
+                        continue;
+                    }
                 }
+
                 if(!is_numeric($array[1])){
                     $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Enchantment '.$enchantmentsData[0].' in item '.$itemString.' could not be loaded because the level is not a number');
                     continue;
                 }
-                $item->addEnchantment(new EnchantmentInstance($enchantment, (int) $enchantmentsData[1]));
+
+                if($enchantment instanceof CustomEnchants){
+                    $this->ak->piggyCustomEnchantsInstance->addEnchantment($item, $enchantment, (int) $enchantmentsData[1]);
+                }else{
+                    $item->addEnchantment(new EnchantmentInstance($enchantment, (int) $enchantmentsData[1]));
+                }
             }
         }
         return $item;
