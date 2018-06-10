@@ -5,7 +5,7 @@ api: [3.0.0-ALPHA12]
 author: luca28pet
 description: Add kits to your server
 website: https://github.com/luca28pet/AdvancedKits
-softdepend: [PurePerms]
+softdepend: [PurePerms, PiggyCustomEnchants]
 commands:
  kit:
   description: Get a kit!
