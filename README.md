@@ -17,6 +17,7 @@ This plugin only supports PocketMine-MP. It might work on other forks as well, b
 - Economy support: pay to get a kit. Support for EconomyS, PocketMoney and MassiveEconomy
 - Sign support: write a sign to let users get a kit
 - Unlimited kits with unlimited items, and armor support
+- Supports custom enchantments with the PiggyCustomEnchants plugin
 - Time limit (cooldown) for kits
 - Option for one kit per life (see config.yml)
 - Execute commands with kits
