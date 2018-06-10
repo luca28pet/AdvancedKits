@@ -182,7 +182,7 @@ class Kit{
                 }
 
                 if($enchantment instanceof CustomEnchants){
-                    $this->ak->piggyCustomEnchantsInstance->addEnchantment($item, $enchantment, (int) $enchantmentsData[1]);
+                    $this->ak->piggyCustomEnchantsInstance->addEnchantment($item, [$enchantmentsData[0]], [(int) $enchantmentsData[1]]);
                 }else{
                     $item->addEnchantment(new EnchantmentInstance($enchantment, (int) $enchantmentsData[1]));
                 }
