@@ -22,6 +22,8 @@ class Main extends PluginBase{
     public $permManager = false;
     /** @var LangManager */
     public $langManager;
+    /** @var  null|\PiggyCustomEnchants\Main */
+    public $piggyCustomEnchantsInstance;
 
     public function onEnable() : void{
         if(!is_dir($this->getDataFolder())){
@@ -42,6 +44,10 @@ class Main extends PluginBase{
             $this->permManager = true;
             $this->getLogger()->notice('PurePerms mode enabled');
         }
+        if(($plugin = $this->getServer()->getPluginManager()->getPlugin('PiggyCustomEnchants')) !== null){
+            $this->piggyCustomEnchantsInstance = $plugin;
+            $this->getLogger()->notice('PiggyCustomEnchants detected. Activated custom enchants support');
+        }
         $this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new CoolDownTask($this), 1200, 1200);
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
     }
@@ -51,6 +57,7 @@ class Main extends PluginBase{
             $kit->save();
         }
         $this->kits = [];
+        $this->piggyCustomEnchantsInstance = null;
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
