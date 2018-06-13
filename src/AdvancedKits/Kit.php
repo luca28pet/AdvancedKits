@@ -2,7 +2,6 @@
 
 namespace AdvancedKits;
 
-use PiggyCustomEnchants\CustomEnchants\CustomEnchants;
 use pocketmine\command\ConsoleCommandSender;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
@@ -37,7 +36,7 @@ class Kit{
             $this->cost = (int) $this->data['money'];
         }
         if(file_exists($this->ak->getDataFolder().'cooldowns/'.strtolower($this->name).'.sl')){
-            $this->coolDowns = unserialize(file_get_contents($this->ak->getDataFolder().'cooldowns/'.strtolower($this->name).'.sl'));
+            $this->coolDowns = unserialize(file_get_contents($this->ak->getDataFolder().'cooldowns/'.strtolower($this->name).'.sl'), ['allowed_classes' => false]);
         }
 
         foreach($this->data['items'] as $itemString){
@@ -165,7 +164,7 @@ class Kit{
                 $enchantment = Enchantment::getEnchantmentByName($enchantmentsData[0]);
                 if($enchantment === null){ //If the specified enchantment is not a vanilla enchantment
                     if($this->ak->piggyCustomEnchantsInstance !== null){ //Check if PiggyCustomEnchants is loaded and try to load the enchantment from there
-                        $enchantment = CustomEnchants::getEnchantmentByName($enchantmentsData[0]);
+                        $enchantment = \PiggyCustomEnchants\CustomEnchants\CustomEnchants::getEnchantmentByName($enchantmentsData[0]);
                         if($enchantment === null){ //If the specified enchantment is not a custom enchantment
                             $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Enchantment '.$enchantmentsData[0].' in item '.$itemString.' could not be loaded because the enchantment does not exist');
                             continue;
@@ -181,7 +180,7 @@ class Kit{
                     continue;
                 }
 
-                if($enchantment instanceof CustomEnchants){
+                if($this->ak->piggyCustomEnchantsInstance !== null && $enchantment instanceof \PiggyCustomEnchants\CustomEnchants\CustomEnchants){
                     $this->ak->piggyCustomEnchantsInstance->addEnchantment($item, [$enchantmentsData[0]], [(int) $enchantmentsData[1]]);
                 }else{
                     $item->addEnchantment(new EnchantmentInstance($enchantment, (int) $enchantmentsData[1]));
