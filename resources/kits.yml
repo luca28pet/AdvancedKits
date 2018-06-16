@@ -21,6 +21,11 @@ testkit:
   leggings: "diamond_leggings:0:1:Leggings Name"
   boots: "diamond_boots:0:1"
 
+  # Set items for specific slots, will override existing items. Only use if you want to assign items to specific slots, otherwise delete this.
+  slots:
+    9: "golden_apple:0:5"
+    12: "bow:0:1"
+
   commands:
   - "tell {player} you got an awesome kit thanks to AdvancedKits plugin!"
 

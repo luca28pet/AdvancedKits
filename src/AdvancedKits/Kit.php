@@ -23,6 +23,8 @@ class Kit{
     private $items = [];
     /** @var Item[] */
     private $armor = ['helmet' => null, 'chestplate' => null, 'leggings' => null, 'boots' => null];
+    /** @var Item[] */
+    private $slots = [];
     /** @var EffectInstance[] */
     private $effects = [];
 
@@ -49,6 +51,15 @@ class Kit{
         isset($this->data['chestplate']) && ($this->armor['chestplate'] = $this->loadItem($this->data['chestplate']));
         isset($this->data['leggings']) && ($this->armor['leggings'] = $this->loadItem($this->data['leggings']));
         isset($this->data['boots']) && ($this->armor['boots'] = $this->loadItem($this->data['boots']));
+
+        if(isset($this->data['slots']) && is_array($this->data['slots'])){
+            foreach($this->data['slots'] as $index => $itemString){
+                $item = $this->loadItem($itemString);
+                if($item !== null){
+                    $this->slots[$index] = $item;
+                }
+            }
+        }
 
         if(isset($this->data['effects']) && is_array($this->data['effects'])){
             foreach($this->data['effects'] as $effectString){
@@ -102,6 +113,10 @@ class Kit{
         $this->armor['chestplate'] !== null && $player->getArmorInventory()->setChestplate($this->armor['chestplate']);
         $this->armor['leggings'] !== null && $player->getArmorInventory()->setLeggings($this->armor['leggings']);
         $this->armor['boots'] !== null && $player->getArmorInventory()->setBoots($this->armor['boots']);
+
+        foreach($this->slots as $slot => $item){
+            $player->getInventory()->setItem($slot, $item);
+        }
 
         foreach($this->effects as $effect){
             $player->addEffect(clone $effect);
