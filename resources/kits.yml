@@ -52,4 +52,10 @@ testkit:
   users:
   - "luca28pet"
   - "dioconsole"
+
+  # FormAPI users:
+  # Img type: 'url' or 'path'
+  img-type: ''
+  # Put here the image URL/path
+  img-data: ''
 ...

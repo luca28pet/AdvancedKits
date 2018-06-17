@@ -28,6 +28,11 @@ class Kit{
     /** @var EffectInstance[] */
     private $effects = [];
 
+    /** @var  int */
+    private $imgType = null;
+    /** @var  string */
+    private $imgData = null;
+
     public function __construct(Main $ak, array $data, string $name){
         $this->ak = $ak;
         $this->data = $data;
@@ -69,10 +74,35 @@ class Kit{
                 }
             }
         }
+
+        if(isset($data['img-type'])){
+            if($data['img-type'] === 'url'){
+                $this->imgType = 1;
+            }elseif($data['img-type'] === 'path'){
+                $this->imgType = 0;
+            }else{
+                $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Image type '.$data['img-type'].' not supproted. Please use \'path\' or \'url\'');
+            }
+        }
+        if(isset($data['img-data'])){
+            $this->imgData = $data['img-data'];
+        }
     }
 
     public function getName() : string{
         return $this->name;
+    }
+
+    public function getImageType() : ?int{
+        return $this->imgType;
+    }
+
+    public function getImageData() : ?string{
+        return $this->imgData;
+    }
+
+    public function hasValidImage() : bool{
+        return $this->imgType !== null && $this->imgData !== null;
     }
 
     public function handleRequest(Player $player) : bool{
