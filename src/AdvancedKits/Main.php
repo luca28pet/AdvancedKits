@@ -19,11 +19,13 @@ class Main extends PluginBase{
     /** @var EconomyManager */
     public $economy;
     /** @var bool  */
-    public $permManager = false;
+    public $permManager;
     /** @var LangManager */
     public $langManager;
     /** @var  null|\PiggyCustomEnchants\Main */
     public $piggyCustomEnchantsInstance;
+    /** @var  null|\jojoe77777\FormAPI\FormAPI */
+    public $formAPIInstance;
 
     public function onEnable() : void{
         if(!is_dir($this->getDataFolder().'cooldowns/')){
@@ -35,6 +37,10 @@ class Main extends PluginBase{
             $this->piggyCustomEnchantsInstance = $plugin;
             $this->getLogger()->notice('PiggyCustomEnchants detected. Activated custom enchants support');
         }
+        if(($plugin = $this->getServer()->getPluginManager()->getPlugin('FormAPI')) !== null){
+            $this->formAPIInstance = $plugin;
+            $this->getLogger()->notice('FormAPI detected. Activated kit selection UI support');
+        }
         $this->saveDefaultConfig();
         $this->loadKits();
         $this->economy = new EconomyManager($this);
@@ -42,6 +48,8 @@ class Main extends PluginBase{
         if(!$this->getConfig()->get('force-builtin-permissions') && $this->getServer()->getPluginManager()->getPlugin('PurePerms') !== null){
             $this->permManager = true;
             $this->getLogger()->notice('PurePerms mode enabled');
+        }else{
+            $this->permManager = false;
         }
         $this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new CoolDownTask($this), 1200, 1200);
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
@@ -53,6 +61,7 @@ class Main extends PluginBase{
         }
         $this->kits = [];
         $this->piggyCustomEnchantsInstance = null;
+        $this->formAPIInstance = null;
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
@@ -63,7 +72,11 @@ class Main extends PluginBase{
                     return true;
                 }
                 if(!isset($args[0])){
-                    $sender->sendMessage($this->langManager->getTranslation('av-kits', implode(', ', array_keys($this->kits))));
+                    if($this->formAPIInstance === null){
+                        $sender->sendMessage($this->langManager->getTranslation('av-kits', implode(', ', array_keys($this->kits))));
+                    }else{
+                        $this->openKitUI($sender);
+                    }
                     return true;
                 }
                 $kit = $this->getKit($args[0]);
@@ -83,6 +96,29 @@ class Main extends PluginBase{
                 return true;
         }
         return true;
+    }
+
+    public function openKitUI(Player $player) : void{
+        if($this->formAPIInstance === null){
+            return;
+        }
+        $form = $this->formAPIInstance->createSimpleForm([$this, 'onPlayerSelection']);
+        $form->setTitle($this->langManager->getTranslation('form-title'));
+        foreach($this->kits as $kit){
+            $form->addButton($kit->getName(), $kit->hasValidImage() ? $kit->getImageType() : -1, $kit->hasValidImage() ? $kit->getImageData() : '', $kit->getName());
+        }
+        $form->sendToPlayer($player);
+    }
+
+    public function onPlayerSelection(Player $player, ?string $data) : void{
+        if($data === null){
+            return;
+        }
+        $kit = $this->getKit($data);
+        if($kit === null){
+            return;
+        }
+        $kit->handleRequest($player);
     }
 
     private function loadKits() : void{

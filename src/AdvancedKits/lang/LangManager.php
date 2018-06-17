@@ -8,7 +8,7 @@ use pocketmine\utils\TextFormat;
 
 class LangManager{
 
-    public const LANG_VERSION = 0;
+    public const LANG_VERSION = 1;
     private const PREFIX = TextFormat::AQUA.'['.TextFormat::RED.'AdvancedKits'.TextFormat::AQUA.'] '.TextFormat::WHITE;
 
     private $ak;
@@ -18,8 +18,7 @@ class LangManager{
     public function __construct(Main $ak){
         $this->ak = $ak;
         $this->defaults = [
-            '#Use & or § for color codes' => '',
-            'lang-version' => 0,
+            'lang-version' => self::LANG_VERSION,
             'in-game' => self::PREFIX.'Please run this command in game',
             'av-kits' => self::PREFIX.'Available kits: {%0}',
             'no-kit' => self::PREFIX.'Kit {%0} does not exist',
@@ -34,7 +33,8 @@ class LangManager{
             'cooldown-format2' => self::PREFIX.'{%0} hours and {%1} minutes',
             'cooldown-format3' => self::PREFIX.'{%0} hours',
             'no-sign-on-kit' => self::PREFIX.'On this sign, the kit is not specified',
-            'no-perm-sign' => self::PREFIX.'You don\'t have permission to create a sign kit'
+            'no-perm-sign' => self::PREFIX.'You don\'t have permission to create a sign kit',
+            'form-title' => self::PREFIX.'Available Kits'
         ];
         $this->data = new Config($this->ak->getDataFolder().'lang.properties', Config::PROPERTIES, $this->defaults);
         if($this->data->get('lang-version') != self::LANG_VERSION){
