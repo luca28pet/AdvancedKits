@@ -3,14 +3,13 @@
 namespace AdvancedKits\tasks;
 
 use AdvancedKits\Main;
-use pocketmine\scheduler\PluginTask;
+use pocketmine\scheduler\Task;
 
-class CoolDownTask extends PluginTask{
+class CoolDownTask extends Task{
 
     private $plugin;
 
     public function __construct(Main $plugin){
-        parent::__construct($plugin);
         $this->plugin = $plugin;
     }
 

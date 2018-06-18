@@ -29,9 +29,11 @@ class Kit{
     private $effects = [];
 
     /** @var  int */
-    private $imgType = null;
+    private $imgType;
     /** @var  string */
-    private $imgData = null;
+    private $imgData;
+    /** @var string */
+    private $formName;
 
     public function __construct(Main $ak, array $data, string $name){
         $this->ak = $ak;
@@ -87,6 +89,9 @@ class Kit{
         if(isset($data['img-data'])){
             $this->imgData = $data['img-data'];
         }
+        if(isset($data['form-name'])){
+            $this->formName = $data['form-name'];
+        }
     }
 
     public function getName() : string{
@@ -102,7 +107,11 @@ class Kit{
     }
 
     public function hasValidImage() : bool{
-        return $this->imgType !== null && $this->imgData !== null;
+        return isset($this->imgType, $this->imgData);
+    }
+
+    public function getFormName() : ?string{
+        return $this->formName;
     }
 
     public function handleRequest(Player $player) : bool{
