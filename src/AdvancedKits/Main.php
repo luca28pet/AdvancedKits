@@ -51,7 +51,7 @@ class Main extends PluginBase{
         }else{
             $this->permManager = false;
         }
-        $this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new CoolDownTask($this), 1200, 1200);
+        $this->getScheduler()->scheduleDelayedRepeatingTask(new CoolDownTask($this), 1200, 1200);
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
     }
 
@@ -105,7 +105,7 @@ class Main extends PluginBase{
         $form = $this->formAPIInstance->createSimpleForm([$this, 'onPlayerSelection']);
         $form->setTitle($this->langManager->getTranslation('form-title'));
         foreach($this->kits as $kit){
-            $form->addButton($kit->getName(), $kit->hasValidImage() ? $kit->getImageType() : -1, $kit->hasValidImage() ? $kit->getImageData() : '', $kit->getName());
+            $form->addButton($kit->getFormName() ?? $kit->getName(), $kit->hasValidImage() ? $kit->getImageType() : -1, $kit->hasValidImage() ? $kit->getImageData() : '', $kit->getName());
         }
         $form->sendToPlayer($player);
     }
