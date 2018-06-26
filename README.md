@@ -2,7 +2,10 @@ AdvancedKits
 ============
 
 A PocketMine-MP plugin that adds kits to your server with many features and support for UIs (FormAPI plugin) and custom enchantments (PiggyCustomEnchants)
-*Find the latest PHAR at: https://poggit.pmmp.io/ci/luca28pet/AdvancedKits*
+
+*Latest release: https://poggit.pmmp.io/p/AdvancedKits/*
+
+*Latest development phars: https://poggit.pmmp.io/ci/luca28pet/AdvancedKits/AdvancedKits*
 
 This plugin only supports PocketMine-MP. It might work on other forks as well, but please Do NOT open issues if you have problems with AdvancedKits and you are using a fork.
 
