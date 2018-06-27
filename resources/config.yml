@@ -10,4 +10,7 @@ force-builtin-permissions: false
 
 # Sign text (capitals and color codes don't matter)
 sign-text: "[AdvancedKits]"
+
+# Kits you don't have the permission to get will be hidden from the kits list
+hide-no-perm-kits: false
 ...

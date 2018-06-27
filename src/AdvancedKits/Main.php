@@ -72,10 +72,11 @@ class Main extends PluginBase{
                     return true;
                 }
                 if(!isset($args[0])){
+                    $kits = (bool)$this->getConfig()->get('hide-no-perm-kits', false) ? array_filter($this->kits, function (Kit $kit) use($sender){return $kit->testPermission($sender);}) : $this->kits;
                     if($this->formAPIInstance === null){
-                        $sender->sendMessage($this->langManager->getTranslation('av-kits', implode(', ', array_keys($this->kits))));
+                        $sender->sendMessage($this->langManager->getTranslation('av-kits', implode(', ', array_keys($kits))));
                     }else{
-                        $this->openKitUI($sender);
+                        $this->openKitUI($sender, $kits);
                     }
                     return true;
                 }
@@ -98,13 +99,17 @@ class Main extends PluginBase{
         return true;
     }
 
-    public function openKitUI(Player $player) : void{
+    /**
+     * @param Player $player
+     * @param Kit[] $kits
+     */
+    public function openKitUI(Player $player, array $kits) : void{
         if($this->formAPIInstance === null){
             return;
         }
         $form = $this->formAPIInstance->createSimpleForm([$this, 'onPlayerSelection']);
         $form->setTitle($this->langManager->getTranslation('form-title'));
-        foreach($this->kits as $kit){
+        foreach($kits as $kit){
             $form->addButton($kit->getFormName() ?? $kit->getName(), $kit->hasValidImage() ? $kit->getImageType() : -1, $kit->hasValidImage() ? $kit->getImageData() : '', $kit->getName());
         }
         $form->sendToPlayer($player);

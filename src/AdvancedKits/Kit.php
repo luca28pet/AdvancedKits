@@ -305,7 +305,7 @@ class Kit{
         }
     }
 
-    private function testPermission(Player $player) : bool{
+    public function testPermission(Player $player) : bool{
         if($this->ak->permManager){
             return $player->hasPermission('advancedkits.'.strtolower($this->name)) || $player->hasPermission('advancedkits.'.$this->name);
         }
