@@ -22,7 +22,7 @@ class Main extends PluginBase{
     public $permManager;
     /** @var LangManager */
     public $langManager;
-    /** @var  null|\PiggyCustomEnchants\Main */
+    /** @var  null|\DaPigGuy\PiggyCustomEnchants\Main */
     public $piggyCustomEnchantsInstance;
     /** @var  null|\jojoe77777\FormAPI\FormAPI */
     public $formAPIInstance;
