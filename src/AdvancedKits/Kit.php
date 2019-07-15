@@ -275,7 +275,7 @@ class Kit{
         return new EffectInstance($e, (int) $duration * 20, (int) $amplifier);
     }
 
-    private function getCoolDownMinutes() : int{
+    private function getCoolownMinutes() : int{
         $min = 0;
         if(isset($this->data['cooldown']['minutes'])){
             $min += (int) $this->data['cooldown']['minutes'];
