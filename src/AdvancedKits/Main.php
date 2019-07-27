@@ -5,6 +5,7 @@ namespace AdvancedKits;
 use AdvancedKits\economy\EconomyManager;
 use AdvancedKits\lang\LangManager;
 use AdvancedKits\tasks\CoolDownTask;
+use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
@@ -72,7 +73,9 @@ class Main extends PluginBase{
                     return true;
                 }
                 if(!isset($args[0])){
-                    $kits = (bool)$this->getConfig()->get('hide-no-perm-kits', false) ? array_filter($this->kits, function (Kit $kit) use($sender){return $kit->testPermission($sender);}) : $this->kits;
+                    $kits = ((bool) $this->getConfig()->get('hide-no-perm-kits', false)) ? array_filter($this->kits, function (Kit $kit) use($sender){
+                        return $kit->testPermission($sender);
+                    }) : $this->kits;
                     if($this->formAPIInstance === null){
                         $sender->sendMessage($this->langManager->getTranslation('av-kits', implode(', ', array_keys($kits))));
                     }else{
@@ -107,12 +110,12 @@ class Main extends PluginBase{
         if($this->formAPIInstance === null){
             return;
         }
-        $form = $this->formAPIInstance->createSimpleForm([$this, 'onPlayerSelection']);
+        $form = new SimpleForm([$this, 'onPlayerSelection']);
         $form->setTitle($this->langManager->getTranslation('form-title'));
         foreach($kits as $kit){
             $form->addButton($kit->getFormName() ?? $kit->getName(), $kit->hasValidImage() ? $kit->getImageType() : -1, $kit->hasValidImage() ? $kit->getImageData() : '', $kit->getName());
         }
-        $form->sendToPlayer($player);
+        $player->sendForm($form);
     }
 
     public function onPlayerSelection(Player $player, ?string $data) : void{
