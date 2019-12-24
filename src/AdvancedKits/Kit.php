@@ -83,7 +83,7 @@ class Kit{
             }elseif($data['img-type'] === 'path'){
                 $this->imgType = 0;
             }else{
-                $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Image type '.$data['img-type'].' not supproted. Please use \'path\' or \'url\'');
+                $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Image type '.$data['img-type'].' not supported. Please use \'path\' or \'url\'');
             }
         }
         if(isset($data['img-data'])){
