@@ -1,6 +1,6 @@
 <?php
 
-namespace luca28pet\AdvancedKits;
+namespace AdvancedKits;
 
 use pocketmine\block\Block;
 use pocketmine\event\block\SignChangeEvent;

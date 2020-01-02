@@ -1,6 +1,6 @@
 <?php
 
-namespace luca28pet\AdvancedKits;
+namespace AdvancedKits;
 
 use DaPigGuy\PiggyCustomEnchants\CustomEnchantManager;
 use InvalidArgumentException;

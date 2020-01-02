@@ -1,8 +1,8 @@
 <?php
 
-namespace luca28pet\AdvancedKits\lang;
+namespace AdvancedKits\lang;
 
-use luca28pet\AdvancedKits\Main;
+use AdvancedKits\Main;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 use function rename;

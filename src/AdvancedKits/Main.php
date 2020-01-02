@@ -1,12 +1,12 @@
 <?php
 
-namespace luca28pet\AdvancedKits;
+namespace AdvancedKits;
 
 use DaPigGuy\PiggyCustomEnchants\PiggyCustomEnchants;
 use jojoe77777\FormAPI\SimpleForm;
-use luca28pet\AdvancedKits\economy\EconomyManager;
-use luca28pet\AdvancedKits\lang\LangManager;
-use luca28pet\AdvancedKits\tasks\CoolDownTask;
+use AdvancedKits\economy\EconomyManager;
+use AdvancedKits\lang\LangManager;
+use AdvancedKits\tasks\CoolDownTask;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
