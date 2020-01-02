@@ -1,8 +1,8 @@
 <?php
 
-namespace AdvancedKits\economy;
+namespace luca28pet\AdvancedKits\economy;
 
-use AdvancedKits\Main;
+use luca28pet\AdvancedKits\Main;
 use pocketmine\Player;
 
 class EconomyManager{
@@ -29,7 +29,7 @@ class EconomyManager{
                 if($this->api->reduceMoney($player, $money) === 1){
                     return true;
                 }
-            break;
+                break;
             case 'PocketMoney':
                 if($this->api->getMoney($player->getName()) < $money){
                     return false;
@@ -37,12 +37,12 @@ class EconomyManager{
                 if($this->api->setMoney($player->getName(), $this->api->getMoney($player->getName()) - $money)){
                     return true;
                 }
-            break;
+                break;
             case 'MassiveEconomy':
                 if($this->api->takeMoney($player->getName(), $money) === 2){
                     return true;
                 }
-            break;
+                break;
         }
         return false;
     }

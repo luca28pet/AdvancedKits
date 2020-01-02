@@ -1,8 +1,8 @@
 <?php
 
-namespace AdvancedKits\tasks;
+namespace luca28pet\AdvancedKits\tasks;
 
-use AdvancedKits\Main;
+use luca28pet\AdvancedKits\Main;
 use pocketmine\scheduler\Task;
 
 class CoolDownTask extends Task{

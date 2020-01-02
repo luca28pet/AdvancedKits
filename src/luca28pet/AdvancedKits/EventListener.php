@@ -1,6 +1,6 @@
 <?php
 
-namespace AdvancedKits;
+namespace luca28pet\AdvancedKits;
 
 use pocketmine\block\Block;
 use pocketmine\event\block\SignChangeEvent;
@@ -10,6 +10,7 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\tile\Sign;
 use pocketmine\utils\TextFormat;
+use function strtolower;
 
 class EventListener implements Listener{
 

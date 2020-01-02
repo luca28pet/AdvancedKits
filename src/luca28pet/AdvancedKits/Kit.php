@@ -1,7 +1,9 @@
 <?php
 
-namespace AdvancedKits;
+namespace luca28pet\AdvancedKits;
 
+use DaPigGuy\PiggyCustomEnchants\CustomEnchantManager;
+use InvalidArgumentException;
 use pocketmine\command\ConsoleCommandSender;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
@@ -9,6 +11,21 @@ use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
 use pocketmine\Player;
+use function array_chunk;
+use function array_shift;
+use function count;
+use function explode;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function floor;
+use function in_array;
+use function is_array;
+use function is_numeric;
+use function serialize;
+use function str_replace;
+use function strtolower;
+use function unserialize;
 
 class Kit{
 
@@ -184,7 +201,7 @@ class Kit{
         $damage = array_shift($array);
         try{
             $item = Item::fromString($name.':'.$damage);
-        }catch(\InvalidArgumentException $exception){
+        }catch(InvalidArgumentException $exception){
             $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Item '.$itemString.' could not be loaded');
             $this->ak->getLogger()->warning($exception->getMessage());
             return null;
@@ -218,7 +235,7 @@ class Kit{
                 $enchantment = Enchantment::getEnchantmentByName($enchantmentsData[0]);
                 if($enchantment === null){ //If the specified enchantment is not a vanilla enchantment
                     if($this->ak->piggyCustomEnchantsInstance !== null && $this->ak->piggyCustomEnchantsInstance->isEnabled()){ //Check if PiggyCustomEnchants is loaded and try to load the enchantment from there
-                        $enchantment = \DaPigGuy\PiggyCustomEnchants\CustomEnchantManager::getEnchantmentByName($enchantmentsData[0]);
+                        $enchantment = CustomEnchantManager::getEnchantmentByName($enchantmentsData[0]);
                         if($enchantment === null){ //If the specified enchantment is not a custom enchantment
                             $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Enchantment '.$enchantmentsData[0].' in item '.$itemString.' could not be loaded because the enchantment does not exist');
                             continue;
@@ -255,10 +272,10 @@ class Kit{
 
         if(!empty($array)){
             $amplifier = array_shift($array);
-             if(!is_numeric($amplifier)){
-                 $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Effect '.$effectString.' could not be loaded because the amplifier is not a number');
-                 return null;
-             }
+            if(!is_numeric($amplifier)){
+                $this->ak->getLogger()->warning('Bad configuration in kit '.$this->name.'. Effect '.$effectString.' could not be loaded because the amplifier is not a number');
+                return null;
+            }
         }else{
             $amplifier = 0;
         }
@@ -302,7 +319,7 @@ class Kit{
     }
 
     public function testPermission(Player $player) : bool{
-        if($this->ak->permManager){
+        if($this->ak->permissionsMode){
             return $player->hasPermission('advancedkits.'.strtolower($this->name)) || $player->hasPermission('advancedkits.'.$this->name);
         }
 

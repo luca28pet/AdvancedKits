@@ -1,10 +1,12 @@
 <?php
 
-namespace AdvancedKits\lang;
+namespace luca28pet\AdvancedKits\lang;
 
-use AdvancedKits\Main;
+use luca28pet\AdvancedKits\Main;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
+use function rename;
+use function str_replace;
 
 class LangManager{
 

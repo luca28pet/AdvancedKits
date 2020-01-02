@@ -5,12 +5,16 @@ one-kit-per-life: true
 # Users are able to get a kit if they log out even if they did not die (only works if one-kit-per-life: true)
 reset-on-logout: true
 
-# Use built in permission system even if using PurePerms
-force-builtin-permissions: false
+# If true, you will need to give players the permission advancedkits.kitname with your permissions manager of choice to let them get a kit
+# If false, no permissions will be used for kits. You will have to specify manually the players/worlds that can get a kit from the kits.yml file
+permissions-mode: true
 
 # Sign text (capitals and color codes don't matter)
 sign-text: "[AdvancedKits]"
 
 # Kits you don't have the permission to get will be hidden from the kits list
 hide-no-perm-kits: false
+
+# Show the kit list as a form when a player runs the command /kit (without arguments)
+show-form-no-args: true
 ...

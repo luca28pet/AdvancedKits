@@ -1,15 +1,27 @@
 <?php
 
-namespace AdvancedKits;
+namespace luca28pet\AdvancedKits;
 
-use AdvancedKits\economy\EconomyManager;
-use AdvancedKits\lang\LangManager;
-use AdvancedKits\tasks\CoolDownTask;
+use DaPigGuy\PiggyCustomEnchants\PiggyCustomEnchants;
 use jojoe77777\FormAPI\SimpleForm;
+use luca28pet\AdvancedKits\economy\EconomyManager;
+use luca28pet\AdvancedKits\lang\LangManager;
+use luca28pet\AdvancedKits\tasks\CoolDownTask;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
+use function array_change_key_case;
+use function array_filter;
+use function array_keys;
+use function array_map;
+use function class_exists;
+use function implode;
+use function is_dir;
+use function mkdir;
+use function strtolower;
+use function yaml_parse_file;
+use const CASE_LOWER;
 
 class Main extends PluginBase{
 
@@ -20,38 +32,34 @@ class Main extends PluginBase{
     /** @var EconomyManager */
     public $economy;
     /** @var bool  */
-    public $permManager;
+    public $permissionsMode;
     /** @var LangManager */
     public $langManager;
-    /** @var  null|\DaPigGuy\PiggyCustomEnchants\PiggyCustomEnchants */
+    /** @var  null|PiggyCustomEnchants */
     public $piggyCustomEnchantsInstance;
-    /** @var  null|\jojoe77777\FormAPI\FormAPI */
-    public $formAPIInstance;
 
     public function onEnable() : void{
+        $this->saveDefaultConfig();
+        if(!class_exists(SimpleForm::class) && $this->getConfig()->get('show-form-no-args', true)){
+            $this->getLogger()->error('libFormAPI virion not found. Please use the phar on poggit or use DEVirion or put \'show-form-no-args: false\' in the config.yml');
+            $this->getServer()->getPluginManager()->disablePlugin($this);
+            return;
+        }
         if(!is_dir($this->getDataFolder().'cooldowns/')){
             if(!mkdir($this->getDataFolder().'cooldowns/', 0777, true) && !is_dir($this->getDataFolder().'cooldowns/')){
                 $this->getLogger()->error('Unable to create cooldowns folder');
+                $this->getServer()->getPluginManager()->disablePlugin($this);
+                return;
             }
         }
         if(($plugin = $this->getServer()->getPluginManager()->getPlugin('PiggyCustomEnchants')) !== null){
             $this->piggyCustomEnchantsInstance = $plugin;
             $this->getLogger()->notice('PiggyCustomEnchants detected. Activated custom enchants support');
         }
-        if(($plugin = $this->getServer()->getPluginManager()->getPlugin('FormAPI')) !== null){
-            $this->formAPIInstance = $plugin;
-            $this->getLogger()->notice('FormAPI detected. Activated kit selection UI support');
-        }
-        $this->saveDefaultConfig();
         $this->loadKits();
         $this->economy = new EconomyManager($this);
         $this->langManager = new LangManager($this);
-        if(!$this->getConfig()->get('force-builtin-permissions') && $this->getServer()->getPluginManager()->getPlugin('PurePerms') !== null){
-            $this->permManager = true;
-            $this->getLogger()->notice('PurePerms mode enabled');
-        }else{
-            $this->permManager = false;
-        }
+        $this->permissionsMode = $this->getConfig()->get('permissions-mode', true);
         $this->getScheduler()->scheduleDelayedRepeatingTask(new CoolDownTask($this), 1200, 1200);
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
     }
@@ -62,7 +70,6 @@ class Main extends PluginBase{
         }
         $this->kits = [];
         $this->piggyCustomEnchantsInstance = null;
-        $this->formAPIInstance = null;
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
@@ -73,13 +80,13 @@ class Main extends PluginBase{
                     return true;
                 }
                 if(!isset($args[0])){
-                    $kits = ((bool) $this->getConfig()->get('hide-no-perm-kits', false)) ? array_filter($this->kits, function (Kit $kit) use($sender){
+                    $kits = ((bool) $this->getConfig()->get('hide-no-perm-kits', false)) ? array_filter($this->kits, static function (Kit $kit) use($sender){
                         return $kit->testPermission($sender);
                     }) : $this->kits;
-                    if($this->formAPIInstance === null){
-                        $sender->sendMessage($this->langManager->getTranslation('av-kits', implode(', ', array_keys($kits))));
-                    }else{
+                    if($this->getConfig()->get('show-form-no-args', true)){
                         $this->openKitUI($sender, $kits);
+                    }else{
+                        $sender->sendMessage($this->langManager->getTranslation('av-kits', implode(', ', array_keys($kits))));
                     }
                     return true;
                 }
@@ -107,9 +114,6 @@ class Main extends PluginBase{
      * @param Kit[] $kits
      */
     public function openKitUI(Player $player, array $kits) : void{
-        if($this->formAPIInstance === null){
-            return;
-        }
         $form = new SimpleForm([$this, 'onPlayerSelection']);
         $form->setTitle($this->langManager->getTranslation('form-title'));
         foreach($kits as $kit){
