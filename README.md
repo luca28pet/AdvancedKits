@@ -12,10 +12,10 @@ This plugin only supports PocketMine-MP. It might work on other forks as well, b
 **Features overview:**
 
 - Highly configurable
-- UI (user interface) support using FormAPI plugin
+- UI (user interface) support using libFormAPI (already included in the phars)
 - Custom enchantments support using PiggyCustomEnchants plugin
 - Custom permissions support
-- Built in permissions system for non-PurePerms users (see kits.yml)
+- Built in permissions system if you don't want to use any permissions manager (see kits.yml)
 - Economy support: pay to get a kit. Support for EconomyS, PocketMoney and MassiveEconomy
 - Sign support: write a sign to let users get a kit
 - Time limit (cooldown) for kits
@@ -46,13 +46,15 @@ The default kit is: testkit.
 You can add kits editing kits.yml (see "Kit settings").
 
 **UI support:**
-To let users select a kit using a UI, install the plugin FormAPI.
+You don't need to install the plugin FormAPI as it is already included in the latest phars from poggit.
+To let users select a kit using a UI, enable 'show-form-no-args' in the config.yml
 Then, to open the UI, use /kit
+If you run this plugin in folder format, you will have to use DEVirion and manually install FormAPI, or disable 'show-form-no-args' in the config.yml
 
 **Permissions:**
-If you have PurePerms: with the permission advancedkits.kitname, a player will be able to get the kit named "kitname".
+If 'permissions-mode' in the config.yml is true: with the permission advancedkits.kitname, a player will be able to get the kit named "kitname".
 Note: in the permission, the kit name HAS to be ALL in lowercase letters.
-If you do not use PurePerms, you can specify which users (and in which worlds) can get a kit. (see kit settings)
+If 'permissions-mode' in the config.yml is false, you can specify in the kits.yml which users (and in which worlds) can get a kit. (see kit settings)
 
 **Kit Settings:**
 
@@ -126,7 +128,7 @@ testkit:
 You can find a list of available enchantments in the file Enchantment.php in the pmmp source code: https://github.com/pmmp/PocketMine-MP/blob/master/src/pocketmine/item/enchantment/Enchantment.php
 
 If you don't specify users or world, then the kit will be available to all users or in all worlds.
-If you have PurePerms, these parameters will be ignored unless you edit the config.yml
+If 'permissions-mode' in the config.yml is true, these parameters will be ignored
 
 
 **Translations:**
