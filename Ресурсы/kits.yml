@@ -1,9 +1,9 @@
 ---
-testkit:
-  # ITEM FORMAT: "id:damage:count:name:ench_name:ench_level"
-  # NO enchantments and NO custom name: "id:damage:count"
+Older:
+  # ITEM FORMAT: "id:damage:32000:name:diamond_sword:ench_level"
+  # NO enchantments and NO custom name: "id:damage:32000"
 
-  # ONLY custom name: "id:damage:count:custom name"
+  # ONLY custom name: "id:damage:32000:Older sword"
 
   # ONLY enchantments: "id:damage:count:DEFAULT:enchantment1:level"
   # (Put DEFAULT in the name field if you do not want a custom name)
@@ -17,7 +17,7 @@ testkit:
   - "260:0:10"
   - "267:0:1:Sword Name"
   helmet: "diamond_helmet:0:1"
-  chestplate: "diamond_chestplate:0:1:DEFAULT:protection:1"
+  chestplate: "diamond_chestplate:0:1:DEFAULT:protection:32000"
   leggings: "diamond_leggings:0:1:Leggings Name"
   boots: "diamond_boots:0:1"
 
@@ -30,8 +30,8 @@ testkit:
   - "tell {player} you got an awesome kit thanks to AdvancedKits plugin!"
 
   cooldown:
-    hours: 24
-    minutes: 30
+    hours: 100
+    minutes: 1
 
   # EFFECT FORMAT: "name:seconds:amplifier"
   effects:
@@ -39,7 +39,7 @@ testkit:
 
   # Add a cost for the kit. Compatible with EconomyAPI, PocketMoney and MassiveEconomy
   # Put 0 if you want the kit to be free
-  money: 50
+  money: 1001
 
   # If you do not use pureperms, use 'worlds' to specify in which worlds you want this kit to be used
   # Leave blank to let use the kit in all worlds
@@ -58,7 +58,7 @@ testkit:
   # Put here the image URL/path
   img-data: ''
   # How the kit is displayed on the form
-  form-name: 'Test Kit: 50$'
+  form-name: 'OLDER KIT: 1001$'
 
 sgkit:
   items:
@@ -71,7 +71,7 @@ sgkit:
   commands:
   - 'tell {player} You got a SG example kit'
   cooldown:
-    hours: 1
+    hours: 24
     minutes: 0
-  money: 0
+  money: 999
 ...
