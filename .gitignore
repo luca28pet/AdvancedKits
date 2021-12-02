@@ -1,0 +1,9 @@
+vendor
+.php_cs.cache
+.idea
+pocketmine
+tags
+build/target
+build/virions
+.vimrc
+
