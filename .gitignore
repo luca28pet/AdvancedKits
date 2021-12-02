@@ -6,4 +6,7 @@ tags
 build/target
 build/virions
 .vimrc
+AdvancedKits.phar
+config.mk
+shaded
 
