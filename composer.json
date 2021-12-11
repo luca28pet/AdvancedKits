@@ -16,27 +16,27 @@
 		"pocketmine/pocketmine-mp": "^4.0.0"
 	},
 	"require": {
-		"jojoe77777/formapi": "1.3.0"
+		"dktapps/pmforms": "2.0.0"
 	},
 	"repositories": [
 		{
 			"type": "package",
 			"package": {
-				"name": "jojoe77777/formapi",
-				"version": "1.3.0",
+				"name": "dktapps/pmforms",
+				"version": "2.0.0",
 				"dist": {
-					"url": "https://poggit.pmmp.io/r/101416/libFormAPI_dev-3.phar",
+					"url": "https://poggit.pmmp.io/r/149990/pmforms_dev-12.phar",
 					"type": "phar",
-					"shasum": "7a75098385ea2b28542d3081445e26dea880b68b"
+					"shasum": "bb28be9c3e877645e163b260468a8e879314d956"
 				},
 				"source": {
 					"type": "git",
-					"url": "https://github.com/jojoe77777/formapi.git",
-					"reference": "b34e519dd0fa6777a46583b1addf851ceaa2c723"
+					"url": "https://github.com/dktapps-pm-pl/pmforms.git",
+					"reference": "80b10dfcc68633a3a659c57cc9e2bd50cd2166e4"
 				},
 				"autoload": {
 					"psr-0": {
-						"jojoe77777\\FormAPI\\": "src"
+						"dktapps\\pmforms\\": "src"
 					}
 				}
 			}
@@ -44,7 +44,8 @@
 	],
 	"autoload": {
 		"psr-0": {
-			"luca28pet\\PartyPractice\\": "src"
+			"AdvancedKits\\": "src"
 		}
 	}
 }
+

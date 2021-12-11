@@ -1,0 +1,9 @@
+parameters:
+    level: 8
+    checkExplicitMixed: true
+    paths:
+        - src
+    scanDirectories:
+        - vendor/pocketmine
+        - vendor/dktapps
+
