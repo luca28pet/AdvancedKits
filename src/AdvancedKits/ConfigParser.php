@@ -199,6 +199,22 @@ final class ConfigParser {
 		return $node;
 	}
 
+	/**
+	 * @param array<string> $alternatives
+	 */
+	public static function getStringAlternative(mixed $node, array $alternatives) : string {
+		if (!is_string($node)) {
+			throw new \InvalidArgumentException('String alternative node contains wrong type '.gettype($node));
+		}
+		foreach ($alternatives as $alt) {
+			if ($node === $alt) {
+				return $alt;
+			}
+		}
+		throw new \InvalidArgumentException(
+			'String alternative node contains unknown option '.$node.', possible values: '.implode(', ', $alternatives));
+	}
+
 	public static function getEnchantmentInstance(mixed $node) : EnchantmentInstance {
 		if (!is_array($node)) {
 			throw new \InvalidArgumentException('Enchantment node must be an array, '.gettype($node).' found');

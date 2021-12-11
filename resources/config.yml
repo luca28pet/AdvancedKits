@@ -15,6 +15,6 @@ sign-text: "[AdvancedKits]"
 # Kits you don't have the permission to get will be hidden from the kits list
 hide-no-perm-kits: false
 
-# Show the kit list as a form when a player runs the command /kit (without arguments)
-show-form-no-args: true
+# "form" or "chat"
+kit-list-type: "form"
 ...
