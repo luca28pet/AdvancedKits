@@ -70,6 +70,30 @@ class KitsManager {
 			}
 			$tmpInv->addItem($item);
 		}
+		if ($kit->getHelmet()?->isNull() === false && !$kit->getOverWriteArmor()) {
+			if (!$tmpInv->canAddItem($kit->getHelmet())) {
+				return false;
+			}
+			$tmpInv->addItem($kit->getHelmet());
+		}
+		if ($kit->getChestplate()?->isNull() === false && !$kit->getOverWriteArmor()) {
+			if (!$tmpInv->canAddItem($kit->getChestplate())) {
+				return false;
+			}
+			$tmpInv->addItem($kit->getChestplate());
+		}
+		if ($kit->getLeggigns()?->isNull() === false && !$kit->getOverWriteArmor()) {
+			if (!$tmpInv->canAddItem($kit->getLeggigns())) {
+				return false;
+			}
+			$tmpInv->addItem($kit->getLeggigns());
+		}
+		if ($kit->getBoots()?->isNull() === false && !$kit->getOverWriteArmor()) {
+			if (!$tmpInv->canAddItem($kit->getBoots())) {
+				return false;
+			}
+			$tmpInv->addItem($kit->getBoots());
+		}
 		return true;
 	}
 }

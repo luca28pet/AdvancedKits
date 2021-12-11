@@ -9,6 +9,10 @@ use pocketmine\item\StringToItemParser;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\enchantment\StringToEnchantmentParser;
 use pocketmine\item\Armor;
+use pocketmine\item\VanillaItems;
+use pocketmine\item\ItemFactory;
+use pocketmine\nbt\JsonNbtParser;
+use pocketmine\nbt\NbtDataException;
 
 final class ConfigParser {
 	private function __construct() {
@@ -51,7 +55,7 @@ final class ConfigParser {
 			if (isset($node[$k])) {
 				try {
 					$tmp = self::getItem($node[$k]);
-					if (!($tmp instanceof Armor)) {
+					if (!($tmp instanceof Armor) && !($tmp->equals(ItemFactory::air()))) {
 						throw new \InvalidArgumentException('Armor item is not an armor');
 					}
 					$armor[$k] = $tmp;
@@ -79,13 +83,33 @@ final class ConfigParser {
 			}
 		}
 
+		if (!isset($node['clear-inventory'])) {
+			throw new \InvalidArgumentException('Kiit node must have a \'clear-inventory\' field');
+		}
+		try {
+			$clearInventory = self::getBool($node['clear-inventory']);
+		} catch (\InvalidArgumentException $e) {
+			throw new \InvalidArgumentException('Kit node: error loading clear-inventory', previous: $e);
+		}
+
+		if (!isset($node['overwrite-armor'])) {
+			throw new \InvalidArgumentException('Kiit node must have a \'overwrite-armor\' field');
+		}
+		try {
+			$overWriteArmor = self::getBool($node['overwrite-armor']);
+		} catch (\InvalidArgumentException $e) {
+			throw new \InvalidArgumentException('Kit node: error loading overwrite-armor', previous: $e);
+		}
+
 		return new Kit(
 			$name,
 			$slotFreeItems,
 			$slottedItems,
 			$armor['helmet'], $armor['chestplate'], $armor['leggings'], $armor['boots'],
 			$cost,
-			$commands
+			$commands,
+			$clearInventory,
+			$overWriteArmor
 		);
 	}
 
@@ -137,6 +161,20 @@ final class ConfigParser {
 			}
 		}
 
+		if (isset($node['custom-nbt'])) {
+			try {
+				$nbtData = self::getString($node['custom-nbt']);
+			} catch (\InvalidArgumentException $e) {
+				throw new \InvalidArgumentException('Item node: error loading custom-nbt', previous: $e);
+			}
+			try {
+				$nbt = JsonNbtParser::parseJson($nbtData);
+				$item->setNamedTag($nbt);
+			} catch (NbtDataException $e) {
+				throw new \InvalidArgumentException('Item node: error loading custom-nbt', previous: $e);
+			}
+		}
+
 		return $item;
 	}
 
@@ -150,6 +188,13 @@ final class ConfigParser {
 	public static function getInt(mixed $node) : int {
 		if (!is_int($node)) {
 			throw new \InvalidArgumentException('Int node contains wrong type '.gettype($node));
+		}
+		return $node;
+	}
+
+	public static function getBool(mixed $node) : bool {
+		if (!is_bool($node)) {
+			throw new \InvalidArgumentException('Bool node contains wrong type '.gettype($node));
 		}
 		return $node;
 	}
