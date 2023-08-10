@@ -16,8 +16,8 @@ use pocketmine\command\Command;
 use pocketmine\player\Player;
 use AdvancedKits\lang\LangManager;
 use AdvancedKits\perm\PermissionChecker;
-use dktapps\pmforms\MenuForm;
-use dktapps\pmforms\MenuOption;
+use dktapps\pmforms\{MenuForm, MenuOption};
+
 
 final class AdvancedKits extends PluginBase {
 	private KitsManager $kitsManager;
