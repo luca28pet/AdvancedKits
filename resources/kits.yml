@@ -1,0 +1,52 @@
+---
+- name: TestKit
+  # Items list
+  items:
+    - alias: diamond_sword
+      count: 1
+      custom-name: My Diamond Sword
+      enchantments:
+        - name: protection
+          level: 1
+    - alias: apple
+      count: 5
+
+  # Armor
+  helmet:
+    alias: diamond_helmet
+  chestplate:
+    alias: diamond_chestplate
+  leggings:
+    alias: diamond_leggings
+  boots:
+    alias: diamond_boots
+
+  # Set items for specific slots, will override existing items. Only use if you want to assign items to specific slots, otherwise delete this.
+  slots:
+    12:
+      alias: bow
+      count: 1
+
+  commands:
+    - "tell {player} you got an awesome kit thanks to AdvancedKits plugin!"
+
+  cooldown:
+    hours: 24
+    minutes: 30
+
+  # EFFECT FORMAT: "name:seconds:amplifier"
+  effects:
+  - "speed:120:2"
+
+  # Add a cost for the kit. Compatible with EconomyAPI, PocketMoney and MassiveEconomy
+  # Put 0 if you want the kit to be free
+  money: 50
+
+  # FormAPI users:
+  # Img type: 'url' or 'path'
+  img-type: ''
+  # Put here the image URL/path
+  img-data: ''
+  # How the kit is displayed on the form
+  form-name: 'Test Kit: 50$'
+...

@@ -1,0 +1,28 @@
+name: AdvancedKits
+main: AdvancedKits\AdvancedKits
+version: 6.0.0
+api: 4.0.0
+author: luca28pet
+description: Add kits to your server
+website: https://github.com/luca28pet/AdvancedKits
+commands:
+  kit:
+    description: Get a kit!
+    usage: /kit <kitName>
+    permission: advancedkits.command.kit
+  akreload:
+    descrpition: Reload Kits settings
+    usage: /akreload
+    permission: advancedkits.command.akreload
+  givekit:
+    description: Give a kit to someone
+    usage: /givekit <kitName> <playerName>
+    permission: advancedkits.command.givekit
+permissions:
+  advancedkits.command.kit:
+    default: true
+  advancedkits.command.akreload:
+    default: op
+  advancedkits.command.givekit:
+    default: op
+
