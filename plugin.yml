@@ -2,9 +2,9 @@ name: AdvancedKits
 main: AdvancedKits\AdvancedKits
 version: 7.0.0
 api: 5.0.0
-author: luca28pet
+author: [luca28pet,skyss0fly]
 description: Add kits to your server
-website: https://github.com/luca28pet/AdvancedKits
+website: https://github.com/skyss0fly/AdvancedKits
 commands:
   kit:
     description: Get a kit!
