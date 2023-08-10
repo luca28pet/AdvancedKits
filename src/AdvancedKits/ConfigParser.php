@@ -54,7 +54,7 @@ final class ConfigParser {
 			if (isset($node[$k])) {
 				try {
 					$tmp = self::getItem($node[$k]);
-					if (!($tmp instanceof Armor) && !($tmp->equals(ItemFactory::air()))) {
+					if (!($tmp instanceof Armor) && !($tmp->equals(VanillaItems::air()))) {
 						throw new \InvalidArgumentException('Armor item is not an armor');
 					}
 					$armor[$k] = $tmp;
