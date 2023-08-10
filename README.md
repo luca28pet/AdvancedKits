@@ -5,7 +5,7 @@ A PocketMine-MP plugin that adds kits to your server with many features and supp
 
 *Latest release: https://poggit.pmmp.io/p/AdvancedKits/*
 
-*Latest development phars: https://poggit.pmmp.io/ci/luca28pet/AdvancedKits/AdvancedKits*
+*Latest development phars: https://poggit.pmmp.io/ci/skyss0fly/AdvancedKits/AdvancedKits*
 
 This plugin only supports PocketMine-MP. It might work on other forks as well, but please Do NOT open issues if you have problems with AdvancedKits and you are using a fork.
 
