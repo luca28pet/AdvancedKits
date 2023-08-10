@@ -1,0 +1,8 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/skyss0fly/AdvancedKits
+build-by-default: true
+branches:
+- master
+projects:
+  AdvancedKits:
+    path: ""
+...
