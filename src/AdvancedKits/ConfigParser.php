@@ -10,7 +10,6 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\enchantment\StringToEnchantmentParser;
 use pocketmine\item\Armor;
 use pocketmine\item\VanillaItems;
-use pocketmine\item\ItemFactory;
 use pocketmine\nbt\JsonNbtParser;
 use pocketmine\nbt\NbtDataException;
 
