@@ -5,4 +5,7 @@ branches:
 projects:
   AdvancedKits:
     path: ""
+    libs:
+      - src: dktapps-pm-pl/pmforms/pmforms
+        version: ^2.1.0
 ...
