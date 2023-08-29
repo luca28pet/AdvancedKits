@@ -9,20 +9,20 @@ commands:
   kit:
     description: Get a kit!
     usage: /kit <kitName>
-    permission: advancedkits.command.kit
+    permission: AdvancedKitsAK.command.kit
   akreload:
     descrpition: Reload Kits settings
     usage: /akreload
-    permission: advancedkits.command.akreload
+    permission: AdvancedKitsAK.command.akreload
   givekit:
     description: Give a kit to someone
     usage: /givekit <kitName> <playerName>
-    permission: advancedkits.command.givekit
+    permission: AdvancedKitsAK.command.givekit
 permissions:
-  advancedkits.command.kit:
+  AdvancedKitsAK.command.kit:
     default: true
-  advancedkits.command.akreload:
+  AdvancedKitsAK.command.akreload:
     default: op
-  advancedkits.command.givekit:
+  AdvancedKitsAK.command.givekit:
     default: op
 
