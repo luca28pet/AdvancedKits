@@ -15,12 +15,12 @@ class DefaultPermissionChecker implements PermissionChecker {
 	 */
 	public function __construct(array $kits) {
 		foreach ($kits as $kit) {
-			PermissionManager::getInstance()->addPermission(new Permission('advancedkits.'.strtolower($kit->getName())));
+			PermissionManager::getInstance()->addPermission(new Permission('AdvancedKitsAK.'.strtolower($kit->getName())));
 		}
 	}
 
 	public function canPlayerGetKit(Player $p, Kit $kit) : bool {
-		return $p->hasPermission('advancedkits.'.strtolower($kit->getName()));
+		return $p->hasPermission('AdvancedKitsAK.'.strtolower($kit->getName()));
 	}
 }
 
