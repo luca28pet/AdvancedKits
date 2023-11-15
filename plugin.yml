@@ -1,29 +1,28 @@
 name: AdvancedKits
-main: AdvancedKits\Main
-version: 5.3.0
-api: [3.0.0]
-author: luca28pet
+main: AdvancedKits\AdvancedKits
+version: 7.0.0
+api: 5.0.0
+author: [luca28pet,skyss0fly]
 description: Add kits to your server
-website: https://github.com/luca28pet/AdvancedKits
-softdepend: [PiggyCustomEnchants]
+website: https://github.com/skyss0fly/AdvancedKits
 commands:
- kit:
-  description: Get a kit!
-  usage: "/kit <kitName>"
-  aliases: [ak, advancedkits]
-  permission: advancedkits.command
- akreload:
-  descrpition: Reload Kits settings
-  usage: "/akreload"
-  permission: advancedkits.admin
+  kit:
+    description: Get a kit!
+    usage: /kit <kitName>
+    permission: AdvancedKitsAK.command.kit
+  akreload:
+    descrpition: Reload Kits settings
+    usage: /akreload
+    permission: AdvancedKitsAK.command.akreload
+  givekit:
+    description: Give a kit to someone
+    usage: /givekit <kitName> <playerName>
+    permission: AdvancedKitsAK.command.givekit
 permissions:
- advancedkits:
-  description: "Root permission"
-  default: false
-  children:
-   advancedkits.command:
-    description: "Allows the user to run /kit command"
+  AdvancedKitsAK.command.kit:
     default: true
-   advancedkits.admin:
-    description: "Allows to manage admin features"
+  AdvancedKitsAK.command.akreload:
     default: op
+  AdvancedKitsAK.command.givekit:
+    default: op
+

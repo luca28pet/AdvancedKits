@@ -1,10 +1,11 @@
---- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/luca28pet/AdvancedKits
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/skyss0fly/AdvancedKits
+build-by-default: true
 branches:
 - master
 projects:
   AdvancedKits:
     path: ""
     libs:
-      - src: jojoe77777/FormAPI/libFormAPI
-        version: ^1.3
+      - src: dktapps-pm-pl/pmforms/pmforms
+        version: ^2.1.0
 ...
